@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ôn Tập Lịch Sử 12 - Chinh Phục THPT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Lexend', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
+        .pulse-correct { animation: pulse-green 0.5s ease-in-out infinite alternate; }
+        @keyframes pulse-green { from { transform: scale(1); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); } to { transform: scale(1.02); box-shadow: 0 0 22px rgba(16, 185, 129, 0.8); } }
+        .glass-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-32 -left-32 w-80 h-80 bg-indigo-600/30 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 -right-32 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10 w-full max-w-2xl mx-auto p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg">
+                <i class="fa-solid fa-graduation-cap text-slate-950 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-300 to-white bg-clip-text text-transparent">Sử 12 - Ôn Tập THPT</h1>
+                <p class="text-xs text-slate-400">Đua Top & Luyện Trắc Nghiệm</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="openLeaderboard()" class="p-2.5 rounded-xl glass-card text-amber-400 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy"></i><span>BXH</span>
+            </button>
+            <button onclick="toggleSound()" class="p-2.5 rounded-xl glass-card text-slate-300">
+                <i id="sound-icon" class="fa-solid fa-volume-high text-cyan-400"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 w-full max-w-2xl mx-auto px-4 py-2 flex-1 flex flex-col justify-center">
+
+        <!-- SCREEN 1: START -->
+        <div id="screen-start" class="glass-card rounded-3xl p-6 sm:p-8 text-center border border-slate-800 shadow-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs mb-4">
+                <i class="fa-solid fa-rotate"></i> Tự động xáo trộn câu hỏi & đáp án
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Bộ Đề Ôn Tập Lịch Sử 12</h2>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">Gồm 23 câu hỏi chuẩn cấu trúc. Tích lũy <span class="text-amber-400 font-bold">Streak</span> để x2 điểm thưởng và ghi tên lên <span class="text-yellow-400 font-bold">Bảng Xếp Hạng</span>!</p>
+
+            <button onclick="startGame()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-500 via-blue-600 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold text-lg shadow-lg shadow-indigo-500/30 transition transform active:scale-95 flex items-center justify-center gap-3">
+                <i class="fa-solid fa-play"></i> BẮT ĐẦU CHƠI
+            </button>
+        </div>
+
+        <!-- SCREEN 2: QUIZ -->
+        <div id="screen-quiz" class="hidden flex-col gap-4">
+            <div class="glass-card rounded-2xl p-4 border border-slate-800 flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400">CÂU HỎI</span>
+                    <div class="text-lg font-extrabold text-cyan-300"><span id="quiz-current-num">1</span>/<span id="quiz-total-num">23</span></div>
+                </div>
+                <div id="streak-badge" class="px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-amber-500 text-base"></i>
+                    <span id="quiz-streak" class="text-sm font-extrabold text-amber-400">x0</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400">ĐIỂM</span>
+                    <div id="quiz-score" class="text-lg font-extrabold text-yellow-400">0</div>
+                </div>
+            </div>
+
+            <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-800">
+                <div id="timer-bar" class="bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500 h-full rounded-full transition-all duration-1000 linear" style="width: 100%;"></div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 flex flex-col justify-between shadow-xl">
+                <h3 id="question-text" class="text-base sm:text-lg font-semibold text-slate-100 mb-6">Đang tải...</h3>
+                <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+
+                <div id="explanation-box" class="hidden mt-4 p-4 rounded-2xl bg-indigo-950/60 border border-indigo-500/30 text-xs sm:text-sm text-indigo-200">
+                    <div class="font-bold text-cyan-300 mb-1"><i class="fa-solid fa-lightbulb text-amber-400"></i> Lời giải thích:</div>
+                    <div id="explanation-text" class="leading-relaxed"></div>
+                </div>
+
+                <button id="btn-next" onclick="nextQuestion()" class="hidden mt-4 w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+                    CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULT -->
+        <div id="screen-result" class="hidden glass-card rounded-3xl p-6 sm:p-8 text-center border border-slate-800 shadow-2xl">
+            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 flex items-center justify-center text-slate-950 text-3xl shadow-lg shadow-amber-500/30">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-extrabold text-white mb-1">Hoàn Thành!</h2>
+            <p id="result-evaluation" class="text-sm text-cyan-300 font-medium mb-6"></p>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800"><div class="text-xs text-slate-400">Tổng điểm</div><div id="res-score" class="text-xl font-extrabold text-yellow-400">0</div></div>
+                <div class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800"><div class="text-xs text-slate-400">Số câu đúng</div><div id="res-correct" class="text-xl font-extrabold text-emerald-400">0/23</div></div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 mb-6 text-left">
+                <label class="block text-xs font-semibold text-slate-300 mb-2">Lưu tên vào Bảng Xếp Hạng:</label>
+                <div class="flex gap-2">
+                    <input type="text" id="player-name-input" placeholder="Tên của bạn..." maxlength="20" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <button onclick="saveScoreToLeaderboard()" id="btn-save-score" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition">Lưu</button>
+                </div>
+                <p id="save-score-msg" class="text-[11px] mt-1 text-emerald-400 hidden"></p>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="startGame()" class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold text-sm">Chơi Lại</button>
+                <button onclick="openLeaderboard()" class="flex-1 py-3.5 rounded-xl bg-slate-800 text-amber-400 font-bold text-sm">Xem BXH</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL LEADERBOARD -->
+    <div id="modal-leaderboard" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="glass-card rounded-3xl w-full max-w-md border border-slate-800 shadow-2xl p-6 flex flex-col max-h-[80vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+                <div class="flex items-center gap-2 text-amber-400 font-bold"><i class="fa-solid fa-trophy"></i> BẢNG XẾP HẠNG</div>
+                <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="leaderboard-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- JS SCRIPT -->
+    <script>
+        const RAW_QUESTIONS = [
+            { q: "Nội dung nào sau đây phản ánh đúng về bối cảnh thành lập Liên hợp quốc (1945)?", options: ["Phe Liên minh có nhu cầu giải quyết mâu thuẫn với phe Trục.", "Mỹ phát động cuộc chiến tranh thế giới mới.", "Trật tự hai cực I-an-ta được xác lập.", "Các nước trong phe Đồng minh còn tồn tại những bất đồng."], answer: 3, exp: "Tại Hội nghị Ianta (2-1945), các cường quốc Đồng minh dù thống nhất thành lập LHQ nhưng giữa họ vẫn tồn tại những bất đồng." },
+            { q: "Sự kiện nào đánh dấu Liên hợp quốc chính thức được thành lập (1945)?", options: ["Hội nghị Tê-hê-ran.", "Tuyên bố Liên hợp quốc tại Mỹ.", "Hội nghị I-an-ta.", "Quốc hội các nước thành viên phê chuẩn Hiến chương."], answer: 3, exp: "Ngày 24/10/1945, Hiến chương LHQ chính thức có hiệu lực sau khi được Quốc hội các nước phê chuẩn." },
+            { q: "Mục đích hàng đầu của tổ chức Liên hợp quốc là gì?", options: ["Trừng trị các hoạt động gây chiến.", "Thúc đẩy thương mại tự do.", "Duy trì hòa bình và an ninh thế giới.", "Ngăn chặn ô nhiễm môi trường."], answer: 2, exp: "Mục đích tối cao trong Hiến chương là Duy trì hòa bình và an ninh thế giới." },
+            { q: "Nguyên tắc hoạt động cốt lõi của Liên hợp quốc là?", options: ["Thúc đẩy quan hệ hữu nghị.", "Không can thiệp vào công việc nội bộ của các nước.", "Hợp tác giải quyết vấn đề quốc tế.", "Duy trì an ninh quốc tế."], answer: 1, exp: "Một trong 5 nguyên tắc chính là: Không can thiệp vào công việc nội bộ của bất kỳ quốc gia nào." },
+            { q: "Hoạt động nào của Liên hợp quốc giúp duy trì hòa bình an ninh?", options: ["Thành lập khối NATO.", "Xây dựng công ước quốc tế về giải trừ quân bị.", "Xây dựng quân đội chung.", "Thành lập khối phòng thủ."], answer: 1, exp: "LHQ đã soạn thảo nhiều công ước quốc tế quan trọng về kiểm soát vũ khí và giải trừ quân bị." },
+            { q: "Một trong những vai trò quan trọng của Liên hợp quốc là?", options: ["Bình đẳng chủ quyền.", "Đảm bảo quyền con người, phát triển văn hóa, xã hội.", "Tôn trọng luật pháp quốc tế.", "Không can thiệp nội bộ."], answer: 1, exp: "LHQ đóng vai trò to lớn thúc đẩy tôn trọng quyền con người, phát triển văn hóa, giáo dục và xã hội." },
+            { q: "Liên hợp quốc thực hiện hoạt động nào để bảo vệ quyền con người?", options: ["Xây dựng và ký kết các điều ước quốc tế về quyền con người.", "Can thiệp trực tiếp vào nội bộ các nước.", "Xây dựng thể chế chính trị chung.", "Thành lập khối quân sự."], answer: 0, exp: "LHQ thông qua Tuyên ngôn Quốc tế Nhân quyền (1948) và nhiều công ước bảo vệ quyền con người." },
+            { q: "Năm 1977, Việt Nam gia nhập tổ chức quốc tế nào?", options: ["Khối Vác-sa-va.", "WTO.", "Liên hợp quốc (UN).", "ASEAN."], answer: 2, exp: "Ngày 20/9/1977, Việt Nam chính thức trở thành thành viên thứ 149 của Liên hợp quốc." },
+            { q: "Hội nghị Ianta (2-1945) diễn ra khi Chiến tranh thế giới 2", options: ["đã kết thúc hoàn toàn.", "bước vào giai đoạn kết thúc.", "đang diễn ra vô cùng ác liệt.", "vừa mới bùng nổ."], answer: 1, exp: "Tháng 2/1945, Chiến tranh thế giới thứ hai bước vào giai đoạn kết thúc, đặt ra nhiều vấn đề cấp bách." },
+            { q: "Hội nghị Ianta (2-1945) đã quyết định vấn đề nào?", options: ["Thành lập IMF.", "Thành lập Ngân hàng Thế giới.", "Thành lập Liên minh châu Âu.", "Tiêu diệt tận gốc quân phiệt Nhật Bản."], answer: 3, exp: "Hội nghị quyết định tiêu diệt tận gốc chủ nghĩa phát xít Đức và quân phiệt Nhật Bản." },
+            { q: "Theo quyết định Hội nghị Ianta, Liên Xô KHÔNG đóng quân ở đâu?", options: ["Đông Đức.", "Tây Á.", "Đông Âu.", "Bắc Triều Tiên."], answer: 1, exp: "Liên Xô đóng quân ở Đông Đức, Đông Âu và Bắc Triều Tiên. Tây Á không thuộc vùng ảnh hưởng của Liên Xô." },
+            { q: "Khi thực hiện 'Kế hoạch Mác-san', Mĩ còn nhằm mục đích gì?", options: ["Chiếm lĩnh thị trường Tây Âu.", "Tập hợp Tây Âu vào liên minh quân sự chống Liên Xô, Đông Âu.", "Thúc đẩy liên kết kinh tế.", "Xoa dịu mâu thuẫn thuộc địa."], answer: 1, exp: "Mỹ dùng viện trợ Mác-san để lôi kéo các nước Tây Âu vào khối quân sự NATO chống Liên Xô." },
+            { q: "Xu thế phát triển chính của thế giới sau Chiến tranh lạnh là?", options: ["Đa cực trong quan hệ quốc tế.", "Chấm dứt mọi xung đột.", "Hạn chế liên kết kinh tế.", "Đối đầu giữa Liên Xô và Mỹ."], answer: 0, exp: "Sau khi Trật tự Ianta sụp đổ, thế giới chuyển sang xu thế đa cực với nhiều trung tâm lớn." },
+            { q: "Xét về bản chất, toàn cầu hóa là gì?", options: ["Phát triển thương mại nhanh chóng.", "Sáp nhập các tập đoàn lớn.", "Sự tăng lên mạnh mẽ các mối liên hệ, phụ thuộc lẫn nhau giữa các nước.", "Ra đời các tổ chức liên kết."], answer: 2, exp: "Toàn cầu hóa là quá trình gia tăng mạnh mẽ mối liên hệ và sự phụ thuộc lẫn nhau trên thế giới." },
+            { q: "Tổ chức ASEAN ra đời năm 1967 do các nước nhận thấy cần", options: ["cân bằng sức mạnh với Mỹ.", "tăng cường sức mạnh quân sự.", "đoàn kết giải phóng dân tộc.", "có sự hợp tác để cùng phát triển."], answer: 3, exp: "Các nước Đông Nam Á cần hợp tác liên kết cùng phát triển kinh tế và hạn chế sự ảnh hưởng bên ngoài." },
+            { q: "Năm 1963, ở Đông Nam Á tổ chức nào được thành lập?", options: ["MAPHILINDO", "ASA", "Cộng đồng châu Âu", "SEV"], answer: 0, exp: "MAPHILINDO gồm Mã Lai, Philippines và Indonesia thành lập năm 1963." },
+            { q: "Mục tiêu quan trọng nhất của ASEAN theo Tuyên bố Băng Cốc là?", options: ["Xóa bỏ áp bức nghèo nàn.", "Xây dựng khối quân sự.", "Xây dựng khối liên minh kinh tế.", "Tăng cường hợp tác phát triển kinh tế và văn hóa."], answer: 3, exp: "Mục tiêu ban đầu của ASEAN là thúc đẩy tăng trưởng kinh tế, tiến bộ xã hội và văn hóa." },
+            { q: "Nước nào sau đây tham gia sáng lập ASEAN năm 1967?", options: ["Ấn Độ.", "Iran.", "Nhật Bản.", "Xingapo."], answer: 3, exp: "5 nước sáng lập ASEAN gồm: Indonesia, Malaysia, Philippines, Singapore và Thái Lan." },
+            { q: "Đặc điểm của ASEAN giai đoạn 1967 - 1976 là gì?", options: ["Kinh tế xuất khẩu.", "Xây dựng nền móng.", "Phát triển thần kỳ.", "Tránh đối đầu."], answer: 1, exp: "Giai đoạn 1967 - 1976 là thời kỳ ASEAN đặt những nền móng hợp tác ban đầu." },
+            { q: "Sự khởi sắc của ASEAN được đánh dấu bằng sự kiện nào?", options: ["Việt Nam gia nhập ASEAN.", "Hiệp ước Bali được ký kết (1976).", "Campuchia gia nhập.", "Brunay gia nhập."], answer: 1, exp: "Hội nghị cấp cao tại Bali (2/1976) với Hiệp ước Bali đã đánh dấu sự khởi sắc của ASEAN." },
+            { q: "Sự kiện Việt Nam gia nhập ASEAN (1995) có ý nghĩa gì?", options: ["Hoàn thành ASEAN 10.", "Mở đầu liên minh khu vực.", "Xóa bỏ mọi mâu thuẫn.", "Thúc đẩy sự phát triển của quá trình liên kết khu vực."], answer: 3, exp: "Việt Nam gia nhập ASEAN năm 1995 thúc đẩy mạnh mẽ tiến trình liên kết toàn khu vực." },
+            { q: "Việt Nam gia nhập ASEAN (1995) phản ánh điều gì?", options: ["Triển vọng liên kết.", "Hợp tác hiệu quả.", "Liên minh kinh tế chính trị.", "Sự khác biệt về chế độ chính trị có thể hòa giải và cùng phát triển."], answer: 3, exp: "Việt Nam (XHCN) gia nhập ASEAN chứng minh sự khác biệt chế độ chính trị vẫn có thể hợp tác phát triển." },
+            { q: "Thành tựu quan trọng của ASEAN vào ngày 31/12/2015 là gì?", options: ["Thông qua Hiến chương.", "Tuyên bố khu vực trung lập.", "Cộng đồng ASEAN được thành lập.", "Mở rộng 10 thành viên."], answer: 2, exp: "Ngày 31/12/2015, Cộng đồng ASEAN (AC) chính thức được thành lập." }
+        ];
+
+        let questionsList = [], currentIndex = 0, score = 0, streak = 0, maxStreak = 0, correctCount = 0, timer = null, timeLeft = 20, soundEnabled = true, answeredCurrent = false;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            if (!soundEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+        function playSoundCorrect() { playTone(523, 'sine', 0.15); setTimeout(() => playTone(659, 'sine', 0.25), 100); }
+        function playSoundWrong() { playTone(220, 'sawtooth', 0.2); setTimeout(() => playTone(180, 'sawtooth', 0.3), 150); }
+        function playSoundClick() { playTone(400, 'triangle', 0.05); }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-icon').className = soundEnabled ? 'fa-solid fa-volume-high text-cyan-400' : 'fa-solid fa-volume-xmark text-slate-500';
+        }
+
+        function shuffleArray(arr) {
+            let a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function startGame() {
+            playSoundClick();
+            questionsList = shuffleArray(RAW_QUESTIONS.map(q => {
+                const opts = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.answer }));
+                const shuffledOpts = shuffleArray(opts);
+                return { q: q.q, options: shuffledOpts.map(o => o.text), answer: shuffledOpts.findIndex(o => o.isCorrect), exp: q.exp };
+            }));
+
+              function startGame() {
+            playSoundClick();
+            questionsList = shuffleArray(RAW_QUESTIONS.map(q => {
+                const opts = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.answer }));
+                const shuffledOpts = shuffleArray(opts);
+                return { q: q.q, options: shuffledOpts.map(o => o.text), answer: shuffledOpts.findIndex(o => o.isCorrect), exp: q.exp };
+            }));
+
+            currentIndex = 0; score = 0; streak = 0; maxStreak = 0; correctCount = 0;
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            document.getElementById('screen-quiz').classList.add('flex');
+            updateTopBar(); loadQuestion();
+        }
+
+        function updateTopBar() {
+            document.getElementById('quiz-current-num').textContent = currentIndex + 1;
+            document.getElementById('quiz-score').textContent = score;
+            document.getElementById('quiz-streak').textContent = 'x' + streak;
+        }
+
+        function loadQuestion() {
+            answeredCurrent = false; clearInterval(timer);
+            const qData = questionsList[currentIndex];
+            document.getElementById('question-text').textContent = (currentIndex + 1) + ". " + qData.q;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            const prefixes = ['A', 'B', 'C', 'D'];
+
+            qData.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left text-sm font-medium text-slate-200 flex items-center gap-3 shadow-md`;
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `<span class="w-7 h-7 rounded-lg bg-slate-800 text-cyan-400 font-bold flex items-center justify-center shrink-0 text-xs border border-slate-700">${prefixes[idx]}</span><span class="flex-1">${optText}</span>`;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('explanation-box').classList.add('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+
+            timeLeft = 20; updateTimerBar();
+            timer = setInterval(() => {
+                timeLeft--; updateTimerBar();
+                if (timeLeft <= 0) { clearInterval(timer); handleTimeOut(); }
+            }, 1000);
+        }
+
+        function updateTimerBar() {
+            document.getElementById('timer-bar').style.width = (timeLeft / 20 * 100) + '%';
+        }
+
+        function selectOption(selectedIndex) {
+            if (answeredCurrent) return;
+            answeredCurrent = true; clearInterval(timer);
+            const qData = questionsList[currentIndex];
+            const optionBtns = document.querySelectorAll('.option-btn');
+            optionBtns.forEach(btn => btn.style.pointerEvents = 'none');
+
+            if (selectedIndex === qData.answer) {
+                playSoundCorrect(); correctCount++; streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                score += 100 + (streak - 1) * 30 + timeLeft * 5;
+                optionBtns[selectedIndex].className = `option-btn w-full p-4 rounded-2xl bg-emerald-600 border-2 border-emerald-400 text-white font-semibold text-left text-sm flex items-center gap-3 pulse-correct`;
+            } else {
+                playSoundWrong(); streak = 0;
+                optionBtns[selectedIndex].className = `option-btn w-full p-4 rounded-2xl bg-red-600 border-2 border-red-400 text-white font-semibold text-left text-sm flex items-center gap-3 shake`;
+                optionBtns[qData.answer].className = `option-btn w-full p-4 rounded-2xl bg-emerald-600 border-2 border-emerald-400 text-white font-semibold text-left text-sm flex items-center gap-3 pulse-correct`;
+            }
+            updateTopBar(); showExplanation(qData.exp);
+        }
+
+        function handleTimeOut() {
+            if (answeredCurrent) return;
+            answeredCurrent = true; playSoundWrong(); streak = 0;
+            const qData = questionsList[currentIndex];
+            const optionBtns = document.querySelectorAll('.option-btn');
+            optionBtns.forEach(btn => btn.style.pointerEvents = 'none');
+            optionBtns[qData.answer].className = `option-btn w-full p-4 rounded-2xl bg-emerald-600 border-2 border-emerald-400 text-white font-semibold text-left text-sm flex items-center gap-3 pulse-correct`;
+            updateTopBar(); showExplanation("Hết giờ! " + qData.exp);
+        }
+
+        function showExplanation(expText) {
+            document.getElementById('explanation-text').textContent = expText;
+            document.getElementById('explanation-box').classList.remove('hidden');
+            document.getElementById('btn-next').classList.remove('hidden');
+            document.getElementById('btn-next').classList.add('flex');
+        }
+
+        function nextQuestion() {
+            playSoundClick(); currentIndex++;
+            if (currentIndex < questionsList.length) loadQuestion();
+            else finishGame();
+        }
+
+        function finishGame() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('flex');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            const accuracy = Math.round((correctCount / 23) * 100);
+            document.getElementById('res-score').textContent = score;
+            document.getElementById('res-correct').textContent = `${correctCount}/23`;
+            document.getElementById('result-evaluation').textContent = accuracy >= 80 ? "Xuất sắc! Kiến thức rất vững vàng! 🏆" : "Làm tốt lắm! Hãy tiếp tục phát huy nhé! 🌟";
+
+            if (accuracy >= 70 && typeof confetti === 'function') confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function getLeaderboardData() {
+            const data = localStorage.getItem('history_quiz_leaderboard');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveScoreToLeaderboard() {
+            const input = document.getElementById('player-name-input');
+            const name = input.value.trim() || 'Người chơi';
+            let leaderboard = getLeaderboardData();
+            leaderboard.push({ name, score, correct: correctCount, date: new Date().toLocaleDateString('vi-VN') });
+            leaderboard.sort((a, b) => b.score - a.score);
+            localStorage.setItem('history_quiz_leaderboard', JSON.stringify(leaderboard.slice(0, 10)));
+            document.getElementById('save-score-msg').textContent = "✓ Đã lưu thành công!";
+            document.getElementById('save-score-msg').classList.remove('hidden');
+        }
+
+        function openLeaderboard() {
+            playSoundClick();
+            const modal = document.getElementById('modal-leaderboard');
+            const list = document.getElementById('leaderboard-list');
+            const data = getLeaderboardData();
+            list.innerHTML = data.length === 0 ? `<div class="text-center py-6 text-slate-500 text-xs">Chưa có điểm lưu. Hãy chơi và ghi danh nhé!</div>` : '';
+            data.forEach((item, idx) => {
+                const el = document.createElement('div');
+                el.className = "p-3 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between";
+                el.innerHTML = `<div class="flex items-center gap-2.5"><span class="font-bold text-amber-400">#${idx + 1}</span><div><div class="text-sm font-bold text-slate-100">${item.name}</div><div class="text-[10px] text-slate-400">Đúng: ${item.correct}/23 • ${item.date}</div></div></div><div class="text-sm font-extrabold text-yellow-400">${item.score}đ</div>`;
+                list.appendChild(el);
+            });
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeLeaderboard() {
+            playSoundClick();
+            document.getElementById('modal-leaderboard').classList.add('hidden');
+            document.getElementById('modal-leaderboard').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>
