@@ -3,7 +3,7 @@
    Format: { q: câu hỏi, o: [4 đáp án], a: chỉ số đáp án đúng }
    a = 0 (A), 1 (B), 2 (C), 3 (D)
    ========================================================= */
-window.QUESTIONS = [
+window.ON_TAP_DATA = window.QUESTIONS = [
   { q:"Nội dung nào sau đây phản ánh đúng về bối cảnh thành lập Liên hợp quốc (1945)?",
     o:["Phe Liên minh có nhu cầu giải quyết mâu thuẫn với phe Trục.",
        "Mỹ phát động cuộc chiến tranh thế giới mới để thực hiện chiến lược toàn cầu.",
