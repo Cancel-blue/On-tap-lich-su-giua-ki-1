@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đang tải...</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+<!-- ===== MÀN START ===== -->
+<section id="screenStart" class="screen active">
+  <div class="card">
+    <a href="index.html" class="btn-back">← Trang chủ</a>
+    <h1 id="monTitle">⚔️ ĐẤU TRƯỜNG</h1>
+    <p class="sub" id="monSub">Ôn tập • Chọn mức độ để bắt đầu</p>
+
+    <label class="field">
+      <span>NHẬP TÊN CỦA BẠN</span>
+      <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
+    </label>
+
+    <p class="label-diff">CHỌN MỨC ĐỘ</p>
+    <div class="diff-grid" id="diffGrid"></div>
+
+    <div class="toggle-row" id="toggleHardcore">
+      <div class="lbl">
+        <b>⚡ Chế độ khắc nghiệt</b>
+        <small>Giảm 1/2 thời gian mỗi câu</small>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+
+    <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
+    <button class="btn-online" id="btnOnlineMode" type="button">🌐 ĐẤU ONLINE 4 NGƯỜI</button>
+    <p class="foot">Chúc bạn chinh phục được toàn bộ câu hỏi!</p>
+  </div>
+</section>
+
+<!-- ===== MÀN QUIZ ===== -->
+<section id="screenQuiz" class="screen">
+  <div class="card">
+    <div class="topbar">
+      <div class="who">
+        <div class="ava" id="avatar">?</div>
+        <span class="nm" id="hudName">Player</span>
+      </div>
+      <div class="stats">
+        <div class="chip">🏆 <b id="hudScore">0</b></div>
+        <div class="chip streak" id="streakChip">🔥 <b id="hudStreak">x1.0</b></div>
+        <div class="chip curse" id="curseChip" style="display:none">💀 <b id="hudCurse">4</b></div>
+        <button class="btn-quit" id="btnQuit">Thoát</button>
+      </div>
+    </div>
+    <div id="pvpBoard" class="pvp-board" style="display:none"></div>
+    <div id="effectBadges" class="effect-badges" style="display:none"></div>
+    <div class="prog-wrap">
+      <div class="prog"><i id="progFill"></i></div>
+      <div class="prog-txt" id="progTxt">0/0</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+      <div class="timer-txt" id="timerText">--s</div>
+    </div>
+    <div class="qbox">
+      <div class="badge" id="qBadge">CÂU HỎI</div>
+      <div id="qText">...</div>
+    </div>
+    <div class="options" id="options"></div>
+    <div class="inv-bar" id="invBar" style="display:none">
+      <span class="empty">Túi đồ trống</span>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+</section>
+
+<!-- ===== MÀN END ===== -->
+<section id="screenEnd" class="screen">
+  <div class="card">
+    <div class="end-title" id="endTitle">HOÀN THÀNH!</div>
+    <div class="end-name" id="endName"></div>
+    <div class="score-big" id="endScore">0</div>
+    <div class="score-lbl">TỔNG ĐIỂM</div>
+    <div class="stat-grid">
+      <div class="stat g"><b id="stCorrect">0</b><small>ĐÚNG</small></div>
+      <div class="stat r"><b id="stWrong">0</b><small>SAI</small></div>
+      <div class="stat y"><b id="stAcc">0%</b><small>CHÍNH XÁC</small></div>
+      <div class="stat"><b id="stStreak">0</b><small>CHUỖI DÀI</small></div>
+    </div>
+    <div class="wrong-list" id="wrongList"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" id="btnHome">🏠 Trang chủ</button>
+      <button class="btn-primary" id="btnReplay" style="flex:1">🔄 CHƠI LẠI</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MÀN LOBBY ===== -->
+<section id="screenLobby" class="screen">
+  <div class="card">
+    <h1>🌐 ĐẤU ONLINE</h1>
+    <p class="sub">Tạo phòng hoặc nhập mã để chiến với bạn bè</p>
+    <div class="mode-row">
+      <button class="btn-mode on" id="btnModeCreate" type="button">
+        🎮 TẠO PHÒNG
+        <small>Tối đa 4 người</small>
+      </button>
+      <button class="btn-mode" id="btnModeJoin" type="button">
+        🔗 VÀO PHÒNG
+        <small>Nhập mã từ bạn</small>
+      </button>
+    </div>
+    <div id="lobbyCreate" style="display:block">
+      <p style="color:#94a3b8;font-size:13.5px;line-height:1.6;margin-bottom:14px;text-align:center">
+        Hệ thống tạo mã phòng 4 ký tự.<br>Chia sẻ cho bạn bè để cùng chơi!
+      </p>
+      <button class="btn-primary" id="btnDoCreate" type="button">TẠO PHÒNG NGAY 🚀</button>
+    </div>
+    <div id="lobbyJoin" style="display:none">
+      <label class="field">
+        <span>NHẬP MÃ PHÒNG (4 KÝ TỰ)</span>
+        <input id="inputRoomCode" class="input-code" type="text" maxlength="4" placeholder="----" autocomplete="off">
+      </label>
+      <button class="btn-primary" id="btnDoJoin" type="button">VÀO PHÒNG 🔗</button>
+    </div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn-ghost" id="btnLobbyBack">← Quay lại</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MÀN ROOM ===== -->
+<section id="screenRoom" class="screen">
+  <div class="card">
+    <h1 id="roomTitle">PHÒNG CHỜ</h1>
+    <p class="sub">Chia sẻ mã này cho bạn bè</p>
+    <div class="room-code" id="roomCodeShow">----</div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span style="color:#94a3b8;font-size:13px;font-weight:700">NGƯỜI CHƠI</span>
+      <span style="color:#38bdf8;font-size:13px;font-weight:800" id="onlineCount">0/4</span>
+    </div>
+    <div class="online-player-list" id="onlinePlayerList"></div>
+    <button class="btn-ready off" id="btnReady" type="button">CHƯA SẴN SÀNG</button>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn-ghost" id="btnLeaveRoom">✖ Rời phòng</button>
+    </div>
+    <p style="color:#64748b;font-size:11.5px;text-align:center;margin-top:14px">
+      Khi có ≥2 người sẵn sàng, chủ phòng bắt đầu
+    </p>
+  </div>
+</section>
+
+</div>
+
+<!-- ===== LOAD DATA THEO MÔN ===== -->
+<script>
+(function loadMonData(){
+  const params = new URLSearchParams(window.location.search);
+  const mon = params.get("mon") || "lich-su";
+  const monNames = {
+    "lich-su": { name:"LỊCH SỬ", icon:"📜", sub:"Ôn tập giữa kì 1 • Liên hợp quốc – Ianta – ASEAN" },
+    "dia-ly":  { name:"ĐỊA LÝ",  icon:"🌍", sub:"Ôn tập Địa lý" },
+    "vat-ly":  { name:"VẬT LÝ",  icon:"⚛️", sub:"Ôn tập Vật lý" },
+    "toan":    { name:"TOÁN",    icon:"🔢", sub:"Ôn tập Toán" },
+    "hoa":     { name:"HÓA HỌC", icon:"🧪", sub:"Ôn tập Hóa học" }
+  };
+  const info = monNames[mon] || monNames["lich-su"];
+  document.title = info.name + " - Ôn tập";
+  document.getElementById("monTitle").textContent = info.icon + " " + info.name;
+  document.getElementById("monSub").textContent = info.sub;
+
+  /* Load file data tương ứng */
+  const script = document.createElement("script");
+  script.src = "data/" + mon + ".js";
+  script.onerror = function(){
+    document.getElementById("monSub").innerHTML =
+      '<span style="color:#f87171">⚠️ Chưa có đề môn này. Vui lòng quay lại sau!</span>';
+    document.getElementById("btnStart").disabled = true;
+    document.getElementById("btnOnlineMode").disabled = true;
+  };
+  script.onload = function(){
+    /* Sau khi data load xong -> load script.js chính */
+    const main = document.createElement("script");
+    main.src = "script.js";
+    document.body.appendChild(main);
+  };
+  document.body.appendChild(script);
+
+  /* Lưu môn hiện tại vào biến global để script.js đọc */
+  window.CURRENT_MON = mon;
+})();
+</script>
+</body>
+</html>
