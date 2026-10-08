@@ -872,5 +872,4 @@ window.DUNG_SAI_DATA = [
       { text:"Theo đoạn tư liệu, công cuộc đổi mới do Đảng Cộng sản Việt Nam khởi xướng và lãnh đạo là sự lựa chọn mang tính lịch sử phù hợp với xu thế của thời đại.", answer:true }
     ]
   }
-
 ];
