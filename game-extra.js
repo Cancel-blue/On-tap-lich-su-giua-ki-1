@@ -1,6 +1,29 @@
 /* =========================================================
-   GAME EXTRA - Xử lý màn chọn mức độ full
+   GAME EXTRA - Xử lý menu chọn bộ đề và mức độ full
    ========================================================= */
+
+/* Ghi đè hàm chonBoDe cũ */
+window.chonBoDe = function(set){
+  sessionStorage.setItem("chosenSet", set);
+  if(set === "full"){
+    window.hienThiManHinh("screenChooseLevelFull");
+  } else {
+    window.hienThiManHinh("screenStart");
+  }
+};
+
+window.hienThiManHinh = function(id){
+  document.querySelectorAll(".screen").forEach(s=>{
+    s.classList.toggle("active", s.id === id);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+};
+
+window.quayLaiChonSet = function(){
+  window.hienThiManHinh("screenChooseSet");
+};
+
+/* Xử lý chọn mức độ full */
 let selectedFullDiff = "mediumFull";
 
 document.addEventListener("DOMContentLoaded", ()=>{
