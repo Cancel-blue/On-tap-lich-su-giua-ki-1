@@ -12,11 +12,11 @@ window.DUNG_SAI_DATA = [
   },
 
   {
-    doc:"Nhiệm vụ cơ bản của cách mạng Việt Nam là tiêu diệt bọn đế quốc xâm lược, đánh đổ bọn bù nhìn Việt gian phản nước, làm cho Việt Nam hoàn toàn độc lập và thống nhất; xoá bỏ những di tích phong kiến và nửa phong kiến, làm cho người cày có ruộng.",
+    doc:"Nhiệm vụ cơ bản của cách mạng Việt Nam là tiêu diệt bọn đế quốc xâm lược, đánh đổ bọn bù nhìn Việt gian phản nước, làm cho Việt Nam hoàn toàn độc lập và thống nhất.",
     source:"Trường Chinh, Bàn về cách mạng Việt Nam, 1952",
     statements:[
       { text:"Theo đoạn tư liệu, nhiệm vụ cơ bản của cách mạng Việt Nam là xoá bỏ chế độ phong kiến và nửa phong kiến, làm cho người cày có ruộng.", answer:true },
-      { text:"Trong kháng chiến chống Pháp, Đảng đã thực hiện triệt để khẩu hiệu \"người cày có ruộng\" ở hậu phương.", answer:false },
+      { text:"Trong kháng chiến chống Pháp, Đảng đã thực hiện triệt để khẩu hiệu người cày có ruộng ở hậu phương.", answer:false },
       { text:"Đoạn tư liệu khẳng định nhiệm vụ phản phong kiến phải tiến hành đồng thời với nhiệm vụ phản đế.", answer:true },
       { text:"Đoạn tư liệu xác định những nhiệm vụ cụ thể của cách mạng Việt Nam trong thời kì xây dựng cơ sở vật chất kĩ thuật ban đầu của chủ nghĩa xã hội.", answer:false }
     ]
@@ -64,29 +64,30 @@ window.DUNG_SAI_DATA = [
       { text:"Đường lối đổi mới toàn diện và đồng bộ đất nước, trọng tâm là đổi mới về kinh tế được đề ra tại Đại hội VI (1986).", answer:true },
       { text:"Việc cải cách cơ chế quản lý kinh tế đã giải phóng sức sản xuất tạo ra động lực to lớn.", answer:true }
     ]
-  }
-{
-  doc:"Trật tự thế giới mới này được hình thành như thế nào, còn tùy thuộc ở nhiều nhân tố: Sự phát triển về thực lực kinh tế, chính trị, quân sự của các cường quốc.",
-  source:"Nguyễn Anh Thái, Lịch sử thế giới hiện đại, NXB GDVN, 2021",
-  statements:[
-    { text:"Trong xu thế đa cực Liên Xô, Mỹ là hai cực có tầm ảnh hưởng lớn.", answer:false },
-    { text:"Đoạn tư liệu trên đề cập đến nội dung chính là trật tự thế giới hai cực I-an-ta.", answer:false },
-    { text:"Cuộc chạy đua về sức mạnh tổng hợp của các cường quốc là một trong những nhân tố quan trọng tác động đến sự hình thành trật tự thế giới đa cực.", answer:true },
-    { text:"Sự phát triển của cách mạng khoa học - kĩ thuật là một trong những nhân tố tác động đến sự hình thành trật tự thế giới mới.", answer:true }
-  ]
-},
+  },
 
-{
-  doc:"Cách mạng tháng Tám và sự ra đời nước Việt Nam Dân chủ Cộng hoà nằm trong xu thế chung của thế giới và khu vực thời kỳ kết thúc của chiến tranh thế giới thứ II.",
-  source:"Trần Văn Hiệp, Một số chuyên đề lịch sử Việt Nam – tập 1, 2013",
-  statements:[
-    { text:"Đoạn tư liệu đề cập đến sự ra đời của nhà nước dân chủ cộng hòa đầu tiên trên thế giới.", answer:false },
-    { text:"Sự ra đời nước Việt Nam Dân chủ Cộng hoà năm 1945 là thành quả chung của sự nghiệp cách mạng thế giới.", answer:false },
-    { text:"Tổng khởi nghĩa tháng Tám năm 1945 thắng lợi trên phạm vi toàn quốc chủ yếu đã phát huy được sức mạnh của toàn dân tộc.", answer:true },
-    { text:"Cách mạng tháng Tám đã đánh dấu một bước tiến nhảy vọt trong lịch sử dân tộc: mở ra kỷ nguyên độc lập, tự do.", answer:true }
-  ]
-},
+  {
+    doc:"Trật tự thế giới mới này được hình thành như thế nào, còn tùy thuộc ở nhiều nhân tố: Sự phát triển về thực lực kinh tế, chính trị, quân sự của các cường quốc.",
+    source:"Nguyễn Anh Thái, Lịch sử thế giới hiện đại, NXB GDVN, 2021",
+    statements:[
+      { text:"Trong xu thế đa cực Liên Xô, Mỹ là hai cực có tầm ảnh hưởng lớn.", answer:false },
+      { text:"Đoạn tư liệu trên đề cập đến nội dung chính là trật tự thế giới hai cực I-an-ta.", answer:false },
+      { text:"Cuộc chạy đua về sức mạnh tổng hợp của các cường quốc là một trong những nhân tố quan trọng tác động đến sự hình thành trật tự thế giới đa cực.", answer:true },
+      { text:"Sự phát triển của cách mạng khoa học - kĩ thuật là một trong những nhân tố tác động đến sự hình thành trật tự thế giới mới.", answer:true }
+    ]
+  },
 
+  {
+    doc:"Cách mạng tháng Tám và sự ra đời nước Việt Nam Dân chủ Cộng hoà nằm trong xu thế chung của thế giới và khu vực thời kỳ kết thúc của chiến tranh thế giới thứ II.",
+    source:"Trần Văn Hiệp, Một số chuyên đề lịch sử Việt Nam – tập 1, 2013",
+    statements:[
+      { text:"Đoạn tư liệu đề cập đến sự ra đời của nhà nước dân chủ cộng hòa đầu tiên trên thế giới.", answer:false },
+      { text:"Sự ra đời nước Việt Nam Dân chủ Cộng hoà năm 1945 là thành quả chung của sự nghiệp cách mạng thế giới.", answer:false },
+      { text:"Tổng khởi nghĩa tháng Tám năm 1945 thắng lợi trên phạm vi toàn quốc chủ yếu đã phát huy được sức mạnh của toàn dân tộc.", answer:true },
+      { text:"Cách mạng tháng Tám đã đánh dấu một bước tiến nhảy vọt trong lịch sử dân tộc: mở ra kỷ nguyên độc lập, tự do.", answer:true }
+    ]
+  },
+  
 {
   doc:"Sau Chiến tranh thế giới thứ hai, trên cơ sở những thỏa thuận đạt được tại Hội nghị I-an-ta (tháng 2-1945), một trật tự thế giới mới được xác lập.",
   source:"Viện Lịch sử Quân sự Việt Nam, Lịch sử thế giới hiện đại (1945–1995)",
@@ -129,20 +130,21 @@ window.DUNG_SAI_DATA = [
     { text:"Tuyên bố ASEAN xác định xây dựng Cộng đồng các quốc gia Đông Nam Á phát triển toàn diện, hoà bình và thịnh vượng.", answer:true },
     { text:"Tuyên bố ASEAN trở thành khuôn khổ của những thoả thuận cho việc thành lập và xây dựng Cộng đồng ASEAN với ba trụ cột chính.", answer:false }
   ]
-}
+},
+
 {
-  doc:"Nghị quyết Hội nghị lần thứ 21 Ban Chấp hành Trung ương Đảng Lao động Việt Nam (7 – 1973) xác định nhiệm vụ cơ bản của cách mạng miền Nam trong giai đoạn mới là tiếp tục thực hiện chiến lược cách mạng dân tộc dân chủ nhân dân. Bất kể trong tình huống nào, ta vẫn phải kiên định con đường cách mạng bạo lực, giữ vững chiến lược tiến công.",
+  doc:"Nghị quyết Hội nghị lần thứ 21 Ban Chấp hành Trung ương Đảng Lao động Việt Nam (7 – 1973) xác định nhiệm vụ cơ bản của cách mạng miền Nam trong giai đoạn mới là tiếp tục thực hiện chiến lược cách mạng dân tộc dân chủ nhân dân.",
   source:"Ban Chỉ đạo Tổng kết chiến tranh, Chiến tranh cách mạng Việt Nam 1945-1975",
   statements:[
     { text:"Trong 30 năm chiến tranh giải phóng dân tộc và bảo vệ Tổ quốc (1945 – 1975), để thống nhất lãnh thổ, nhân dân Việt Nam buộc phải dùng bạo lực cách mạng, không thể trông chờ vào kết quả của một giải pháp hòa bình.", answer:true },
     { text:"Nghị quyết 21 của Đảng là một trong những văn kiện chỉ đạo cách mạng cả nước thực hiện nhiệm vụ chiến lược ở giai đoạn cuối của cuộc kháng chiến chống Mỹ, cứu nước.", answer:true },
-    { text:"Theo đoạn tư liệu, nhiệm vụ cơ bản của cách mạng miền Nam Việt Nam (từ tháng 7 – 1973) là \"tiếp tục thực hiện chiến lược cách mạng dân tộc dân chủ nhân dân\".", answer:true },
+    { text:"Theo đoạn tư liệu, nhiệm vụ cơ bản của cách mạng miền Nam Việt Nam (từ tháng 7 – 1973) là tiếp tục thực hiện chiến lược cách mạng dân tộc dân chủ nhân dân.", answer:true },
     { text:"Trong bối cảnh cách mạng miền Nam sau Hiệp định Pa-ri, Nghị quyết 21 của Đảng tạo được thế và lực mới, mở ra thời cơ tiến công chiến lược giải phóng hoàn toàn miền Nam.", answer:true }
   ]
 },
 
 {
-  doc:"Đối với Việt Nam, Hiệp định Giơ-ne-vơ năm 1954 về Đông Dương và Hiệp định Pa-ri năm 1973 về Việt Nam đều được kí kết sau khi Việt Nam giành được những thắng lợi lớn về quân sự. Thực tiễn 30 năm chiến tranh cách mạng và giải phóng (1945 – 1975) ở Việt Nam chứng tỏ đấu tranh chính trị là yếu tố trực tiếp đưa tới việc kí kết các hiệp định hòa bình.",
+  doc:"Đối với Việt Nam, Hiệp định Giơ-ne-vơ năm 1954 về Đông Dương và Hiệp định Pa-ri năm 1973 về Việt Nam đều được kí kết sau khi Việt Nam giành được những thắng lợi lớn về quân sự.",
   source:"Tư liệu về đấu tranh ngoại giao Việt Nam",
   statements:[
     { text:"Đối với Việt Nam, Hiệp định Giơ-ne-vơ năm 1954 về Đông Dương và Hiệp định Pa-ri năm 1973 về Việt Nam đều được kí kết sau khi Việt Nam giành được những thắng lợi lớn về quân sự.", answer:true },
@@ -164,7 +166,7 @@ window.DUNG_SAI_DATA = [
 },
 
 {
-  doc:"Tình hình quốc tế và trong nước đòi hỏi Đảng phải đổi mới toàn diện các lĩnh vực từ kinh tế, chính trị đến tư tưởng, văn hóa, xã hội, khắc phục tư duy cũ, cách làm cũ. Vì vậy \"Đối với nước ta, đổi mới là yêu cầu bức thiết của sự nghiệp cách mạng, là vấn đề có ý nghĩa sống còn\".",
+  doc:"Tình hình quốc tế và trong nước đòi hỏi Đảng phải đổi mới toàn diện các lĩnh vực từ kinh tế, chính trị đến tư tưởng, văn hóa, xã hội, khắc phục tư duy cũ, cách làm cũ.",
   source:"Lịch sử Việt Nam, Tập 15, 2017",
   statements:[
     { text:"Đường lối Đổi mới của Đảng diễn ra toàn diện trên nhiều lĩnh vực, trọng tâm là đổi mới về chính trị.", answer:false },
@@ -173,7 +175,7 @@ window.DUNG_SAI_DATA = [
     { text:"Việt Nam tiến hành đổi mới đất nước trong bối cảnh đất nước đã thống nhất, cả nước đi lên chủ nghĩa xã hội.", answer:true }
   ]
 },
-
+  
 {
   doc:"Sau Chiến tranh thế giới thứ hai, quốc gia Mỹ La-tinh nào sau đây tuyên bố đi theo con đường xã hội chủ nghĩa? Đó là Cu-ba — quốc gia đã tiến hành cải cách dân chủ trên lĩnh vực kinh tế, chính trị, xã hội và bước vào thời kì xây dựng chủ nghĩa xã hội từ năm 1961.",
   source:"Tư liệu về chủ nghĩa xã hội ở Mỹ La-tinh",
@@ -186,7 +188,7 @@ window.DUNG_SAI_DATA = [
 },
 
 {
-  doc:"Ngày 30-8-1945, trước cửa Ngọ môn Huế, Bảo Đại đọc Chiếu thoái vị: \"...Rồi ông Trần Huy Liệu đọc bản tuyên bố của Đoàn đại biểu Chính phủ, nêu rõ thắng lợi của Cách mạng tháng Tám là kết quả của hàng mấy chục năm tranh đấu anh dũng, kiên cường, bền bỉ của nhân dân cả nước, tuyên bố chấm dứt vĩnh viễn chế độ quân chủ\".",
+  doc:"Ngày 30-8-1945, trước cửa Ngọ môn Huế, Bảo Đại đọc Chiếu thoái vị. Thắng lợi của Cách mạng tháng Tám là kết quả của hàng mấy chục năm tranh đấu anh dũng, kiên cường, bền bỉ của nhân dân cả nước, tuyên bố chấm dứt vĩnh viễn chế độ quân chủ.",
   source:"Phạm Khắc Hoè, Từ triều đình Huế đến chiến khu Việt Bắc, 1987",
   statements:[
     { text:"Sự kiện vua Bảo Đại đọc chiếu thoái vị ở Ngọ môn Huế đã đánh dấu sự sụp đổ hoàn toàn của chế độ phong kiến Việt Nam từng tồn tại trong nhiều thế kỉ.", answer:true },
@@ -194,15 +196,16 @@ window.DUNG_SAI_DATA = [
     { text:"Cách mạng tháng Tám năm 1945 ở Việt Nam thành công đã góp phần vào chiến thắng chủ nghĩa phát xít, góp phần làm biến đổi bản đồ chính trị thế giới.", answer:true },
     { text:"Cuộc Tổng khởi nghĩa tháng Tám năm 1945 ở Việt Nam là một cuộc cách mạng sử dụng bạo lực nhằm vào hai đối tượng chính là đế quốc và phong kiến.", answer:false }
   ]
-}
+},
+
 {
-  doc:"Đảng Cộng sản Việt Nam đã vận dụng sáng tạo chủ nghĩa Mác - Lênin vào điều kiện cụ thể của Việt Nam. Từ thực tiễn Cách mạng tháng Tám năm 1945 và kháng chiến chống Pháp (1945 – 1954) cho thấy, những địa bàn xây dựng căn cứ địa phải đáp ứng được các điều kiện quan trọng, ngoại trừ việc có quân đội chủ lực bảo vệ.",
+  doc:"Đảng Cộng sản Việt Nam đã vận dụng sáng tạo chủ nghĩa Mác - Lênin vào điều kiện cụ thể của Việt Nam. Từ thực tiễn Cách mạng tháng Tám năm 1945 và kháng chiến chống Pháp (1945 – 1954) cho thấy, những địa bàn xây dựng căn cứ địa phải đáp ứng được các điều kiện quan trọng.",
   source:"Tư liệu về căn cứ địa cách mạng",
   statements:[
     { text:"Từ thực tiễn Cách mạng Tháng Tám năm 1945 và kháng chiến chống Pháp (1945 – 1954) ở Việt Nam cho thấy, những địa bàn xây dựng căn cứ địa phải đáp ứng được các điều kiện quan trọng, ngoại trừ có quân đội chủ lực bảo vệ.", answer:true },
     { text:"Căn cứ địa cách mạng cần phải có lực lượng chính trị vững chắc, có điều kiện sản xuất lương thực và có điều kiện xây dựng lực lượng.", answer:true },
     { text:"Cách mạng tháng Tám năm 1945 ở Việt Nam thành công là kết quả của quá trình chuẩn bị và xây dựng lực lượng lâu dài, chu đáo.", answer:true },
-    { text:"Trong kháng chiến chống Pháp, Đảng đã thực hiện triệt để khẩu hiệu \"người cày có ruộng\" ở hậu phương.", answer:false }
+    { text:"Trong kháng chiến chống Pháp, Đảng đã thực hiện triệt để khẩu hiệu người cày có ruộng ở hậu phương.", answer:false }
   ]
 },
 
@@ -234,13 +237,13 @@ window.DUNG_SAI_DATA = [
   statements:[
     { text:"Thắng lợi của cuộc Cách mạng tháng Mười Nga năm 1917 trực tiếp đưa đến sự ra đời của Chính quyền Xô viết.", answer:true },
     { text:"Cách mạng tháng Mười Nga năm 1917 đã mở ra thời đại mới - thời đại quá độ từ chủ nghĩa tư bản lên chủ nghĩa xã hội trên phạm vi toàn thế giới.", answer:true },
-    { text:"Ngay sau khi thành lập, chính quyền Xô viết ở Nga do Lê-nin đứng đầu đã ban hành \"Sắc lệnh hòa bình\" và \"Sắc lệnh ruộng đất\".", answer:true },
+    { text:"Ngay sau khi thành lập, chính quyền Xô viết ở Nga do Lê-nin đứng đầu đã ban hành Sắc lệnh hòa bình và Sắc lệnh ruộng đất.", answer:true },
     { text:"Cách mạng tháng Mười Nga năm 1917 là cuộc cách mạng dân chủ tư sản kiểu mới.", answer:false }
   ]
 },
 
 {
-  doc:"Nội dung nào sau đây phản ánh không đúng nguyên nhân dẫn đến thắng lợi của Cách mạng tháng Tám năm 1945 ở Việt Nam? Sự giúp đỡ trực tiếp của các nước xã hội chủ nghĩa không phải là nguyên nhân dẫn đến thắng lợi của Cách mạng tháng Tám.",
+  doc:"Nội dung nào sau đây phản ánh không đúng nguyên nhân dẫn đến thắng lợi của Cách mạng tháng Tám năm 1945 ở Việt Nam? Sự giúp đỡ trực tiếp của các nước xã hội chủ nghĩa không phải là nguyên nhân.",
   source:"Tư liệu về Cách mạng tháng Tám",
   statements:[
     { text:"Sự giúp đỡ trực tiếp của các nước xã hội chủ nghĩa không phải là nguyên nhân dẫn đến thắng lợi của Cách mạng tháng Tám năm 1945.", answer:true },
@@ -259,7 +262,8 @@ window.DUNG_SAI_DATA = [
     { text:"Việt Nam gia nhập ASEAN vào năm 1995 và trở thành thành viên thứ 7 của tổ chức này.", answer:true },
     { text:"Một trong những thành tựu quan trọng của ASEAN trong giai đoạn từ 2015 đến nay là Cộng đồng ASEAN được thành lập.", answer:true }
   ]
-     }
+},
+  
 {
   doc:"Với Cách mạng tháng Tám, một Đảng Cộng sản mới 15 tuổi, đã trở thành một đảng cầm quyền. Với thắng lợi của cuộc Cách mạng tháng Tám, lần đầu tiên chủ nghĩa Mác - Lênin đã được vận dụng sáng tạo và chiến thắng ở một nước thuộc địa.",
   source:"Nguyễn Quang Ngọc, Tiến trình lịch sử Việt Nam, NXB Giáo dục, 2007",
@@ -305,7 +309,7 @@ window.DUNG_SAI_DATA = [
 },
 
 {
-  doc:"Trong thời kì hậu Chiến tranh lạnh, thế giới đang chứng kiến sự thay đổi về địa vị chiến lược của các cường quốc, sự sắp xếp lại vị trí và vai trò của mỗi chủ thể quốc tế, kéo theo những biến chuyển lớn trong cục diện quan hệ quốc tế. Các quốc gia, các tổ chức và lực lượng chính trị quốc tế thực hiện điều chỉnh chiến lược đối nội, đối ngoại.",
+  doc:"Trong thời kì hậu Chiến tranh lạnh, thế giới đang chứng kiến sự thay đổi về địa vị chiến lược của các cường quốc, sự sắp xếp lại vị trí và vai trò của mỗi chủ thể quốc tế, kéo theo những biến chuyển lớn trong cục diện quan hệ quốc tế.",
   source:"Hoàng Hải Hà, Nguyễn Thị Mỹ Hạnh (2024), Giáo trình Lịch sử Ngoại giao Việt Nam",
   statements:[
     { text:"Các cường quốc điều chỉnh chiến lược phát triển trong thời kỳ hậu Chiến tranh lạnh đã đưa đến những chuyển biến lớn trong cục diện quan hệ quốc tế.", answer:true },
@@ -324,7 +328,8 @@ window.DUNG_SAI_DATA = [
     { text:"Công cuộc Đổi mới là quá trình tìm kiếm những hình thức, bước đi và biện pháp phù hợp để xây dựng đất nước theo một mục tiêu không thay đổi.", answer:true },
     { text:"Đoạn tư liệu trên ghi nhận: Công cuộc Đổi mới đã để lại nhiều bài học kinh nghiệm quý giá cho công cuộc bảo vệ Tổ quốc ngày nay.", answer:true }
   ]
-}
+},
+
 {
   doc:"Năm 1977, để bảo vệ chủ quyền quốc gia ở Biên Đông, Chính phủ Việt Nam đã ra tuyên bố về lãnh hải, vùng tiếp giáp, vùng đặc quyền kinh tế và thềm lục địa.",
   source:"Tư liệu về chủ quyền biển đảo Việt Nam",
@@ -337,16 +342,16 @@ window.DUNG_SAI_DATA = [
 },
 
 {
-  doc:"Kế sách \"Thanh dã\" được nhà Trần thực hiện trong cuộc kháng chiến chống quân xâm lược Mông-Nguyên ở thế kỉ XIII. Đây là kế sách vườn không nhà trống, gây khó khăn cho quân địch về lương thảo.",
+  doc:"Kế sách Thanh dã được nhà Trần thực hiện trong cuộc kháng chiến chống quân xâm lược Mông-Nguyên ở thế kỉ XIII. Đây là kế sách vườn không nhà trống, gây khó khăn cho quân địch về lương thảo.",
   source:"Tư liệu về kháng chiến chống Mông-Nguyên",
   statements:[
-    { text:"Kế sách \"Thanh dã\" được nhà Trần thực hiện trong cuộc kháng chiến chống quân xâm lược Mông-Nguyên ở thế kỉ XIII.", answer:true },
-    { text:"Nhà Trần đã thực hiện kế sách \"Tiên phát chế nhân\" trong cuộc kháng chiến chống quân xâm lược Tống ở thế kỉ XI.", answer:false },
+    { text:"Kế sách Thanh dã được nhà Trần thực hiện trong cuộc kháng chiến chống quân xâm lược Mông-Nguyên ở thế kỉ XIII.", answer:true },
+    { text:"Nhà Trần đã thực hiện kế sách Tiên phát chế nhân trong cuộc kháng chiến chống quân xâm lược Tống ở thế kỉ XI.", answer:false },
     { text:"Năm 1285, quân dân Đại Việt đánh bại quân Nguyên xâm lược lần thứ hai.", answer:true },
     { text:"Năm 1288, quân dân nhà Trần giành thắng lợi ở sông Bạch Đằng, đánh tan quân Nguyên lần thứ ba.", answer:true }
   ]
 },
-
+  
 {
   doc:"Từ phong trào Đồng khởi (1959 – 1960) ở miền Nam Việt Nam, Mặt trận Dân tộc giải phóng miền Nam Việt Nam được thành lập (20-12-1960). Đây là tổ chức đại diện cho khối đại đoàn kết dân tộc trong cuộc đấu tranh chống Mỹ - Diệm.",
   source:"Tư liệu về phong trào Đồng khởi",
@@ -389,7 +394,8 @@ window.DUNG_SAI_DATA = [
     { text:"Đại hội đại biểu toàn quốc lần thứ VI của Đảng (1986) đã đề ra đường lối đổi mới toàn diện và đồng bộ đất nước.", answer:true },
     { text:"Đại hội đại biểu toàn quốc lần thứ VI của Đảng xác định nhiệm vụ trọng tâm của đổi mới là đổi mới về chính trị.", answer:false }
   ]
-}
+},
+
 {
   doc:"Năm 1945, quyết định của Hội nghị I-an-ta góp phần tạo ra khuôn khổ của trật tự thế giới mới sau Chiến tranh thế giới thứ hai. Hội nghị đã thống nhất mục tiêu chung là tiêu diệt tận gốc chủ nghĩa phát xít Đức, Nhật.",
   source:"Tư liệu về Hội nghị I-an-ta",
@@ -433,7 +439,7 @@ window.DUNG_SAI_DATA = [
     { text:"Sau Chiến tranh lạnh, chủ nghĩa xã hội ở Liên Xô và Đông Âu tiếp tục phát triển mạnh mẽ.", answer:false }
   ]
 },
-
+  
 {
   doc:"Xét về bản chất, toàn cầu hóa là sự tăng lên mạnh mẽ những mối liên hệ, tác động, phụ thuộc lẫn nhau giữa các nước. Đây là xu thế khách quan, không thể đảo ngược của thế giới hiện đại.",
   source:"Tư liệu về toàn cầu hóa",
@@ -454,7 +460,8 @@ window.DUNG_SAI_DATA = [
     { text:"Sự kiện Việt Nam gia nhập Hiệp hội các quốc gia Đông Nam Á (1995) có ý nghĩa thúc đẩy sự phát triển của quá trình liên kết khu vực.", answer:true },
     { text:"Năm 1963, ở khu vực Đông Nam Á, tổ chức Hiệp hội Đông Nam Á (ASA) được thành lập.", answer:false }
   ]
-}
+},
+
 {
   doc:"Năm 1963, ở khu vực Đông Nam Á, tổ chức MAPHILINDO được thành lập. Đây là tổ chức liên kết khu vực ra đời trước ASEAN.",
   source:"Tư liệu về các tổ chức khu vực Đông Nam Á",
@@ -500,7 +507,7 @@ window.DUNG_SAI_DATA = [
 },
 
 {
-  doc:"Khi thực hiện \"Kế hoạch Mác-san\" để giúp các nước Tây Âu phục hồi nền kinh tế sau Chiến tranh thế giới thứ hai, Mĩ còn có mục đích tập hợp các nước Tây Âu vào liên minh quân sự chống Liên Xô, Đông Âu.",
+  doc:"Khi thực hiện Kế hoạch Mác-san để giúp các nước Tây Âu phục hồi nền kinh tế sau Chiến tranh thế giới thứ hai, Mĩ còn có mục đích tập hợp các nước Tây Âu vào liên minh quân sự chống Liên Xô, Đông Âu.",
   source:"Tư liệu về Kế hoạch Mác-san",
   statements:[
     { text:"Khi thực hiện Kế hoạch Mác-san để giúp các nước Tây Âu phục hồi nền kinh tế sau Chiến tranh thế giới thứ hai, Mĩ còn có mục đích tập hợp các nước Tây Âu vào liên minh quân sự chống Liên Xô, Đông Âu.", answer:true },
@@ -519,8 +526,8 @@ window.DUNG_SAI_DATA = [
     { text:"Ngay sau khi thành lập, chính quyền Xô viết ở Nga do Lê-nin đứng đầu đã ban hành Sắc lệnh hòa bình và Sắc lệnh ruộng đất.", answer:true },
     { text:"Cách mạng tháng Mười Nga năm 1917 là cuộc cách mạng dân chủ tư sản kiểu mới.", answer:false }
   ]
-    }
-
+},
+  
 {
   doc:"Sự ra đời của Liên bang Cộng hòa xã hội chủ nghĩa Xô viết (1922) là kết quả của sự liên kết tự nguyện giữa các nước Cộng hòa Xô viết. Đây là nhà nước xã hội chủ nghĩa đầu tiên trên thế giới.",
   source:"Tư liệu về Liên bang Xô viết",
@@ -585,7 +592,7 @@ window.DUNG_SAI_DATA = [
     { text:"Đại hội VI của Đảng xác định trọng tâm của công cuộc đổi mới là đổi mới về chính trị.", answer:false },
     { text:"Đại hội VI của Đảng chủ trương phát triển nền kinh tế hàng hóa nhiều thành phần, vận động theo cơ chế thị trường có sự quản lí của Nhà nước.", answer:true }
   ]
-}
+},
 
 {
   doc:"Tình hình thế giới và trong nước những năm 80 của thế kỉ XX đặt ra yêu cầu cấp bách đối với Việt Nam là phải tiến hành công cuộc Đổi mới toàn diện. Đất nước lâm vào khủng hoảng kinh tế - xã hội.",
@@ -608,7 +615,7 @@ window.DUNG_SAI_DATA = [
     { text:"Cương lĩnh 1991 thay thế hoàn toàn Cương lĩnh chính trị đầu tiên của Đảng năm 1930.", answer:false }
   ]
 },
-
+  
 {
   doc:"Đại hội đại biểu toàn quốc lần thứ VIII của Đảng (1996) đã tổng kết 10 năm đổi mới và đề ra nhiệm vụ đẩy mạnh công nghiệp hóa, hiện đại hóa đất nước.",
   source:"Đảng Cộng sản Việt Nam, Văn kiện Đại hội VIII",
@@ -673,7 +680,7 @@ window.DUNG_SAI_DATA = [
     { text:"Việt Nam và Mỹ thiết lập quan hệ đối tác chiến lược toàn diện vào năm 2023.", answer:true },
     { text:"Ưu tiên đối ngoại của Việt Nam thời kì Đổi mới là tăng cường quan hệ hợp với các nước xã hội chủ nghĩa.", answer:false }
   ]
-}
+},
 
 {
   doc:"Vào thập niên 1980, mối quan hệ nồng ấm giữa Tổng thống Mỹ Ri-gân và nhà lãnh đạo Liên Xô Goóc-ba-chốp đã giúp giảm dần tình trạng căng thẳng của Chiến tranh lạnh. Năm 1987, hai nhà lãnh đạo đã đồng ý hủy bỏ tên lửa hạt nhân tầm trung.",
@@ -690,13 +697,13 @@ window.DUNG_SAI_DATA = [
   doc:"Nghị quyết Hội nghị lần thứ 15 Ban Chấp hành Trung ương Đảng Lao động Việt Nam (1-1959) đã xác định con đường tiến lên của cách mạng miền Nam, vạch rõ mục tiêu và phương pháp cách mạng ở miền Nam.",
   source:"Ban Chỉ đạo Tổng kết chiến tranh, Chiến tranh cách mạng Việt Nam 1945-1975",
   statements:[
-    { text:"Đoạn tư liệu trên ghi nhận: \"giải phóng miền Nam, bảo vệ miền Bắc, thống nhất nước nhà...\" là một nội dung trong Nghị quyết 15 của Đảng Lao động Việt Nam.", answer:true },
+    { text:"Đoạn tư liệu trên ghi nhận: giải phóng miền Nam, bảo vệ miền Bắc, thống nhất nước nhà là một nội dung trong Nghị quyết 15 của Đảng Lao động Việt Nam.", answer:true },
     { text:"Nghị quyết 15 của Đảng đã đáp ứng được nguyện vọng tha thiết của đồng bào miền Nam muốn vùng lên đánh đổ chế độ Mỹ - Diệm.", answer:true },
     { text:"Trong bối cảnh cách mạng miền Nam gặp khó khăn, Nghị quyết 15 của Đảng là nguyên nhân sâu xa làm bùng nổ phong trào Đồng khởi, mở đầu sự chuyển biến về thế và lực của cách mạng miền Nam.", answer:true },
     { text:"Với Nghị quyết 15, Đảng đã chuyển từ phương châm đấu tranh chính trị là chủ yếu sang phương châm đẩy mạnh đấu tranh chính trị lên song song với đấu tranh vũ trang trên cả ba vùng chiến lược.", answer:true }
   ]
 },
-
+  
 {
   doc:"Cách mạng Tháng Tám thành công, nước Việt Nam Dân chủ Cộng hòa ra đời, ngoại giao Việt Nam đứng trước một thách thức lớn khi nhiều lực lượng ngoại bang có mặt trên đất nước mà chưa có một quốc gia nào thực sự ủng hộ nhà nước độc lập non trẻ.",
   source:"Vũ Dương Ninh, Lịch sử quan hệ đối ngoại Việt Nam (1940-2020), 2021",
@@ -713,7 +720,7 @@ window.DUNG_SAI_DATA = [
   source:"Viện Sử học, Lịch sử Việt Nam, tập 15, 2017",
   statements:[
     { text:"Những thành tựu đạt được từ công cuộc Đổi mới của Đảng (1986 – nay) tạo cơ đồ, vị thế và uy tín, trở thành nền tảng vững chắc để thực hiện khát vọng phát triển đất nước trong kỉ nguyên mới.", answer:true },
-    { text:"Tư tưởng \"lấy dân làm gốc\" trong đường lối đổi mới của Đảng là sự kế thừa truyền thống quý báu của dân tộc Việt Nam.", answer:true },
+    { text:"Tư tưởng lấy dân làm gốc trong đường lối đổi mới của Đảng là sự kế thừa truyền thống quý báu của dân tộc Việt Nam.", answer:true },
     { text:"Theo đoạn tư liệu trên, bên cạnh đổi mới về tư duy kinh tế, Đảng coi trọng đổi mới về chính trị.", answer:true },
     { text:"Việc thực hiện đổi mới về tư duy kinh tế và đổi mới về chính trị (1986 – nay) đã giải phóng hoàn toàn sức dân, qua đó phát huy được mọi nguồn lực của nhân dân trong nền kinh tế thị trường.", answer:false }
   ]
@@ -761,30 +768,30 @@ window.DUNG_SAI_DATA = [
     { text:"Sau Hiệp định Giơ-ne-vơ (1954), miền Nam Việt Nam tiếp tục cách mạng dân tộc dân chủ nhân dân.", answer:true },
     { text:"Hiệp định Giơ-ne-vơ (1954) đã thống nhất đất nước Việt Nam về mặt nhà nước.", answer:false }
   ]
-}
+},
 
-  {
-    doc:"Sau khi Chiến tranh lạnh kết thúc, hầu hết các quốc gia đều điều chỉnh chiến lược phát triển, tập trung vào lĩnh vực kinh tế. Xu thế đối thoại, hợp tác trở thành xu thế chủ đạo trong quan hệ quốc tế.",
-    source:"Tư liệu về xu thế phát triển sau Chiến tranh lạnh",
-    statements:[
-      { text:"Sau Chiến tranh lạnh, hầu hết các quốc gia đều điều chỉnh chiến lược phát triển, tập trung vào lĩnh vực kinh tế.", answer:true },
-      { text:"Sau Chiến tranh lạnh, các quốc gia đều lấy phát triển tiềm lực quân sự làm mục tiêu chiến lược hàng đầu.", answer:false },
-      { text:"Sau Chiến tranh lạnh, quan hệ giữa các nước được điều chỉnh theo hướng tăng cường đối thoại, thương lượng.", answer:true },
-      { text:"Sau Chiến tranh lạnh, các mâu thuẫn về ý thức hệ giữa các khối nước hoàn toàn biến mất trong quan hệ quốc tế.", answer:false }
-    ]
-  },
+{
+  doc:"Sau khi Chiến tranh lạnh kết thúc, hầu hết các quốc gia đều điều chỉnh chiến lược phát triển, tập trung vào lĩnh vực kinh tế. Xu thế đối thoại, hợp tác trở thành xu thế chủ đạo trong quan hệ quốc tế.",
+  source:"Tư liệu về xu thế phát triển sau Chiến tranh lạnh",
+  statements:[
+    { text:"Sau Chiến tranh lạnh, hầu hết các quốc gia đều điều chỉnh chiến lược phát triển, tập trung vào lĩnh vực kinh tế.", answer:true },
+    { text:"Sau Chiến tranh lạnh, các quốc gia đều lấy phát triển tiềm lực quân sự làm mục tiêu chiến lược hàng đầu.", answer:false },
+    { text:"Sau Chiến tranh lạnh, quan hệ giữa các nước được điều chỉnh theo hướng tăng cường đối thoại, thương lượng.", answer:true },
+    { text:"Sau Chiến tranh lạnh, các mâu thuẫn về ý thức hệ giữa các khối nước hoàn toàn biến mất trong quan hệ quốc tế.", answer:false }
+  ]
+},
 
-  {
-    doc:"Nghị quyết Trung ương lần thứ 8 khóa XIII (2023) về Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định mục tiêu: giữ vững môi trường hòa bình, ổn định để phát triển đất nước.",
-    source:"Nghị quyết Trung ương 8 khóa XIII (2023)",
-    statements:[
-      { text:"Nghị quyết Trung ương 8 khóa XIII (2023) về Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định mục tiêu giữ vững môi trường hòa bình, ổn định để phát triển đất nước.", answer:true },
-      { text:"Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định bảo vệ Tổ quốc từ sớm, từ xa.", answer:true },
-      { text:"Chiến lược bảo vệ Tổ quốc xác định xây dựng Quân đội nhân dân Việt Nam cách mạng, chính quy, tinh nhuệ, hiện đại.", answer:true },
-      { text:"Chiến lược bảo vệ Tổ quốc trong tình hình mới chỉ tập trung vào việc xây dựng lực lượng vũ trang.", answer:false }
-    ]
-  },
-
+{
+  doc:"Nghị quyết Trung ương lần thứ 8 khóa XIII (2023) về Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định mục tiêu: giữ vững môi trường hòa bình, ổn định để phát triển đất nước.",
+  source:"Nghị quyết Trung ương 8 khóa XIII (2023)",
+  statements:[
+    { text:"Nghị quyết Trung ương 8 khóa XIII (2023) về Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định mục tiêu giữ vững môi trường hòa bình, ổn định để phát triển đất nước.", answer:true },
+    { text:"Chiến lược bảo vệ Tổ quốc trong tình hình mới xác định bảo vệ Tổ quốc từ sớm, từ xa.", answer:true },
+    { text:"Chiến lược bảo vệ Tổ quốc xác định xây dựng Quân đội nhân dân Việt Nam cách mạng, chính quy, tinh nhuệ, hiện đại.", answer:true },
+    { text:"Chiến lược bảo vệ Tổ quốc trong tình hình mới chỉ tập trung vào việc xây dựng lực lượng vũ trang.", answer:false }
+  ]
+},
+  
   {
     doc:"Trong xu thế đa cực hiện nay, Việt Nam đã thiết lập quan hệ đối tác chiến lược toàn diện với nhiều nước, trở thành thành viên tích cực của nhiều tổ chức quốc tế và khu vực.",
     source:"Tư liệu về vị thế quốc tế của Việt Nam",
@@ -872,4 +879,5 @@ window.DUNG_SAI_DATA = [
       { text:"Theo đoạn tư liệu, công cuộc đổi mới do Đảng Cộng sản Việt Nam khởi xướng và lãnh đạo là sự lựa chọn mang tính lịch sử phù hợp với xu thế của thời đại.", answer:true }
     ]
   }
+
 ];
