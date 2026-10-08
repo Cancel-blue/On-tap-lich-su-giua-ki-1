@@ -371,8 +371,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(titleEl) titleEl.textContent = info.icon + " " + info.name;
 
   const subEl = document.getElementById("monSub");
-  if(subEl) subEl.textContent = info.sub;
-
+if(subEl){
+  if(set === "full"){
+    const diffNames = {
+      mediumFull: "Trung bình • 1 phút/câu",
+      hardFull: "Khó • 30 giây/câu",
+      extremeFull: "Siêu khó • 10 giây/câu",
+      pvpFull: "PVP 4 người • 30 giây/câu"
+    };
+    const savedDiff = sessionStorage.getItem("chosenDiff") || "mediumFull";
+    subEl.textContent = "📚 Đề " + de + " • " + (diffNames[savedDiff] || savedDiff);
+  } else {
+    subEl.textContent = info.sub;
+  }
+}
   /* Chọn file data theo set + đề */
   let dataPath;
   if(set === "full"){
