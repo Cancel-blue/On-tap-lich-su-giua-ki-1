@@ -316,3 +316,32 @@ h1{
 .btn-ready.off{background:linear-gradient(90deg,#475569,#334155)}
 .btn-ready:hover{transform:translateY(-2px)}
 .btn-ready:disabled{opacity:.5;cursor:not-allowed;transform:none}
+/* ===== CẢNH BÁO GAME FULL ===== */
+.warning-note{
+  padding:12px 14px;
+  border-radius:11px;
+  background:rgba(251,191,36,.1);
+  border:1.5px solid rgba(251,191,36,.45);
+  color:#fbbf24;
+  font-size:12.5px;
+  line-height:1.55;
+  margin-bottom:16px;
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+}
+.warning-note .wn-icon{
+  font-size:18px;
+  flex-shrink:0;
+  line-height:1.2;
+}
+.warning-note b{
+  color:#fcd34d;
+  display:block;
+  margin-bottom:3px;
+  font-size:13px;
+}
+.warning-note .wn-text{
+  color:#cbd5e1;
+  font-size:12px;
+}
