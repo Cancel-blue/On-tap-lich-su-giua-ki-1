@@ -48,3 +48,33 @@ document.addEventListener("DOMContentLoaded", ()=>{
     };
   }
 });
+/* =========================================================
+   TỰ ĐỘNG ẨN MÀN CHỌN BỘ ĐỀ VỚI MÔN KHÁC LỊCH SỬ
+   ========================================================= */
+(function setupChooseSet(){
+  const params = new URLSearchParams(window.location.search);
+  const mon = params.get("mon") || "lich-su";
+
+  const monInfo = {
+    "lich-su": { name:"LỊCH SỬ", icon:"📜" },
+    "dia-ly":  { name:"ĐỊA LÝ",  icon:"🌍" },
+    "vat-ly":  { name:"VẬT LÝ",  icon:"⚛️" },
+    "toan":    { name:"TOÁN",    icon:"🔢" },
+    "hoa":     { name:"HÓA HỌC", icon:"🧪" }
+  };
+
+  const info = monInfo[mon] || monInfo["lich-su"];
+
+  // Cập nhật tiêu đề màn chọn bộ đề
+  const title = document.getElementById("chooseSetTitle");
+  if(title) title.textContent = info.icon + " " + info.name;
+
+  // Chỉ lịch sử mới có màn chọn bộ đề
+  const screenSet = document.getElementById("screenChooseSet");
+  const screenStart = document.getElementById("screenStart");
+
+  if(mon !== "lich-su"){
+    if(screenSet) screenSet.classList.remove("active");
+    if(screenStart) screenStart.classList.add("active");
+  }
+})();
