@@ -75,6 +75,36 @@ if(QUESTIONS.length === 0){
 (function buildDiffGrid(){
   const grid = $("diffGrid");
   if(!grid) return;
+
+  /* Kiểm tra nếu là game full */
+  const params = new URLSearchParams(window.location.search);
+  const set = params.get("set");
+  const de = params.get("de") || "01-02";
+
+  if(set === "full"){
+    /* Ẩn grid mức độ */
+    grid.style.display = "none";
+    /* Đổi label "CHỌN MỨC ĐỘ" thành thông báo */
+    const label = document.querySelector('p.label-diff');
+    if(label){
+      const diffNames = {
+        mediumFull: "TRUNG BÌNH (1 phút/câu)",
+        hardFull: "KHÓ (30 giây/câu)",
+        extremeFull: "SIÊU KHÓ (10 giây/câu)",
+        pvpFull: "PVP 4 NGƯỜI (30 giây/câu)"
+      };
+      const diffName = diffNames[selectedDiff] || selectedDiff;
+      label.innerHTML = `
+        <span style="display:block;padding:10px 14px;background:rgba(56,189,248,.1);border:1.5px solid #38bdf8;border-radius:11px;color:#7dd3fc;font-size:13px;line-height:1.5">
+          📚 <b>Đề ${de}</b> • ⚡ <b>${diffName}</b><br>
+          <span style="color:#94a3b8;font-size:11.5px">Nhập tên và bấm BẮT ĐẦU để chơi</span>
+        </span>
+      `;
+    }
+    return;
+  }
+
+  /* Chế độ trường: hiện 5 mức cơ bản */
   const baseKeys = ["easy","medium","hard","extreme","pvp"];
   baseKeys.forEach(key=>{
     const d = DIFFICULTIES[key];
