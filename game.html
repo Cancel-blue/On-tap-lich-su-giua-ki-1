@@ -25,36 +25,80 @@
       <button class="btn-primary" onclick="chonBoDe('full')"
               style="background:linear-gradient(90deg,#a855f7,#7c3aed);padding:22px 16px">
         📚 GAME FULL KIẾN THỨC
-        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">Đề thi thử TN THPT • 4 mức độ</small>
+        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">20 đề thi thử TN THPT</small>
       </button>
     </div>
   </div>
 </section>
 
-<!-- ===== MÀN CHỌN MỨC ĐỘ FULL ===== -->
+<!-- ===== MÀN CHỌN NHÓM ĐỀ + MỨC ĐỘ FULL ===== -->
 <section id="screenChooseLevelFull" class="screen">
   <div class="card">
     <button class="btn-back" onclick="quayLaiChonSet()" type="button">← Quay lại</button>
     <h1>📚 GAME FULL</h1>
-    <p class="sub">Chọn mức độ</p>
+    <p class="sub">Chọn nhóm đề và mức độ</p>
 
-    <p class="label-diff">MỨC ĐỘ</p>
+    <p class="label-diff">CHỌN NHÓM ĐỀ</p>
+    <div class="diff-grid" id="deGridFull">
+      <button class="diff on" type="button" data-key="01-02">
+        <b>ĐỀ 1-2</b>
+        <small>Hải Phòng • Quảng Ninh</small>
+      </button>
+      <button class="diff" type="button" data-key="03-04">
+        <b>ĐỀ 3-4</b>
+        <small>Hà Nội • Ninh Bình</small>
+      </button>
+      <button class="diff" type="button" data-key="05-06">
+        <b>ĐỀ 5-6</b>
+        <small>Lào Cai • Thanh Hóa</small>
+      </button>
+      <button class="diff" type="button" data-key="07-08">
+        <b>ĐỀ 7-8</b>
+        <small>Nghệ An • Thái Nguyên</small>
+      </button>
+      <button class="diff" type="button" data-key="09-10">
+        <b>ĐỀ 9-10</b>
+        <small>Đề tham khảo</small>
+      </button>
+      <button class="diff" type="button" data-key="11-12">
+        <b>ĐỀ 11-12</b>
+        <small>Đề tham khảo</small>
+      </button>
+      <button class="diff" type="button" data-key="13-14">
+        <b>ĐỀ 13-14</b>
+        <small>Đề tham khảo</small>
+      </button>
+      <button class="diff" type="button" data-key="15-16">
+        <b>ĐỀ 15-16</b>
+        <small>Đề tham khảo</small>
+      </button>
+      <button class="diff" type="button" data-key="17-18">
+        <b>ĐỀ 17-18</b>
+        <small>Đề tham khảo</small>
+      </button>
+      <button class="diff" type="button" data-key="19-20">
+        <b>ĐỀ 19-20</b>
+        <small>Đề tham khảo</small>
+      </button>
+    </div>
+
+    <p class="label-diff">CHỌN MỨC ĐỘ</p>
     <div class="diff-grid" id="diffGridFull">
       <button class="diff on" type="button" data-key="mediumFull">
         <b>TRUNG BÌNH</b>
-        <small>Đảo vị trí đáp án • 1 phút/câu</small>
+        <small>1 phút/câu</small>
       </button>
       <button class="diff" type="button" data-key="hardFull">
         <b>KHÓ</b>
-        <small>Trộn đáp án câu khác • 30 giây/câu</small>
+        <small>30 giây/câu</small>
       </button>
       <button class="diff" type="button" data-key="extremeFull">
         <b>SIÊU KHÓ</b>
-        <small>Trộn đáp án câu khác • 10 giây/câu</small>
+        <small>10 giây/câu</small>
       </button>
       <button class="diff pvp" type="button" data-key="pvpFull">
         <b>PVP 4 NGƯỜI</b>
-        <small>Bạn vs 3 bot • 30 giây/câu</small>
+        <small>30 giây/câu</small>
       </button>
     </div>
 
@@ -211,8 +255,9 @@
      SCRIPT XỬ LÝ
      ============================================================ -->
 <script>
-/* ===== BIẾN TOÀN CỤC CHO MÀN CHỌN MỨC FULL ===== */
+/* ===== BIẾN TOÀN CỤC ===== */
 let selectedFullDiff = "mediumFull";
+let selectedDeFull = "01-02";
 
 /* ===== HÀM CHUYỂN MÀN HÌNH ===== */
 function hienThiManHinh(id){
@@ -222,7 +267,7 @@ function hienThiManHinh(id){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-/* ===== HÀM XỬ LÝ NÚT CHỌN BỘ ĐỀ ===== */
+/* ===== CHỌN BỘ ĐỀ (truong / full) ===== */
 function chonBoDe(set){
   sessionStorage.setItem("chosenSet", set);
   if(set === "full"){
@@ -252,30 +297,34 @@ document.addEventListener("DOMContentLoaded", ()=>{
   };
   const info = monInfo[mon] || monInfo["lich-su"];
 
-  /* Đổi tiêu đề màn chọn bộ đề theo môn */
   const title = document.getElementById("chooseSetTitle");
   if(title) title.textContent = info.icon + " " + info.name;
 
-  /* ===================================================
-     NẾU ĐÃ CHỌN SET TỪ TRƯỚC (qua URL ?set=xxx)
-     -> Vào thẳng màn Start, bỏ qua màn chọn
-     =================================================== */
+  /* Nếu đã chọn set từ trước -> vào màn Start */
   if(setFromUrl){
     hienThiManHinh("screenStart");
     const savedDiff = sessionStorage.getItem("chosenDiff");
-    if(savedDiff){
-      selectedFullDiff = savedDiff;
-    }
+    const savedDe = sessionStorage.getItem("chosenDe");
+    if(savedDiff) selectedFullDiff = savedDiff;
+    if(savedDe) selectedDeFull = savedDe;
   }
-  /* ===================================================
-     NẾU LÀ MÔN KHÁC LỊCH SỬ -> ẨN MÀN CHỌN BỘ ĐỀ
-     =================================================== */
+  /* Nếu là môn khác Lịch sử -> vào màn Start */
   else if(mon !== "lich-su"){
     hienThiManHinh("screenStart");
   }
-  /* Ngược lại: giữ nguyên màn chọn bộ đề (mặc định) */
 
-  /* ===== XỬ LÝ CHỌN MỨC ĐỘ FULL ===== */
+  /* ===== XỬ LÝ CHỌN NHÓM ĐỀ ===== */
+  const deGrid = document.getElementById("deGridFull");
+  if(deGrid){
+    [...deGrid.querySelectorAll(".diff")].forEach(btn=>{
+      btn.onclick = ()=>{
+        selectedDeFull = btn.dataset.key;
+        [...deGrid.children].forEach(b=>b.classList.toggle("on", b === btn));
+      };
+    });
+  }
+
+  /* ===== XỬ LÝ CHỌN MỨC ĐỘ ===== */
   const gridFull = document.getElementById("diffGridFull");
   if(gridFull){
     [...gridFull.querySelectorAll(".diff")].forEach(btn=>{
@@ -292,18 +341,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
     btnStartFull.onclick = ()=>{
       sessionStorage.setItem("chosenSet", "full");
       sessionStorage.setItem("chosenDiff", selectedFullDiff);
+      sessionStorage.setItem("chosenDe", selectedDeFull);
       const url = new URL(window.location.href);
       url.searchParams.set("set", "full");
+      url.searchParams.set("de", selectedDeFull);
       window.location.href = url.toString();
     };
   }
 });
 
-/* ===== LOAD DATA THEO MÔN + SET ===== */
+/* ===== LOAD DATA THEO MÔN + SET + ĐỀ ===== */
 (function loadMonData(){
   const params = new URLSearchParams(window.location.search);
   const mon = params.get("mon") || "lich-su";
   const set = params.get("set") || "truong";
+  const de = params.get("de") || sessionStorage.getItem("chosenDe") || "01-02";
 
   const monNames = {
     "lich-su": { name:"LỊCH SỬ", icon:"📜", sub:"Ôn tập giữa kì 1 • Liên hợp quốc – Ianta – ASEAN" },
@@ -321,10 +373,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const subEl = document.getElementById("monSub");
   if(subEl) subEl.textContent = info.sub;
 
-  /* Chọn file data theo set */
-  const dataPath = set === "full"
-    ? "data/" + mon + "-full.js"
-    : "data/" + mon + "-truong.js";
+  /* Chọn file data theo set + đề */
+  let dataPath;
+  if(set === "full"){
+    dataPath = "data/" + mon + "-full-" + de + ".js";
+  } else {
+    dataPath = "data/" + mon + "-truong.js";
+  }
 
   const script = document.createElement("script");
   script.src = dataPath;
@@ -332,7 +387,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   script.onerror = function(){
     const sub = document.getElementById("monSub");
     if(sub){
-      sub.innerHTML = '<span style="color:#f87171">⚠️ Chưa có đề môn này. Vui lòng quay lại sau!</span>';
+      sub.innerHTML = '<span style="color:#f87171">⚠️ Chưa có đề nhóm này. Vui lòng chọn nhóm khác!</span>';
     }
     const b1 = document.getElementById("btnStart");
     const b2 = document.getElementById("btnOnlineMode");
@@ -349,12 +404,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   document.body.appendChild(script);
 
-  /* Lưu môn hiện tại */
   window.CURRENT_MON = mon;
 })();
 </script>
-
-<!-- Script mở rộng: xử lý menu + PvP + chọn mức độ -->
-<script src="game-extra.js"></script>
 </body>
-</html>
+                                                              </html>
