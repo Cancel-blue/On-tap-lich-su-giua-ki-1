@@ -9,44 +9,35 @@
 <body>
 <div class="app">
 
-<!-- ===== MÀN START ===== -->
 <section id="screenStart" class="screen active">
   <div class="card">
     <a href="menu-ds.html" class="btn-back">← Quay lại</a>
     <h1>✅ TRẮC NGHIỆM ĐÚNG/SAI</h1>
     <p class="sub" id="startSub">Ôn tập câu hỏi Đúng/Sai</p>
-
     <label class="field">
       <span>NHẬP TÊN CỦA BẠN</span>
       <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
     </label>
-
     <p class="label-diff">CHỌN MỨC ĐỘ</p>
     <div class="diff-grid" id="diffGrid">
       <button class="diff on" type="button" data-key="easy">
-        <b>THOẢI MÁI</b>
-        <small>Không giới hạn thời gian</small>
+        <b>THOẢI MÁI</b><small>Không giới hạn thời gian</small>
       </button>
       <button class="diff" type="button" data-key="medium">
-        <b>TRUNG BÌNH</b>
-        <small>60 giây/câu</small>
+        <b>TRUNG BÌNH</b><small>60 giây/câu</small>
       </button>
       <button class="diff" type="button" data-key="hard">
-        <b>KHÓ</b>
-        <small>30 giây/câu</small>
+        <b>KHÓ</b><small>30 giây/câu</small>
       </button>
       <button class="diff pvp" type="button" data-key="pvp">
-        <b>PVP 4 NGƯỜI</b>
-        <small>Bạn vs 3 bot • 40 giây/câu</small>
+        <b>PVP 4 NGƯỜI</b><small>Bạn vs 3 bot • 40s/câu</small>
       </button>
     </div>
-
     <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
     <p class="foot" id="totalInfo">Đang tải câu hỏi...</p>
   </div>
 </section>
 
-<!-- ===== MÀN CHƠI ===== -->
 <section id="screenQuiz" class="screen">
   <div class="card">
     <div class="topbar">
@@ -60,71 +51,56 @@
         <button class="btn-quit" id="btnQuit">Thoát</button>
       </div>
     </div>
-
     <div id="pvpBoard" class="pvp-board" style="display:none"></div>
-
     <div class="timer-wrap" id="timerWrap">
       <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       <div class="timer-txt" id="timerText">--s</div>
     </div>
-
     <div id="questionWrap"></div>
-
     <div class="ds-feedback" id="dsFeedback"></div>
   </div>
 </section>
 
-<!-- ===== MÀN KẾT THÚC ===== -->
 <section id="screenEnd" class="screen">
   <div class="card">
     <div class="end-title" id="endTitle">HOÀN THÀNH!</div>
     <div class="end-name" id="endName"></div>
     <div class="score-big" id="endScore">0</div>
     <div class="score-lbl">TỔNG ĐIỂM</div>
-
     <div class="stat-grid">
       <div class="stat g"><b id="stCorrect">0</b><small>Ý ĐÚNG</small></div>
       <div class="stat r"><b id="stWrong">0</b><small>Ý SAI</small></div>
       <div class="stat y"><b id="stAcc">0%</b><small>CHÍNH XÁC</small></div>
       <div class="stat"><b id="stStreak">0</b><small>CHUỖI DÀI</small></div>
     </div>
-
     <div class="wrong-list" id="wrongList"></div>
-
     <div class="btn-row">
       <button class="btn-ghost" id="btnHome">🏠 Menu Đ/S</button>
       <button class="btn-primary" id="btnReplay" style="flex:1">🔄 CHƠI LẠI</button>
     </div>
   </div>
 </section>
-
 </div>
 <script>
-/* =========================================================
-   LOAD DATA Đ/S
-   ========================================================= */
 const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode") || "full";  // full | random20 | random40
+const mode = params.get("mode") || "full";
 const mon = params.get("mon") || "lich-su";
 
 const modeInfo = {
   "full":     { name:"CHƠI FULL 80 CÂU", count: 80 },
-  "random20": { name:"RANDOM 20 CÂU",    count: 20 },
-  "random40": { name:"RANDOM 40 CÂU",    count: 40 }
+  "random20": { name:"RANDOM 20 CÂU", count: 20 },
+  "random40": { name:"RANDOM 40 CÂU", count: 40 }
 };
 const currentMode = modeInfo[mode] || modeInfo.full;
-
 document.getElementById("startSub").textContent = currentMode.name;
 
-/* ===== BIẾN STATE ===== */
-let DANH_SACH_CAU = [];      // Data gốc
-let danhSachChoi = [];       // Data đã random
-let cauHienTai = 0;          // Index câu đang chơi
+/* ===== STATE ===== */
+let DANH_SACH_CAU = [];
+let danhSachChoi = [];
+let cauHienTai = 0;
 let selectedDiff = "easy";
 let playerName = "";
 let score = 0;
-let correctCount = 0;
-let wrongCount = 0;
 let streak = 0;
 let bestStreak = 0;
 let timerId = null;
@@ -138,7 +114,6 @@ let soYDungTrongCau = 0;
 
 const $ = id => document.getElementById(id);
 
-/* ===== DIFFICULTIES ===== */
 const DIFFICULTIES = {
   easy:   { label:"THOẢI MÁI", time: 0,  pvp:false },
   medium: { label:"TRUNG BÌNH", time: 60, pvp:false },
@@ -147,63 +122,49 @@ const DIFFICULTIES = {
 };
 
 const BOT_POOL = [
-  { name:"Hùng Vương",    ava:"👑" },
-  { name:"Lê Lợi",        ava:"🗡️" },
-  { name:"Quang Trung",   ava:"🐉" },
+  { name:"Hùng Vương", ava:"👑" },
+  { name:"Lê Lợi", ava:"🗡️" },
+  { name:"Quang Trung", ava:"🐉" },
   { name:"Trần Hưng Đạo", ava:"🛡️" },
-  { name:"Nguyễn Huệ",    ava:"⚔️" },
-  { name:"Lý Thường Kiệt",ava:"🏹" }
+  { name:"Nguyễn Huệ", ava:"⚔️" },
+  { name:"Lý Thường Kiệt", ava:"🏹" }
 ];
 
 /* ===== LOAD DATA ===== */
-const script = document.createElement("script");
-script.src = "data/" + mon + "-dung-sai.js";
-script.onerror = function(){
-  $("totalInfo").innerHTML =
-    '<span style="color:#f87171">⚠️ Chưa có dữ liệu Đúng/Sai. Vui lòng quay lại sau!</span>';
+const scriptData = document.createElement("script");
+scriptData.src = "data/" + mon + "-dung-sai.js";
+scriptData.onerror = function(){
+  $("totalInfo").innerHTML = '<span style="color:#f87171">⚠️ Chưa có dữ liệu Đúng/Sai!</span>';
   $("btnStart").disabled = true;
 };
-script.onload = function(){
+scriptData.onload = function(){
   DANH_SACH_CAU = window.DUNG_SAI_DATA || [];
   $("totalInfo").textContent = "Tổng cộng: " + DANH_SACH_CAU.length + " câu Đúng/Sai";
   initEvents();
 };
-document.body.appendChild(script);
+document.body.appendChild(scriptData);
 
-/* ===== INIT SỰ KIỆN ===== */
+/* ===== INIT ===== */
 function initEvents(){
-  /* Chọn mức độ */
   [...$("diffGrid").querySelectorAll(".diff")].forEach(btn=>{
     btn.onclick = ()=>{
       selectedDiff = btn.dataset.key;
       [...$("diffGrid").children].forEach(b=>b.classList.toggle("on", b === btn));
     };
   });
-
-  /* Bắt đầu */
   $("btnStart").onclick = startGame;
-
-  /* Nhập tên → Enter */
-  $("playerName").addEventListener("keydown", e=>{
-    if(e.key === "Enter") startGame();
-  });
-
-  /* Thoát */
-  $("btnQuit").onclick = ()=>{
-    if(confirm("Thoát ván chơi?")){
-      clearInterval(timerId);
-      window.location.href = "menu-ds.html";
-    }
-  };
-
-  /* Về menu */
+  $("playerName").addEventListener("keydown", e=>{ if(e.key === "Enter") startGame(); });
+  $("btnQuit").onclick = ()=>{ if(confirm("Thoát ván chơi?")) window.location.href = "menu-ds.html"; };
   $("btnHome").onclick = ()=>{ window.location.href = "menu-ds.html"; };
-
-  /* Chơi lại */
   $("btnReplay").onclick = ()=>{ window.location.reload(); };
 }
 
-/* ===== BẮT ĐẦU GAME ===== */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active", s.id === id));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ===== START GAME ===== */
 function startGame(){
   const name = $("playerName").value.trim();
   if(!name){
@@ -212,37 +173,23 @@ function startGame(){
     setTimeout(()=>$("playerName").classList.remove("err"), 450);
     return;
   }
-  if(DANH_SACH_CAU.length === 0){
-    alert("Chưa có câu hỏi!");
-    return;
-  }
+  if(DANH_SACH_CAU.length === 0){ alert("Chưa có câu hỏi!"); return; }
 
   playerName = name;
-  score = 0;
-  correctCount = 0;
-  wrongCount = 0;
-  streak = 0;
-  bestStreak = 0;
-  cauHienTai = 0;
-  wrongList = [];
+  score = 0; streak = 0; bestStreak = 0;
+  cauHienTai = 0; wrongList = [];
+  soYDaTraLoi = 0; soYDungTrongCau = 0;
   isPvP = DIFFICULTIES[selectedDiff].pvp;
 
-  /* Random + giới hạn số câu */
   const shuffled = [...DANH_SACH_CAU].sort(()=>Math.random()-0.5);
-  danhSachChoi = shuffled.slice(0, currentMode.count);
+  danhSachChoi = shuffled.slice(0, Math.min(currentMode.count, shuffled.length));
 
-  /* Setup HUD */
   $("hudName").textContent = playerName;
   $("avatar").textContent = playerName.charAt(0).toUpperCase();
   $("hudScore").textContent = "0";
 
-  /* Setup PvP bots */
-  if(isPvP){
-    $("pvpBoard").style.display = "grid";
-    setupBots();
-  } else {
-    $("pvpBoard").style.display = "none";
-  }
+  if(isPvP){ $("pvpBoard").style.display = "grid"; setupBots(); }
+  else { $("pvpBoard").style.display = "none"; }
 
   showScreen("screenQuiz");
   renderQuestion();
@@ -250,21 +197,17 @@ function startGame(){
 
 function setupBots(){
   const pool = [...BOT_POOL].sort(()=>Math.random()-0.5);
-  bots = pool.slice(0,3).map(b=>({
-    name: b.name, ava: b.ava, score: 0, state: null
-  }));
+  bots = pool.slice(0,3).map(b=>({ name: b.name, ava: b.ava, score: 0, state: null }));
   renderPvpBoard();
 }
 
 function renderPvpBoard(){
   const board = $("pvpBoard");
   board.innerHTML = "";
-  /* Bạn */
   const me = document.createElement("div");
   me.className = "pvp-player me";
   me.innerHTML = `<span class="ava">${playerName.charAt(0).toUpperCase()}</span><span class="nm">${playerName}</span><span class="sc">${score}</span>`;
   board.appendChild(me);
-  /* Bots */
   bots.forEach(bot=>{
     const el = document.createElement("div");
     el.className = "pvp-player";
@@ -275,44 +218,30 @@ function renderPvpBoard(){
   });
 }
 
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active", s.id === id));
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
 /* ===== RENDER CÂU HỎI ===== */
 function renderQuestion(){
-  if(cauHienTai >= danhSachChoi.length){
-    endGame();
-    return;
-  }
-
+  if(cauHienTai >= danhSachChoi.length){ endGame(); return; }
   const cau = danhSachChoi[cauHienTai];
   $("hudProgress").textContent = (cauHienTai + 1) + "/" + danhSachChoi.length;
 
   const wrap = $("questionWrap");
   wrap.innerHTML = "";
 
-  /* Đoạn tư liệu */
   if(cau.doc){
     const doc = document.createElement("div");
     doc.className = "ds-doc";
-    let html = `<span class="doc-label">📖 ĐỌC ĐOẠN TƯ LIỆU</span>`;
-    html += `<div class="doc-text">${cau.doc}</div>`;
-    if(cau.source){
-      html += `<div class="doc-source">${cau.source}</div>`;
-    }
+    let html = '<span class="doc-label">📖 ĐỌC ĐOẠN TƯ LIỆU</span>';
+    html += '<div class="doc-text">' + cau.doc + '</div>';
+    if(cau.source) html += '<div class="doc-source">' + cau.source + '</div>';
     doc.innerHTML = html;
     wrap.appendChild(doc);
   }
 
-  /* Tiêu đề câu hỏi */
   const title = document.createElement("div");
   title.className = "ds-question-title";
   title.textContent = "ĐÁNH GIÁ ĐÚNG / SAI CÁC Ý SAU:";
   wrap.appendChild(title);
 
-  /* 4 ý a b c d */
   cau.statements.forEach((st, idx)=>{
     const letter = "abcd"[idx];
     const el = document.createElement("div");
@@ -321,7 +250,7 @@ function renderQuestion(){
 
     const text = document.createElement("div");
     text.className = "st-text";
-    text.innerHTML = `<span class="st-letter">${letter})</span>${st.text}`;
+    text.innerHTML = '<span class="st-letter">' + letter + ')</span>' + st.text;
 
     const buttons = document.createElement("div");
     buttons.className = "st-buttons";
@@ -338,17 +267,17 @@ function renderQuestion(){
     btnSai.textContent = "✗ SAI";
     btnSai.onclick = ()=>selectAnswer(idx, false);
 
-    buttons.append(btnDung, btnSai);
-    el.append(text, buttons);
+    buttons.appendChild(btnDung);
+    buttons.appendChild(btnSai);
+    el.appendChild(text);
+    el.appendChild(buttons);
     wrap.appendChild(el);
   });
 
-  /* Reset feedback */
   const fb = $("dsFeedback");
   fb.textContent = "";
   fb.className = "ds-feedback";
 
-  /* Bắt đầu timer */
   startTimer();
   if(isPvP) scheduleBotsAnswer();
 }
@@ -357,11 +286,7 @@ function renderQuestion(){
 function startTimer(){
   clearInterval(timerId);
   const cfg = DIFFICULTIES[selectedDiff];
-  if(cfg.time === 0){
-    /* Chế độ thoải mái - ẩn timer */
-    $("timerWrap").style.display = "none";
-    return;
-  }
+  if(cfg.time === 0){ $("timerWrap").style.display = "none"; return; }
   $("timerWrap").style.display = "flex";
   totalTime = cfg.time;
   timeLeft = totalTime;
@@ -369,13 +294,10 @@ function startTimer(){
   timerId = setInterval(()=>{
     timeLeft -= 0.1;
     if(timeLeft <= 0){
-      timeLeft = 0;
-      paintTimer();
+      timeLeft = 0; paintTimer();
       clearInterval(timerId);
       handleTimeout();
-    } else {
-      paintTimer();
-    }
+    } else paintTimer();
   }, 100);
 }
 
@@ -389,43 +311,38 @@ function paintTimer(){
   $("timerText").textContent = Math.ceil(timeLeft) + "s";
   $("timerText").style.color = p<=20 ? "#f87171" : "#94a3b8";
 }
-  /* ===== BIẾN ĐẾM ===== */
-let soYDaTraLoi = 0;
-let soYDungTrongCau = 0;
-
-/* ===== XỬ LÝ CLICK ĐÚNG/SAI ===== */
+  /* ===== XỬ LÝ ĐÁP ÁN ===== */
 function selectAnswer(idx, chonDung){
   const cau = danhSachChoi[cauHienTai];
-  if(!cau){ return; }
+  if(!cau) return;
   const st = cau.statements[idx];
   const el = document.querySelector('.ds-statement[data-idx="' + idx + '"]');
-  if(!el){ return; }
-  if(el.classList.contains("locked")){ return; }
+  if(!el || el.classList.contains("locked")) return;
 
   el.classList.add("locked");
   const btns = el.querySelectorAll(".ds-btn");
   const dungThatSu = st.answer;
   const traLoiDung = (chonDung === dungThatSu);
 
-  if(chonDung){ btns[0].classList.add("selected-dung"); }
-  else { btns[1].classList.add("selected-sai"); }
+  if(chonDung) btns[0].classList.add("selected-dung");
+  else btns[1].classList.add("selected-sai");
 
   if(dungThatSu){
     btns[0].classList.add("correct-ans");
-    if(!chonDung){ btns[1].classList.add("wrong-ans"); }
+    if(!chonDung) btns[1].classList.add("wrong-ans");
   } else {
     btns[1].classList.add("correct-ans");
-    if(chonDung){ btns[0].classList.add("wrong-ans"); }
+    if(chonDung) btns[0].classList.add("wrong-ans");
   }
 
-  btns.forEach(function(b){ b.disabled = true; });
+  btns.forEach(b=>b.disabled = true);
 
   if(traLoiDung){
     el.classList.add("correct");
     soYDungTrongCau++;
     score += 25;
     streak++;
-    if(streak > bestStreak){ bestStreak = streak; }
+    if(streak > bestStreak) bestStreak = streak;
   } else {
     el.classList.add("wrong");
     streak = 0;
@@ -434,7 +351,7 @@ function selectAnswer(idx, chonDung){
   soYDaTraLoi++;
 
   $("hudScore").textContent = score;
-  if(isPvP){ renderPvpBoard(); }
+  if(isPvP) renderPvpBoard();
 
   if(soYDaTraLoi >= 4){
     if(soYDungTrongCau === 4){
@@ -443,15 +360,55 @@ function selectAnswer(idx, chonDung){
     }
     const fb = $("dsFeedback");
     fb.className = "ds-feedback show " + (soYDungTrongCau >= 2 ? "ok" : "no");
-    fb.textContent = "Hoàn thành! Đúng " + soYDungTrongCau + "/4 ý • Tổng: " + score + "đ";
+    fb.textContent = "Hoàn thành! Đúng " + soYDungTrongCau + "/4 ý" + (soYDungTrongCau===4?" (+50 bonus)":"") + " • Tổng: " + score + "đ";
 
-    setTimeout(function(){
+    setTimeout(()=>{
       cauHienTai++;
       soYDaTraLoi = 0;
       soYDungTrongCau = 0;
       renderQuestion();
     }, 2000);
   }
+}
+
+function handleTimeout(){
+  const cau = danhSachChoi[cauHienTai];
+  if(!cau) return;
+  cau.statements.forEach((st, idx)=>{
+    const el = document.querySelector('.ds-statement[data-idx="' + idx + '"]');
+    if(el && !el.classList.contains("locked")){
+      el.classList.add("locked", "wrong");
+      const btns = el.querySelectorAll(".ds-btn");
+      btns.forEach(b=>b.disabled = true);
+      if(st.answer) btns[0].classList.add("correct-ans");
+      else btns[1].classList.add("correct-ans");
+      wrongList.push({ letter: "abcd"[idx], text: st.text, correct: st.answer });
+    }
+  });
+
+  const fb = $("dsFeedback");
+  fb.className = "ds-feedback show no";
+  fb.textContent = "⏰ Hết giờ! Chuyển câu tiếp...";
+
+  setTimeout(()=>{
+    cauHienTai++;
+    soYDaTraLoi = 0;
+    soYDungTrongCau = 0;
+    renderQuestion();
+  }, 2000);
+}
+
+function scheduleBotsAnswer(){
+  bots.forEach(bot=>{
+    bot.state = null;
+    const delay = 2 + Math.random() * 3;
+    setTimeout(()=>{
+      const correct = Math.random() < 0.6;
+      bot.state = correct ? "correct" : "wrong";
+      if(correct) bot.score += 50 + Math.floor(Math.random() * 50);
+      renderPvpBoard();
+    }, delay * 1000);
+  });
 }
 
 /* ===== KẾT THÚC ===== */
@@ -482,7 +439,7 @@ function endGame(){
     const h = document.createElement("h3");
     h.textContent = "❗ CÁC Ý LÀM SAI (" + wrongList.length + ")";
     list.appendChild(h);
-    wrongList.slice(0, 20).forEach(function(w){
+    wrongList.slice(0, 20).forEach(w=>{
       const d = document.createElement("div");
       d.className = "wrong-item";
       d.innerHTML = '<div class="q">Ý ' + w.letter + ') ' + w.text + '</div><div class="a">Đáp án đúng: <b>' + (w.correct ? "ĐÚNG" : "SAI") + '</b></div>';
@@ -498,3 +455,6 @@ function endGame(){
 
   showScreen("screenEnd");
 }
+</script>
+</body>
+</html>
