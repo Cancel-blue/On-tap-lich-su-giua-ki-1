@@ -396,60 +396,46 @@ let soYDungTrongCau = 0;
 /* ===== XỬ LÝ CLICK ĐÚNG/SAI ===== */
 function selectAnswer(idx, chonDung){
   const cau = danhSachChoi[cauHienTai];
+  if(!cau){ return; }
   const st = cau.statements[idx];
-  const el = document.querySelector(`.ds-statement[data-idx="${idx}"]`);
-  
-  if(!el){ console.log("Không tìm thấy ý", idx); return; }
-  if(el.classList.contains("locked")) return;
-  
+  const el = document.querySelector('.ds-statement[data-idx="' + idx + '"]');
+  if(!el){ return; }
+  if(el.classList.contains("locked")){ return; }
+
   el.classList.add("locked");
-  
   const btns = el.querySelectorAll(".ds-btn");
   const dungThatSu = st.answer;
   const traLoiDung = (chonDung === dungThatSu);
-  
-  /* Đánh dấu nút đã chọn */
-  if(chonDung){
-    btns[0].classList.add("selected-dung");
-  } else {
-    btns[1].classList.add("selected-sai");
-  }
-  
-  /* Hiện đáp án đúng */
+
+  if(chonDung){ btns[0].classList.add("selected-dung"); }
+  else { btns[1].classList.add("selected-sai"); }
+
   if(dungThatSu){
     btns[0].classList.add("correct-ans");
-    if(!chonDung) btns[1].classList.add("wrong-ans");
+    if(!chonDung){ btns[1].classList.add("wrong-ans"); }
   } else {
     btns[1].classList.add("correct-ans");
-    if(chonDung) btns[0].classList.add("wrong-ans");
+    if(chonDung){ btns[0].classList.add("wrong-ans"); }
   }
-  
-  /* Vô hiệu hóa */
-  btns.forEach(b=>b.disabled = true);
-  
-  /* Chấm điểm */
+
+  btns.forEach(function(b){ b.disabled = true; });
+
   if(traLoiDung){
     el.classList.add("correct");
     soYDungTrongCau++;
     score += 25;
     streak++;
-    if(streak > bestStreak) bestStreak = streak;
+    if(streak > bestStreak){ bestStreak = streak; }
   } else {
     el.classList.add("wrong");
     streak = 0;
-    wrongList.push({
-      letter: "abcd"[idx],
-      text: st.text,
-      correct: dungThatSu
-    });
+    wrongList.push({ letter: "abcd"[idx], text: st.text, correct: dungThatSu });
   }
   soYDaTraLoi++;
-  
-  /* Cập nhật HUD */
+
   $("hudScore").textContent = score;
-  if(isPvP) renderPvpBoard();
-  
-  /* Đủ 4 ý chưa? */
+  if(isPvP){ renderPvpBoard(); }
+
   if(soYDaTraLoi >= 4){
     if(soYDungTrongCau === 4){
       score += 50;
@@ -457,9 +443,9 @@ function selectAnswer(idx, chonDung){
     }
     const fb = $("dsFeedback");
     fb.className = "ds-feedback show " + (soYDungTrongCau >= 2 ? "ok" : "no");
-    fb.textContent = `✅ Hoàn thành! Đúng ${soYDungTrongCau}/4 ý${soYDungTrongCau === 4 ? ' (+50 bonus)' : ''} • Tổng: ${score}đ`;
-    
-    setTimeout(()=>{
+    fb.textContent = "Hoàn thành! Đúng " + soYDungTrongCau + "/4 ý • Tổng: " + score + "đ";
+
+    setTimeout(function(){
       cauHienTai++;
       soYDaTraLoi = 0;
       soYDungTrongCau = 0;
@@ -467,6 +453,48 @@ function selectAnswer(idx, chonDung){
     }, 2000);
   }
 }
-</script>
-</body>
-</html>
+
+/* ===== KẾT THÚC ===== */
+function endGame(){
+  clearInterval(timerId);
+  const totalCorrect = Math.round(score / 25);
+  const totalWrong = wrongList.length;
+  const total = totalCorrect + totalWrong;
+  const acc = total ? Math.round(totalCorrect / total * 100) : 0;
+
+  $("endName").textContent = "Người chơi: " + playerName + " • Mức " + DIFFICULTIES[selectedDiff].label;
+  $("endScore").textContent = score.toLocaleString("vi-VN");
+  $("stCorrect").textContent = totalCorrect;
+  $("stWrong").textContent = totalWrong;
+  $("stAcc").textContent = acc + "%";
+  $("stStreak").textContent = bestStreak;
+
+  let title = "HOÀN THÀNH!";
+  if(acc >= 90) title = "🏆 XUẤT SẮC!";
+  else if(acc >= 70) title = "🌟 RẤT TỐT!";
+  else if(acc >= 50) title = "👍 CỐ GẮNG THÊM!";
+  else title = "📚 ÔN LẠI NHÉ!";
+  $("endTitle").textContent = title;
+
+  const list = $("wrongList");
+  list.innerHTML = "";
+  if(wrongList.length > 0){
+    const h = document.createElement("h3");
+    h.textContent = "❗ CÁC Ý LÀM SAI (" + wrongList.length + ")";
+    list.appendChild(h);
+    wrongList.slice(0, 20).forEach(function(w){
+      const d = document.createElement("div");
+      d.className = "wrong-item";
+      d.innerHTML = '<div class="q">Ý ' + w.letter + ') ' + w.text + '</div><div class="a">Đáp án đúng: <b>' + (w.correct ? "ĐÚNG" : "SAI") + '</b></div>';
+      list.appendChild(d);
+    });
+  } else {
+    const d = document.createElement("div");
+    d.className = "wrong-item";
+    d.style.borderLeftColor = "#22c55e";
+    d.innerHTML = '<div class="q" style="color:#4ade80;margin:0">🎉 Tuyệt vời! Không làm sai ý nào!</div>';
+    list.appendChild(d);
+  }
+
+  showScreen("screenEnd");
+}
