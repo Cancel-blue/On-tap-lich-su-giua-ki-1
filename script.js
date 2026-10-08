@@ -6,7 +6,12 @@ const DIFFICULTIES = {
   medium:  { label:"TRUNG BÌNH",  time:60, hard:false, pvp:false, desc:"Đảo vị trí đáp án • 1p/câu" },
   hard:    { label:"KHÓ",         time:40, hard:true,  pvp:false, desc:"Trộn đáp án câu khác • 40s/câu" },
   extreme: { label:"SIÊU KHÓ",    time:20, hard:true,  pvp:false, desc:"Trộn đáp án câu khác • 20s/câu" },
-  pvp:     { label:"PVP 4 NGƯỜI", time:30, hard:false, pvp:true,  desc:"Bạn vs 3 bot • 30s/câu" }
+  pvp:     { label:"PVP 4 NGƯỜI", time:30, hard:false, pvp:true,  desc:"Bạn vs 3 bot • 30s/câu" },
+  /* === MỨC ĐỘ CHO GAME FULL === */
+  mediumFull:  { label:"TRUNG BÌNH", time:60, hard:false, pvp:false, desc:"Đảo vị trí đáp án • 1p/câu" },
+  hardFull:    { label:"KHÓ",        time:30, hard:true,  pvp:false, desc:"Trộn đáp án câu khác • 30s/câu" },
+  extremeFull: { label:"SIÊU KHÓ",   time:10, hard:true,  pvp:false, desc:"Trộn đáp án câu khác • 10s/câu" },
+  pvpFull:     { label:"PVP 4 NGƯỜI", time:30, hard:false, pvp:true,  desc:"Bạn vs 3 bot • 30 giây/câu" }
 };
 
 const ITEMS = {
@@ -50,13 +55,30 @@ if(QUESTIONS.length === 0){
   console.error("Không có data câu hỏi cho môn: " + MON);
 }
 
+/* Đọc mức đã chọn từ màn Full (nếu có) */
+(function checkChosenDiff(){
+  const params = new URLSearchParams(window.location.search);
+  const set = params.get("set");
+  if(set === "full"){
+    const saved = sessionStorage.getItem("chosenDiff");
+    if(saved && DIFFICULTIES[saved]){
+      selectedDiff = saved;
+    } else {
+      selectedDiff = "mediumFull";
+    }
+  }
+})();
+
 /* =========================================================
-   BUILD DIFF GRID
+   BUILD DIFF GRID (chỉ hiện 5 mức cơ bản)
    ========================================================= */
 (function buildDiffGrid(){
   const grid = $("diffGrid");
   if(!grid) return;
-  Object.entries(DIFFICULTIES).forEach(([key,d])=>{
+  const baseKeys = ["easy","medium","hard","extreme","pvp"];
+  baseKeys.forEach(key=>{
+    const d = DIFFICULTIES[key];
+    if(!d) return;
     const b = document.createElement("button");
     b.type = "button";
     b.className = "diff" + (key===selectedDiff ? " on" : "") + (d.pvp ? " pvp" : "");
@@ -70,11 +92,14 @@ if(QUESTIONS.length === 0){
   });
 })();
 
-$("toggleHardcore").onclick = function(){
-  hardcoreMode = !hardcoreMode;
-  this.classList.toggle("on", hardcoreMode);
-};
-
+/* Nút khắc nghiệt */
+const toggleEl = $("toggleHardcore");
+if(toggleEl){
+  toggleEl.onclick = function(){
+    hardcoreMode = !hardcoreMode;
+    this.classList.toggle("on", hardcoreMode);
+  };
+}
 /* =========================================================
    BẮT ĐẦU GAME
    ========================================================= */
@@ -98,7 +123,7 @@ $("playerName").addEventListener("keydown", e=>{
 
 function startGame(name, diff){
   clearTimeout(pendingTimeout);
-  const cfg = DIFFICULTIES[diff];
+  const cfg = DIFFICULTIES[diff] || DIFFICULTIES.easy;
   let totalTime = cfg.time;
   if(hardcoreMode) totalTime = Math.max(10, Math.round(totalTime/2));
 
@@ -370,7 +395,7 @@ function updateProgress(){
   const done = QUESTIONS.length - S.queue.length;
   $("progFill").style.width = (done / QUESTIONS.length * 100) + "%";
   $("progTxt").textContent = `${Math.min(done+1, QUESTIONS.length)}/${QUESTIONS.length}`;
-      }
+     }
 /* =========================================================
    VẬT PHẨM
    ========================================================= */
@@ -484,8 +509,7 @@ function useItem(key){
   }
   updateHud();
   updateInventory();
-}
-
+         }
 /* =========================================================
    PVP BOTS
    ========================================================= */
@@ -538,7 +562,6 @@ function endGame(){
   const total = S.correctCount + S.wrongCount;
   const acc = total ? Math.round(S.correctCount/total*100) : 0;
 
-  /* Lưu điểm cao vào localStorage */
   saveScore(MON, S.score);
 
   $("endName").textContent = `Người chơi: ${S.name} • Mức ${S.cfg.label}${hardcoreMode?" ⚡":""}`;
@@ -600,7 +623,7 @@ function saveScore(mon, score){
 }
 
 /* =========================================================
-   NÚT ĐIỀU KHIỂN
+   NÚT ĐIỀU KHIỂN CHÍNH
    ========================================================= */
 $("btnQuit").onclick = ()=>{
   if(online && online.started){
