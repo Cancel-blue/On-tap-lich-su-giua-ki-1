@@ -14,25 +14,56 @@
 <section id="screenChooseSet" class="screen active">
   <div class="card">
     <a href="index.html" class="btn-back">← Trang chủ</a>
-<h1 id="chooseSetTitle">📜 LỊCH SỬ</h1>
+    <h1 id="chooseSetTitle">📜 LỊCH SỬ</h1>
     <p class="sub">Chọn bộ đề để chơi</p>
     <div style="display:grid;gap:14px;margin-top:14px">
       <button class="btn-primary" onclick="chonBoDe('truong')"
               style="background:linear-gradient(90deg,#fbbf24,#f59e0b);padding:22px 16px">
         🎮 GAME ÔN TẬP
-        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">23 câu giữa kì 1 • Chơi vui tính điểm</small>
+        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">23 câu giữa kì 1 • 5 mức độ</small>
       </button>
       <button class="btn-primary" onclick="chonBoDe('full')"
               style="background:linear-gradient(90deg,#a855f7,#7c3aed);padding:22px 16px">
         📚 GAME FULL KIẾN THỨC
-        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">Toàn bộ đề thi thử TN THPT</small>
+        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">Đề thi thử TN THPT • 4 mức độ</small>
       </button>
     </div>
   </div>
 </section>
 
-<!-- ===== MÀN START CŨ ===== -->
-<!-- ===== MÀN START ===== -->
+<!-- ===== MÀN CHỌN MỨC ĐỘ FULL ===== -->
+<section id="screenChooseLevelFull" class="screen">
+  <div class="card">
+    <button class="btn-back" onclick="quayLaiChonSet()" type="button">← Quay lại</button>
+    <h1>📚 GAME FULL</h1>
+    <p class="sub">Chọn mức độ</p>
+
+    <p class="label-diff">MỨC ĐỘ</p>
+    <div class="diff-grid" id="diffGridFull">
+      <button class="diff on" type="button" data-key="mediumFull">
+        <b>TRUNG BÌNH</b>
+        <small>Đảo vị trí đáp án • 1 phút/câu</small>
+      </button>
+      <button class="diff" type="button" data-key="hardFull">
+        <b>KHÓ</b>
+        <small>Trộn đáp án câu khác • 30 giây/câu</small>
+      </button>
+      <button class="diff" type="button" data-key="extremeFull">
+        <b>SIÊU KHÓ</b>
+        <small>Trộn đáp án câu khác • 10 giây/câu</small>
+      </button>
+      <button class="diff pvp" type="button" data-key="pvpFull">
+        <b>PVP 4 NGƯỜI</b>
+        <small>Bạn vs 3 bot • 30 giây/câu</small>
+      </button>
+    </div>
+
+    <button class="btn-primary" id="btnStartFull" type="button">BẮT ĐẦU ⚔️</button>
+    <p class="foot">Chúc bạn chinh phục bộ đề full!</p>
+  </div>
+</section>
+
+<!-- ===== MÀN START CHÍNH ===== -->
 <section id="screenStart" class="screen">
   <div class="card">
     <a href="index.html" class="btn-back">← Trang chủ</a>
@@ -119,7 +150,7 @@
   </div>
 </section>
 
-<!-- ===== MÀN LOBBY ===== -->
+<!-- ===== MÀN LOBBY (ONLINE) ===== -->
 <section id="screenLobby" class="screen">
   <div class="card">
     <h1>🌐 ĐẤU ONLINE</h1>
@@ -153,7 +184,7 @@
   </div>
 </section>
 
-<!-- ===== MÀN ROOM ===== -->
+<!-- ===== MÀN ROOM (ONLINE) ===== -->
 <section id="screenRoom" class="screen">
   <div class="card">
     <h1 id="roomTitle">PHÒNG CHỜ</h1>
@@ -176,17 +207,104 @@
 
 </div>
 
-<!-- ===== LOAD DATA THEO MÔN ===== -->
+<!-- ============================================================
+     SCRIPT XỬ LÝ
+     ============================================================ -->
 <script>
-function chonBoDe(set){
-  const url = new URL(window.location.href);
-  url.searchParams.set("set", set);
-  window.location.href = url.toString();
+/* ===== BIẾN TOÀN CỤC CHO MÀN CHỌN MỨC FULL ===== */
+let selectedFullDiff = "mediumFull";
+
+/* ===== HÀM CHUYỂN MÀN HÌNH ===== */
+function hienThiManHinh(id){
+  document.querySelectorAll(".screen").forEach(s=>{
+    s.classList.toggle("active", s.id === id);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
+/* ===== HÀM XỬ LÝ NÚT CHỌN BỘ ĐỀ ===== */
+function chonBoDe(set){
+  sessionStorage.setItem("chosenSet", set);
+  if(set === "full"){
+    hienThiManHinh("screenChooseLevelFull");
+  } else {
+    hienThiManHinh("screenStart");
+  }
+}
+
+/* ===== QUAY LẠI MÀN CHỌN BỘ ĐỀ ===== */
+function quayLaiChonSet(){
+  hienThiManHinh("screenChooseSet");
+}
+
+/* ===== XỬ LÝ KHI TRANG LOAD XONG ===== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  const params = new URLSearchParams(window.location.search);
+  const mon = params.get("mon") || "lich-su";
+  const setFromUrl = params.get("set");
+
+  const monInfo = {
+    "lich-su": { name:"LỊCH SỬ", icon:"📜" },
+    "dia-ly":  { name:"ĐỊA LÝ",  icon:"🌍" },
+    "vat-ly":  { name:"VẬT LÝ",  icon:"⚛️" },
+    "toan":    { name:"TOÁN",    icon:"🔢" },
+    "hoa":     { name:"HÓA HỌC", icon:"🧪" }
+  };
+  const info = monInfo[mon] || monInfo["lich-su"];
+
+  /* Đổi tiêu đề màn chọn bộ đề theo môn */
+  const title = document.getElementById("chooseSetTitle");
+  if(title) title.textContent = info.icon + " " + info.name;
+
+  /* ===================================================
+     NẾU ĐÃ CHỌN SET TỪ TRƯỚC (qua URL ?set=xxx)
+     -> Vào thẳng màn Start, bỏ qua màn chọn
+     =================================================== */
+  if(setFromUrl){
+    hienThiManHinh("screenStart");
+    const savedDiff = sessionStorage.getItem("chosenDiff");
+    if(savedDiff){
+      selectedFullDiff = savedDiff;
+    }
+  }
+  /* ===================================================
+     NẾU LÀ MÔN KHÁC LỊCH SỬ -> ẨN MÀN CHỌN BỘ ĐỀ
+     =================================================== */
+  else if(mon !== "lich-su"){
+    hienThiManHinh("screenStart");
+  }
+  /* Ngược lại: giữ nguyên màn chọn bộ đề (mặc định) */
+
+  /* ===== XỬ LÝ CHỌN MỨC ĐỘ FULL ===== */
+  const gridFull = document.getElementById("diffGridFull");
+  if(gridFull){
+    [...gridFull.querySelectorAll(".diff")].forEach(btn=>{
+      btn.onclick = ()=>{
+        selectedFullDiff = btn.dataset.key;
+        [...gridFull.children].forEach(b=>b.classList.toggle("on", b === btn));
+      };
+    });
+  }
+
+  /* ===== NÚT BẮT ĐẦU FULL ===== */
+  const btnStartFull = document.getElementById("btnStartFull");
+  if(btnStartFull){
+    btnStartFull.onclick = ()=>{
+      sessionStorage.setItem("chosenSet", "full");
+      sessionStorage.setItem("chosenDiff", selectedFullDiff);
+      const url = new URL(window.location.href);
+      url.searchParams.set("set", "full");
+      window.location.href = url.toString();
+    };
+  }
+});
+
+/* ===== LOAD DATA THEO MÔN + SET ===== */
 (function loadMonData(){
   const params = new URLSearchParams(window.location.search);
   const mon = params.get("mon") || "lich-su";
+  const set = params.get("set") || "truong";
+
   const monNames = {
     "lich-su": { name:"LỊCH SỬ", icon:"📜", sub:"Ôn tập giữa kì 1 • Liên hợp quốc – Ianta – ASEAN" },
     "dia-ly":  { name:"ĐỊA LÝ",  icon:"🌍", sub:"Ôn tập Địa lý" },
@@ -196,34 +314,47 @@ function chonBoDe(set){
   };
   const info = monNames[mon] || monNames["lich-su"];
   document.title = info.name + " - Ôn tập";
-  document.getElementById("monTitle").textContent = info.icon + " " + info.name;
-  document.getElementById("monSub").textContent = info.sub;
 
-  /* Load file data tương ứng */
-  const set = params.get("set") || "truong";
-const dataPath = set === "full"
-  ? "data/" + mon + "-full.js"
-  : "data/" + mon + "-truong.js";
+  const titleEl = document.getElementById("monTitle");
+  if(titleEl) titleEl.textContent = info.icon + " " + info.name;
 
-const script = document.createElement("script");
-script.src = dataPath;
+  const subEl = document.getElementById("monSub");
+  if(subEl) subEl.textContent = info.sub;
+
+  /* Chọn file data theo set */
+  const dataPath = set === "full"
+    ? "data/" + mon + "-full.js"
+    : "data/" + mon + "-truong.js";
+
+  const script = document.createElement("script");
+  script.src = dataPath;
+
   script.onerror = function(){
-    document.getElementById("monSub").innerHTML =
-      '<span style="color:#f87171">⚠️ Chưa có đề môn này. Vui lòng quay lại sau!</span>';
-    document.getElementById("btnStart").disabled = true;
-    document.getElementById("btnOnlineMode").disabled = true;
+    const sub = document.getElementById("monSub");
+    if(sub){
+      sub.innerHTML = '<span style="color:#f87171">⚠️ Chưa có đề môn này. Vui lòng quay lại sau!</span>';
+    }
+    const b1 = document.getElementById("btnStart");
+    const b2 = document.getElementById("btnOnlineMode");
+    if(b1) b1.disabled = true;
+    if(b2) b2.disabled = true;
   };
+
   script.onload = function(){
-  window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
-  const main = document.createElement("script");
-  main.src = "script.js";
-  document.body.appendChild(main);
-};
-document.body.appendChild(script);
-  /* Lưu môn hiện tại vào biến global để script.js đọc */
-    window.CURRENT_MON = mon;
+    window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
+    const main = document.createElement("script");
+    main.src = "script.js";
+    document.body.appendChild(main);
+  };
+
+  document.body.appendChild(script);
+
+  /* Lưu môn hiện tại */
+  window.CURRENT_MON = mon;
 })();
 </script>
+
+<!-- Script mở rộng: xử lý menu + PvP + chọn mức độ -->
 <script src="game-extra.js"></script>
 </body>
 </html>
