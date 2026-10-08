@@ -387,6 +387,84 @@ function paintTimer(){
   $("timerText").textContent = Math.ceil(timeLeft) + "s";
   $("timerText").style.color = p<=20 ? "#f87171" : "#94a3b8";
 }
+  /* ===== BIẾN ĐẾM ===== */
+let soYDaTraLoi = 0;
+let soYDungTrongCau = 0;
+
+/* ===== XỬ LÝ CLICK ĐÚNG/SAI ===== */
+function selectAnswer(idx, chonDung){
+  const cau = danhSachChoi[cauHienTai];
+  const st = cau.statements[idx];
+  const el = document.querySelector(`.ds-statement[data-idx="${idx}"]`);
+  
+  if(!el){ console.log("Không tìm thấy ý", idx); return; }
+  if(el.classList.contains("locked")) return;
+  
+  el.classList.add("locked");
+  
+  const btns = el.querySelectorAll(".ds-btn");
+  const dungThatSu = st.answer;
+  const traLoiDung = (chonDung === dungThatSu);
+  
+  /* Đánh dấu nút đã chọn */
+  if(chonDung){
+    btns[0].classList.add("selected-dung");
+  } else {
+    btns[1].classList.add("selected-sai");
+  }
+  
+  /* Hiện đáp án đúng */
+  if(dungThatSu){
+    btns[0].classList.add("correct-ans");
+    if(!chonDung) btns[1].classList.add("wrong-ans");
+  } else {
+    btns[1].classList.add("correct-ans");
+    if(chonDung) btns[0].classList.add("wrong-ans");
+  }
+  
+  /* Vô hiệu hóa */
+  btns.forEach(b=>b.disabled = true);
+  
+  /* Chấm điểm */
+  if(traLoiDung){
+    el.classList.add("correct");
+    soYDungTrongCau++;
+    score += 25;
+    streak++;
+    if(streak > bestStreak) bestStreak = streak;
+  } else {
+    el.classList.add("wrong");
+    streak = 0;
+    wrongList.push({
+      letter: "abcd"[idx],
+      text: st.text,
+      correct: dungThatSu
+    });
+  }
+  soYDaTraLoi++;
+  
+  /* Cập nhật HUD */
+  $("hudScore").textContent = score;
+  if(isPvP) renderPvpBoard();
+  
+  /* Đủ 4 ý chưa? */
+  if(soYDaTraLoi >= 4){
+    if(soYDungTrongCau === 4){
+      score += 50;
+      $("hudScore").textContent = score;
+    }
+    const fb = $("dsFeedback");
+    fb.className = "ds-feedback show " + (soYDungTrongCau >= 2 ? "ok" : "no");
+    fb.textContent = `✅ Hoàn thành! Đúng ${soYDungTrongCau}/4 ý${soYDungTrongCau === 4 ? ' (+50 bonus)' : ''} • Tổng: ${score}đ`;
+    
+    setTimeout(()=>{
+      cauHienTai++;
+      soYDaTraLoi = 0;
+      soYDungTrongCau = 0;
+      renderQuestion();
+    }, 2000);
+  }
+}
 </script>
 </body>
 </html>
