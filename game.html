@@ -214,17 +214,14 @@ script.src = dataPath;
     document.getElementById("btnOnlineMode").disabled = true;
   };
   script.onload = function(){
-    /* Sau khi data load xong -> load script.js chính */
-    script.onload = function(){
   window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
   const main = document.createElement("script");
   main.src = "script.js";
   document.body.appendChild(main);
 };
-  document.body.appendChild(script);
-
+document.body.appendChild(script);
   /* Lưu môn hiện tại vào biến global để script.js đọc */
-  window.CURRENT_MON = mon;
+    window.CURRENT_MON = mon;
 })();
 </script>
 <script src="game-extra.js"></script>
