@@ -294,7 +294,6 @@ function showScreen(id){
 /* ===== RENDER CÂU HỎI ===== */
 function renderQuestion(){
   if(cauHienTai >= danhSachChoi.length || !danhSachChoi[cauHienTai]){ endGame(); return; }
-  cauDaXuLy = false;
 
   const cau = danhSachChoi[cauHienTai];
   $("hudProgress").textContent = (cauHienTai + 1) + "/" + danhSachChoi.length;
@@ -560,12 +559,11 @@ function setFeedback(ok, text){
 
 /* ===== CHUYỂN CÂU ===== */
 function nextAfterDelay(){
-  if(cauDaXuLy) return;
-  cauDaXuLy = true;
+  cauHienTai++;
+  soYDaTraLoi = 0;
+  soYDungTrongCau = 0;
+  clearInterval(timerId);
   setTimeout(()=>{
-    cauHienTai++;
-    soYDaTraLoi = 0;
-    soYDungTrongCau = 0;
     renderQuestion();
   }, 2200);
 }
