@@ -153,6 +153,7 @@ let soYDungTrongCau = 0;
 let isPvP = false;
 let bots = [];
 let hardcoreMode = false;
+let cauDaXuLy = false;
 
 const $ = id => document.getElementById(id);
 
@@ -292,7 +293,8 @@ function showScreen(id){
 
 /* ===== RENDER CÂU HỎI ===== */
 function renderQuestion(){
-  if(cauHienTai >= danhSachChoi.length){ endGame(); return; }
+  if(cauHienTai >= danhSachChoi.length || !danhSachChoi[cauHienTai]){ endGame(); return; }
+  cauDaXuLy = false;
 
   const cau = danhSachChoi[cauHienTai];
   $("hudProgress").textContent = (cauHienTai + 1) + "/" + danhSachChoi.length;
@@ -558,6 +560,8 @@ function setFeedback(ok, text){
 
 /* ===== CHUYỂN CÂU ===== */
 function nextAfterDelay(){
+  if(cauDaXuLy) return;
+  cauDaXuLy = true;
   setTimeout(()=>{
     cauHienTai++;
     soYDaTraLoi = 0;
@@ -565,7 +569,6 @@ function nextAfterDelay(){
     renderQuestion();
   }, 2200);
 }
-
 /* ===== TIMER ===== */
 function startTimer(){
   clearInterval(timerId);
@@ -599,7 +602,9 @@ function paintTimer(){
 }
 
 function handleTimeout(){
+  if(cauDaXuLy) return;
   const cau = danhSachChoi[cauHienTai];
+  if(!cau) return;
   streak = 0;
   const type = cau.type;
 
