@@ -22,16 +22,16 @@
         🎮 GAME ÔN TẬP
         <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">23 câu giữa kì 1 • 5 mức độ</small>
       </button>
-        <button class="btn-primary" onclick="chonBoDe('full')"
-        style="background:linear-gradient(90deg,#a855f7,#7c3aed);padding:22px 16px">
-  📚 GAME FULL KIẾN THỨC
-  <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">20 đề thi thử TN THPT</small>
-</button>
-<a class="btn-primary" href="menu-ds.html"
-   style="background:linear-gradient(90deg,#22c55e,#16a34a);padding:22px 16px;text-decoration:none;display:block;text-align:center;color:#fff;font-weight:800;border-radius:13px;font-size:16px;letter-spacing:1px">
-  ✅ TRẮC NGHIỆM ĐÚNG/SAI
-  <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">80 câu Đ/S • Ôn thi THPT</small>
-</a>    
+      <button class="btn-primary" onclick="chonBoDe('full')"
+              style="background:linear-gradient(90deg,#a855f7,#7c3aed);padding:22px 16px">
+        📚 GAME FULL KIẾN THỨC
+        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">20 đề thi thử TN THPT</small>
+      </button>
+      <a class="btn-primary" href="menu-ds.html"
+         style="background:linear-gradient(90deg,#22c55e,#16a34a);padding:22px 16px;text-decoration:none;display:block;text-align:center;color:#fff;font-weight:800;border-radius:13px;font-size:16px;letter-spacing:1px">
+        ✅ TRẮC NGHIỆM ĐÚNG/SAI
+        <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">80 câu Đ/S • Ôn thi THPT</small>
+      </a>
     </div>
   </div>
 </section>
@@ -42,75 +42,35 @@
     <button class="btn-back" onclick="quayLaiChonSet()" type="button">← Quay lại</button>
     <h1>📚 GAME FULL</h1>
     <p class="sub">Chọn nhóm đề và mức độ</p>
-<div class="warning-note">
-  <span class="wn-icon">⚠️</span>
-  <div>
-    <b>LƯU Ý QUAN TRỌNG</b>
-<span class="wn-text">Đây là bản <b style="display:inline;color:#fcd34d">ôn tập tham khảo</b>, tổng hợp từ các <b style="display:inline;color:#fcd34d">đề thi thử TN THPT</b> của các Sở GD&amp;ĐT. <b style="display:inline;color:#fcd34d">KHÔNG PHẢI</b> đề thi THPT Quốc gia chính thức của Bộ GD&amp;ĐT.</span>
-  </div>
-</div>
+
+    <div class="warning-note">
+      <span class="wn-icon">⚠️</span>
+      <div>
+        <b>LƯU Ý QUAN TRỌNG</b>
+        <span class="wn-text">Đây là bản <b style="display:inline;color:#fcd34d">ôn tập tham khảo</b>, tổng hợp từ các <b style="display:inline;color:#fcd34d">đề thi thử TN THPT</b> của các Sở GD&amp;ĐT. <b style="display:inline;color:#fcd34d">KHÔNG PHẢI</b> đề thi THPT Quốc gia chính thức của Bộ GD&amp;ĐT.</span>
+      </div>
+    </div>
+
     <p class="label-diff">CHỌN NHÓM ĐỀ</p>
     <div class="diff-grid" id="deGridFull">
-      <button class="diff on" type="button" data-key="01-02">
-        <b>ĐỀ 1-2</b>
-        <small>Hải Phòng • Quảng Ninh</small>
-      </button>
-      <button class="diff" type="button" data-key="03-04">
-        <b>ĐỀ 3-4</b>
-        <small>Hà Nội • Ninh Bình</small>
-      </button>
-      <button class="diff" type="button" data-key="05-06">
-        <b>ĐỀ 5-6</b>
-        <small>Lào Cai • Thanh Hóa</small>
-      </button>
-      <button class="diff" type="button" data-key="07-08">
-        <b>ĐỀ 7-8</b>
-        <small>Nghệ An • Thái Nguyên</small>
-      </button>
-      <button class="diff" type="button" data-key="09-10">
-        <b>ĐỀ 9-10</b>
-        <small>Đề tham khảo</small>
-      </button>
-      <button class="diff" type="button" data-key="11-12">
-        <b>ĐỀ 11-12</b>
-        <small>Đề tham khảo</small>
-      </button>
-      <button class="diff" type="button" data-key="13-14">
-        <b>ĐỀ 13-14</b>
-        <small>Đề tham khảo</small>
-      </button>
-      <button class="diff" type="button" data-key="15-16">
-        <b>ĐỀ 15-16</b>
-        <small>Đề tham khảo</small>
-      </button>
-      <button class="diff" type="button" data-key="17-18">
-        <b>ĐỀ 17-18</b>
-        <small>Đề tham khảo</small>
-      </button>
-      <button class="diff" type="button" data-key="19-20">
-        <b>ĐỀ 19-20</b>
-        <small>Đề tham khảo</small>
-      </button>
+      <button class="diff on" type="button" data-key="01-02"><b>ĐỀ 1-2</b><small>Hải Phòng • Quảng Ninh</small></button>
+      <button class="diff" type="button" data-key="03-04"><b>ĐỀ 3-4</b><small>Hà Nội • Ninh Bình</small></button>
+      <button class="diff" type="button" data-key="05-06"><b>ĐỀ 5-6</b><small>Lào Cai • Thanh Hóa</small></button>
+      <button class="diff" type="button" data-key="07-08"><b>ĐỀ 7-8</b><small>Nghệ An • Thái Nguyên</small></button>
+      <button class="diff" type="button" data-key="09-10"><b>ĐỀ 9-10</b><small>Đề tham khảo</small></button>
+      <button class="diff" type="button" data-key="11-12"><b>ĐỀ 11-12</b><small>Đề tham khảo</small></button>
+      <button class="diff" type="button" data-key="13-14"><b>ĐỀ 13-14</b><small>Đề tham khảo</small></button>
+      <button class="diff" type="button" data-key="15-16"><b>ĐỀ 15-16</b><small>Đề tham khảo</small></button>
+      <button class="diff" type="button" data-key="17-18"><b>ĐỀ 17-18</b><small>Đề tham khảo</small></button>
+      <button class="diff" type="button" data-key="19-20"><b>ĐỀ 19-20</b><small>Đề tham khảo</small></button>
     </div>
 
     <p class="label-diff">CHỌN MỨC ĐỘ</p>
     <div class="diff-grid" id="diffGridFull">
-      <button class="diff on" type="button" data-key="mediumFull">
-        <b>TRUNG BÌNH</b>
-        <small>1 phút/câu</small>
-      </button>
-      <button class="diff" type="button" data-key="hardFull">
-        <b>KHÓ</b>
-        <small>30 giây/câu</small>
-      </button>
-      <button class="diff" type="button" data-key="extremeFull">
-        <b>SIÊU KHÓ</b>
-        <small>10 giây/câu</small>
-      </button>
-      <button class="diff pvp" type="button" data-key="pvpFull">
-        <b>PVP 4 NGƯỜI</b>
-        <small>30 giây/câu</small>
-      </button>
+      <button class="diff on" type="button" data-key="mediumFull"><b>TRUNG BÌNH</b><small>1 phút/câu</small></button>
+      <button class="diff" type="button" data-key="hardFull"><b>KHÓ</b><small>30 giây/câu</small></button>
+      <button class="diff" type="button" data-key="extremeFull"><b>SIÊU KHÓ</b><small>10 giây/câu</small></button>
+      <button class="diff pvp" type="button" data-key="pvpFull"><b>PVP 4 NGƯỜI</b><small>30 giây/câu</small></button>
     </div>
 
     <button class="btn-primary" id="btnStartFull" type="button">BẮT ĐẦU ⚔️</button>
@@ -130,56 +90,52 @@
       <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
     </label>
 
-    <!-- KHỐI HÓA - ẩn mặc định, hiện khi vào Hóa -->
-<div id="hoaCustomUI" style="display:none">
-  <div class="hoa-warning">
-    <span class="icon">⚠️</span>
-    <span>Chưa có đề <b>Full năm học</b>. Hiện chỉ có đề ôn tập <b>Giữa kì 1</b>.</span>
-  </div>
-
-  <div class="hoa-main-box" id="hoaMainBox" onclick="toggleHoaMenu()">
-    <span class="big-icon">📚</span>
-    <div class="big-name">ÔN TẬP GIỮA KÌ 1</div>
-    <div class="big-desc">👆 Bấm để chọn chế độ</div>
-  </div>
-
-  <div class="hoa-submenu" id="hoaSubMenu">
-    <div class="row-2">
-      <button class="hoa-sub-btn bot" type="button" onclick="startHoaBot()">
-        🎮 VS BOT
-        <small>5 mức độ</small>
-      </button>
-      <button class="hoa-sub-btn online" type="button" onclick="startHoaOnline()">
-        🌐 ONLINE
-        <small>4 người</small>
-      </button>
-    </div>
-    <a class="hoa-sub-btn mix" href="game-mix.html?mon=hoa">
-      🎯 ÔN TẬP HỖN HỢP
-      <small>57 câu trộn ABCD + Đ/S + TLN</small>
-    </a>
-  </div>
-</div>
-
-<!-- KHỐI GỐC - ẩn khi vào Hóa -->
-<div id="defaultUI">
-<p class="foot">Chúc bạn chinh phục được toàn bộ câu hỏi!</p>
-
-    <div class="toggle-row" id="toggleHardcore">
-      <div class="lbl">
-        <b>⚡ Chế độ khắc nghiệt</b>
-        <small>Giảm 1/2 thời gian mỗi câu</small>
+    <!-- KHỐI HÓA - ẩn mặc định -->
+    <div id="hoaCustomUI" style="display:none">
+      <div class="hoa-warning">
+        <span class="icon">⚠️</span>
+        <span>Chưa có đề <b>Full năm học</b>. Hiện chỉ có đề ôn tập <b>Giữa kì 1</b>.</span>
       </div>
-      <div class="toggle-switch"></div>
+      <div class="hoa-main-box" id="hoaMainBox" onclick="toggleHoaMenu()">
+        <span class="big-icon">📚</span>
+        <div class="big-name">ÔN TẬP GIỮA KÌ 1</div>
+        <div class="big-desc">👆 Bấm để chọn chế độ</div>
+      </div>
+      <div class="hoa-submenu" id="hoaSubMenu">
+        <div class="row-2">
+          <button class="hoa-sub-btn bot" type="button" onclick="startHoaBot()">
+            🎮 VS BOT
+            <small>5 mức độ</small>
+          </button>
+          <button class="hoa-sub-btn online" type="button" onclick="startHoaOnline()">
+            🌐 ONLINE
+            <small>4 người</small>
+          </button>
+        </div>
+        <a class="hoa-sub-btn mix" href="game-mix.html?mon=hoa">
+          🎯 ÔN TẬP HỖN HỢP
+          <small>57 câu trộn ABCD + Đ/S + TLN</small>
+        </a>
+      </div>
     </div>
 
-    <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
-    <button class="btn-online" id="btnOnlineMode" type="button">🌐 ĐẤU ONLINE 4 NGƯỜI</button>
-    <a class="btn-primary" id="btnMix" href="game-mix.html?mon=hoa"
-   style="background:linear-gradient(90deg,#f472b6,#dc2626);padding:16px;text-decoration:none;display:none;text-align:center;color:#fff;font-weight:800;border-radius:13px;font-size:15px;letter-spacing:1px;margin-top:10px">
-  🎯 ÔN TẬP HỖN HỢP
-  <small style="display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:4px">57 câu trộn 3 phần</small>
-    </a>
+    <!-- KHỐI GỐC - ẩn khi vào Hóa -->
+    <div id="defaultUI">
+      <p class="label-diff">CHỌN MỨC ĐỘ</p>
+      <div class="diff-grid" id="diffGrid"></div>
+
+      <div class="toggle-row" id="toggleHardcore">
+        <div class="lbl">
+          <b>⚡ Chế độ khắc nghiệt</b>
+          <small>Giảm 1/2 thời gian mỗi câu</small>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+
+      <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
+      <button class="btn-online" id="btnOnlineMode" type="button">🌐 ĐẤU ONLINE 4 NGƯỜI</button>
+    </div>
+
     <p class="foot">Chúc bạn chinh phục được toàn bộ câu hỏi!</p>
   </div>
 </section>
@@ -248,14 +204,8 @@
     <h1>🌐 ĐẤU ONLINE</h1>
     <p class="sub">Tạo phòng hoặc nhập mã để chiến với bạn bè</p>
     <div class="mode-row">
-      <button class="btn-mode on" id="btnModeCreate" type="button">
-        🎮 TẠO PHÒNG
-        <small>Tối đa 4 người</small>
-      </button>
-      <button class="btn-mode" id="btnModeJoin" type="button">
-        🔗 VÀO PHÒNG
-        <small>Nhập mã từ bạn</small>
-      </button>
+      <button class="btn-mode on" id="btnModeCreate" type="button">🎮 TẠO PHÒNG<small>Tối đa 4 người</small></button>
+      <button class="btn-mode" id="btnModeJoin" type="button">🔗 VÀO PHÒNG<small>Nhập mã từ bạn</small></button>
     </div>
     <div id="lobbyCreate" style="display:block">
       <p style="color:#94a3b8;font-size:13.5px;line-height:1.6;margin-bottom:14px;text-align:center">
@@ -296,12 +246,6 @@
     </p>
   </div>
 </section>
-
-</div>
-
-<!-- ============================================================
-     SCRIPT XỬ LÝ
-     ============================================================ -->
 <script>
 /* ===== BIẾN TOÀN CỤC ===== */
 let selectedFullDiff = "mediumFull";
@@ -330,6 +274,51 @@ function quayLaiChonSet(){
   hienThiManHinh("screenChooseSet");
 }
 
+/* ===== TOGGLE MENU HÓA ===== */
+function toggleHoaMenu(){
+  const sub = document.getElementById("hoaSubMenu");
+  if(sub) sub.classList.toggle("show");
+}
+
+/* ===== START GAME HÓA - VS BOT ===== */
+function startHoaBot(){
+  const name = document.getElementById("playerName").value.trim();
+  if(!name){
+    document.getElementById("playerName").classList.add("err");
+    document.getElementById("playerName").focus();
+    setTimeout(()=>document.getElementById("playerName").classList.remove("err"), 450);
+    return;
+  }
+  /* Chuyển sang screenStart bình thường nhưng giữ tên */
+  sessionStorage.setItem("tempName", name);
+  /* Hiện lại khối gốc để chọn mức độ */
+  document.getElementById("hoaCustomUI").style.display = "none";
+  document.getElementById("defaultUI").style.display = "block";
+  /* Điền lại tên */
+  document.getElementById("playerName").value = name;
+  /* Chuyển sang màn chơi bot (giữ ở màn start, chỉ đổi UI) */
+  alert("Đã chọn chế độ VS BOT!\nChọn mức độ bên dưới rồi bấm BẮT ĐẦU.");
+}
+
+/* ===== START GAME HÓA - ONLINE ===== */
+function startHoaOnline(){
+  const name = document.getElementById("playerName").value.trim();
+  if(!name){
+    document.getElementById("playerName").classList.add("err");
+    document.getElementById("playerName").focus();
+    setTimeout(()=>document.getElementById("playerName").classList.remove("err"), 450);
+    return;
+  }
+  /* Hiện khối gốc rồi click nút Đấu Online */
+  document.getElementById("hoaCustomUI").style.display = "none";
+  document.getElementById("defaultUI").style.display = "block";
+  document.getElementById("playerName").value = name;
+  setTimeout(()=>{
+    const btn = document.getElementById("btnOnlineMode");
+    if(btn) btn.click();
+  }, 300);
+}
+
 /* ===== XỬ LÝ KHI TRANG LOAD XONG ===== */
 document.addEventListener("DOMContentLoaded", ()=>{
   const params = new URLSearchParams(window.location.search);
@@ -348,7 +337,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const title = document.getElementById("chooseSetTitle");
   if(title) title.textContent = info.icon + " " + info.name;
 
-  /* Nếu đã chọn set từ trước -> vào màn Start */
+  /* Điều hướng màn hình */
   if(setFromUrl){
     hienThiManHinh("screenStart");
     const savedDiff = sessionStorage.getItem("chosenDiff");
@@ -356,9 +345,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(savedDiff) selectedFullDiff = savedDiff;
     if(savedDe) selectedDeFull = savedDe;
   }
-  /* Nếu là môn khác Lịch sử -> vào màn Start */
   else if(mon !== "lich-su"){
     hienThiManHinh("screenStart");
+  }
+
+  /* ===== HIỆN KHỐI HÓA / KHỐI GỐC THEO MÔN ===== */
+  const hoaUI = document.getElementById("hoaCustomUI");
+  const defaultUI = document.getElementById("defaultUI");
+
+  if(mon === "hoa"){
+    /* Vào Hóa → hiện khối Hóa, ẩn khối gốc */
+    if(hoaUI) hoaUI.style.display = "block";
+    if(defaultUI) defaultUI.style.display = "none";
+  } else {
+    /* Các môn khác → ẩn khối Hóa, hiện khối gốc */
+    if(hoaUI) hoaUI.style.display = "none";
+    if(defaultUI) defaultUI.style.display = "block";
   }
 
   /* ===== XỬ LÝ CHỌN NHÓM ĐỀ ===== */
@@ -372,7 +374,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
   }
 
-  /* ===== XỬ LÝ CHỌN MỨC ĐỘ ===== */
+  /* ===== XỬ LÝ CHỌN MỨC ĐỘ FULL ===== */
   const gridFull = document.getElementById("diffGridFull");
   if(gridFull){
     [...gridFull.querySelectorAll(".diff")].forEach(btn=>{
@@ -419,21 +421,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(titleEl) titleEl.textContent = info.icon + " " + info.name;
 
   const subEl = document.getElementById("monSub");
-if(subEl){
-  if(set === "full"){
-    const diffNames = {
-      mediumFull: "Trung bình • 1 phút/câu",
-      hardFull: "Khó • 30 giây/câu",
-      extremeFull: "Siêu khó • 10 giây/câu",
-      pvpFull: "PVP 4 người • 30 giây/câu"
-    };
-    const savedDiff = sessionStorage.getItem("chosenDiff") || "mediumFull";
-    subEl.textContent = "📚 Đề " + de + " • " + (diffNames[savedDiff] || savedDiff);
-  } else {
-    subEl.textContent = info.sub;
+  if(subEl){
+    if(set === "full"){
+      const diffNames = {
+        mediumFull: "Trung bình • 1 phút/câu",
+        hardFull: "Khó • 30 giây/câu",
+        extremeFull: "Siêu khó • 10 giây/câu",
+        pvpFull: "PVP 4 người • 30 giây/câu"
+      };
+      const savedDiff = sessionStorage.getItem("chosenDiff") || "mediumFull";
+      subEl.textContent = "📚 Đề " + de + " • " + (diffNames[savedDiff] || savedDiff);
+    } else {
+      subEl.textContent = info.sub;
+    }
   }
-}
-  /* Chọn file data theo set + đề */
+
+  /* Chọn file data */
   let dataPath;
   if(set === "full"){
     dataPath = "data/" + mon + "-full-" + de + ".js";
@@ -464,15 +467,6 @@ if(subEl){
   document.body.appendChild(script);
   window.CURRENT_MON = mon;
 })();
-/* Hiện nút Mix chỉ khi vào Hóa */
-(function showMixBtn(){
-  const params = new URLSearchParams(window.location.search);
-  const mon = params.get("mon") || "lich-su";
-  const btnMix = document.getElementById("btnMix");
-  if(btnMix && mon === "hoa"){
-    btnMix.style.display = "block";
-  }
-})();
 </script>
 </body>
-                                                              </html>
+</html>                                                                                </div>
