@@ -410,3 +410,64 @@ h1{
 .ds-feedback.show{display:block}
 .ds-feedback.ok{background:rgba(34,197,94,.12);border:1.5px solid #22c55e;color:#4ade80}
 .ds-feedback.no{background:rgba(239,68,68,.12);border:1.5px solid #ef4444;color:#f87171}
+/* ===== MENU HÓA HỌC ===== */
+.hoa-warning{
+  padding:12px 14px;
+  border-radius:11px;
+  background:rgba(251,191,36,.1);
+  border:1.5px solid rgba(251,191,36,.45);
+  color:#fbbf24;
+  font-size:12.5px;
+  line-height:1.5;
+  margin-bottom:16px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.hoa-warning .icon{font-size:18px;flex-shrink:0}
+
+.hoa-main-box{
+  padding:24px 18px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#1a2440,#2a1a40);
+  border:2px solid #38bdf8;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+  margin-bottom:12px;
+  box-shadow:0 8px 24px rgba(56,189,248,.25);
+}
+.hoa-main-box:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(56,189,248,.4)}
+.hoa-main-box .big-icon{font-size:44px;display:block;margin-bottom:8px}
+.hoa-main-box .big-name{font-size:17px;font-weight:900;color:#38bdf8;letter-spacing:1.5px;margin-bottom:4px}
+.hoa-main-box .big-desc{font-size:12.5px;color:#94a3b8}
+
+.hoa-submenu{
+  display:none;
+  gap:10px;
+  margin-bottom:12px;
+  animation:fade .3s;
+}
+.hoa-submenu.show{display:grid}
+.hoa-submenu .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hoa-sub-btn{
+  display:block;
+  padding:18px 14px;
+  border-radius:13px;
+  text-decoration:none;
+  text-align:center;
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:.5px;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.2s;
+}
+.hoa-sub-btn:hover{transform:translateY(-2px)}
+.hoa-sub-btn small{display:block;font-size:11px;opacity:.9;margin-top:3px;font-weight:600}
+.hoa-sub-btn.bot{background:linear-gradient(90deg,#0ea5e9,#6366f1)}
+.hoa-sub-btn.online{background:linear-gradient(90deg,#10b981,#0ea5e9)}
+.hoa-sub-btn.mix{background:linear-gradient(90deg,#f472b6,#dc2626)}
+
