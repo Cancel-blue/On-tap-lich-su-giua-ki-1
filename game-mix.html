@@ -71,17 +71,30 @@
       <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
     </label>
     <p class="label-diff">CHỌN MỨC ĐỘ</p>
-    <div class="diff-grid" id="diffGrid">
-      <button class="diff on" type="button" data-key="easy">
-        <b>THOẢI MÁI</b><small>Không giới hạn thời gian</small>
-      </button>
-      <button class="diff" type="button" data-key="medium">
-        <b>TRUNG BÌNH</b><small>90s/câu</small>
-      </button>
-      <button class="diff" type="button" data-key="hard">
-        <b>KHÓ</b><small>45s/câu</small>
-      </button>
-    </div>
+<div class="diff-grid" id="diffGrid">
+  <button class="diff on" type="button" data-key="easy">
+    <b>THOẢI MÁI</b><small>Không giới hạn thời gian</small>
+  </button>
+  <button class="diff" type="button" data-key="medium">
+    <b>TRUNG BÌNH</b><small>90s/câu</small>
+  </button>
+  <button class="diff" type="button" data-key="hard">
+    <b>KHÓ</b><small>45s/câu</small>
+  </button>
+  <button class="diff pvp" type="button" data-key="pvp">
+    <b>PVP 4 NGƯỜI</b><small>Bạn vs 3 bot • 60s/câu</small>
+  </button>
+</div>
+
+<div class="toggle-row" id="toggleHardcore">
+  <div class="lbl">
+    <b>⚡ Chế độ khắc nghiệt</b>
+    <small>Giảm 1/2 thời gian mỗi câu</small>
+  </div>
+  <div class="toggle-switch"></div>
+</div>
+
+<div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
     <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
     <p class="foot" id="totalInfo">Đang tải câu hỏi...</p>
   </div>
@@ -157,6 +170,26 @@ let soYDungTrongCau = 0;
 const $ = id => document.getElementById(id);
 
 const DIFFICULTIES = {
+  let hardcoreMode = false;
+
+const DIFFICULTIES = {
+  easy:   { label:"THOẢI MÁI", time: 0,  pvp:false },
+  medium: { label:"TRUNG BÌNH", time: 90, pvp:false },
+  hard:   { label:"KHÓ",       time: 45, pvp:false },
+  pvp:    { label:"PVP 4 NGƯỜI", time: 60, pvp:true }
+};
+
+const BOT_POOL = [
+  { name:"Hùng Vương",     ava:"👑" },
+  { name:"Lê Lợi",         ava:"🗡️" },
+  { name:"Quang Trung",    ava:"🐉" },
+  { name:"Trần Hưng Đạo",  ava:"🛡️" },
+  { name:"Nguyễn Huệ",     ava:"⚔️" },
+  { name:"Lý Thường Kiệt", ava:"🏹" }
+];
+
+let isPvP = false;
+let bots = [];
   easy:   { label:"THOẢI MÁI", time: 0,  timeDS: 0,  timeTL: 0  },
   medium: { label:"TRUNG BÌNH", time: 90, timeDS: 90, timeTL: 90 },
   hard:   { label:"KHÓ",       time: 45, timeDS: 45, timeTL: 45 }
