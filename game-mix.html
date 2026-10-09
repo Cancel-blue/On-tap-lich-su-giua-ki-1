@@ -583,6 +583,54 @@ function handleTimeout(type){
   setFeedback(false, "⏰ Hết giờ! Chuyển câu tiếp...");
   nextAfterDelay();
 }
+  
+/* ===== KẾT THÚC ===== */
+function endGame(){
+  clearInterval(timerId);
+  const total = correctCount + wrongCount;
+  const acc = total ? Math.round(correctCount / total * 100) : 0;
+
+  $("endName").textContent = "Người chơi: " + playerName + " • Mức " + DIFFICULTIES[selectedDiff].label;
+  $("endScore").textContent = score.toLocaleString("vi-VN");
+  $("stCorrect").textContent = correctCount;
+  $("stWrong").textContent = wrongCount;
+  $("stAcc").textContent = acc + "%";
+  $("stStreak").textContent = bestStreak;
+
+  let title = "HOÀN THÀNH!";
+  if(acc >= 90) title = "🏆 XUẤT SẮC!";
+  else if(acc >= 70) title = "🌟 RẤT TỐT!";
+  else if(acc >= 50) title = "👍 CỐ GẮNG THÊM!";
+  else title = "📚 ÔN LẠI NHÉ!";
+  $("endTitle").textContent = title;
+
+  const list = $("wrongList");
+  list.innerHTML = "";
+  if(wrongList.length > 0){
+    const h = document.createElement("h3");
+    h.textContent = "❗ CÁC CÂU LÀM SAI (" + wrongList.length + ")";
+    list.appendChild(h);
+    wrongList.forEach(w=>{
+      const d = document.createElement("div");
+      d.className = "wrong-item";
+      const typeColor = w.type === "ABCD" ? "#38bdf8" : w.type === "Đ/S" ? "#22c55e" : "#fbbf24";
+      let html = '<div class="q"><span style="display:inline-block;padding:2px 8px;background:' + typeColor + ';color:#000;font-size:10.5px;font-weight:900;border-radius:99px;margin-right:6px">' + w.type + '</span>' + w.q + '</div>';
+      html += '<div class="a">';
+      if(w.userAns) html += 'Bạn trả lời: <b style="color:#f87171">' + w.userAns + '</b> | ';
+      html += 'Đáp án: <b>' + w.correct + '</b></div>';
+      d.innerHTML = html;
+      list.appendChild(d);
+    });
+  } else {
+    const d = document.createElement("div");
+    d.className = "wrong-item";
+    d.style.borderLeftColor = "#22c55e";
+    d.innerHTML = '<div class="q" style="color:#4ade80;margin:0">🎉 Tuyệt vời! Không làm sai câu nào!</div>';
+    list.appendChild(d);
+  }
+
+  showScreen("screenEnd");
+}
 </script>
 </body>
 </html>
