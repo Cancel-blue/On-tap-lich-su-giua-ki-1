@@ -148,12 +148,9 @@ let totalTime = 0;
 let wrongList = [];
 let soYDaTraLoi = 0;
 let soYDungTrongCau = 0;
-
-/* PvP */
 let isPvP = false;
 let bots = [];
 let hardcoreMode = false;
-let cauDaXuLy = false;
 
 const $ = id => document.getElementById(id);
 
@@ -196,7 +193,6 @@ function initEvents(){
     };
   });
 
-  /* Toggle khắc nghiệt */
   const tog = $("toggleHardcore");
   if(tog){
     tog.onclick = function(){
@@ -228,10 +224,8 @@ function startGame(){
   cauHienTai = 0; wrongList = [];
   soYDaTraLoi = 0; soYDungTrongCau = 0;
 
-  /* Trộn 57 câu */
   danhSachChoi = [...DANH_SACH_CAU].sort(()=>Math.random()-0.5);
 
-  /* PvP? */
   isPvP = DIFFICULTIES[selectedDiff].pvp;
   if(isPvP){
     $("pvpBoard").style.display = "grid";
@@ -291,9 +285,11 @@ function showScreen(id){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-/* ===== RENDER CÂU HỎI ===== */
+/* ===== RENDER CÂU HỎI (router) ===== */
 function renderQuestion(){
-  if(cauHienTai >= danhSachChoi.length || !danhSachChoi[cauHienTai]){ endGame(); return; }
+  if(cauHienTai >= danhSachChoi.length || !danhSachChoi[cauHienTai]){
+    endGame(); return;
+  }
 
   const cau = danhSachChoi[cauHienTai];
   $("hudProgress").textContent = (cauHienTai + 1) + "/" + danhSachChoi.length;
@@ -312,6 +308,7 @@ function renderQuestion(){
   startTimer();
   if(isPvP) scheduleBotsAnswer();
 }
+  
 /* ===== RENDER ABCD ===== */
 function renderABCD(cau, wrap){
   const qbox = document.createElement("div");
@@ -557,16 +554,17 @@ function setFeedback(ok, text){
   f.className = "ds-feedback show " + (ok ? "ok" : "no");
 }
 
-/* ===== CHUYỂN CÂU ===== */
+/* ===== CHUYỂN CÂU (KHÔNG KẸT) ===== */
 function nextAfterDelay(){
+  clearInterval(timerId);
   cauHienTai++;
   soYDaTraLoi = 0;
   soYDungTrongCau = 0;
-  clearInterval(timerId);
-  setTimeout(()=>{
+  setTimeout(function(){
     renderQuestion();
   }, 2200);
 }
+
 /* ===== TIMER ===== */
 function startTimer(){
   clearInterval(timerId);
@@ -578,7 +576,7 @@ function startTimer(){
   totalTime = time;
   timeLeft = time;
   paintTimer();
-  timerId = setInterval(()=>{
+  timerId = setInterval(function(){
     timeLeft -= 0.1;
     if(timeLeft <= 0){
       timeLeft = 0; paintTimer();
@@ -600,7 +598,6 @@ function paintTimer(){
 }
 
 function handleTimeout(){
-  if(cauDaXuLy) return;
   const cau = danhSachChoi[cauHienTai];
   if(!cau) return;
   streak = 0;
@@ -610,16 +607,19 @@ function handleTimeout(){
     wrongCount++;
     wrongList.push({ type:"ABCD", q:cau.q, correct:"ABCD"[cau.a] + ". " + cau.o[cau.a] });
     const opts = $("options");
-    if(opts){ opts.classList.add("locked"); [...opts.children].forEach((b,i)=>{ if(i === cau.a) b.classList.add("correct"); }); }
+    if(opts){
+      opts.classList.add("locked");
+      [...opts.children].forEach(function(b,i){ if(i === cau.a) b.classList.add("correct"); });
+    }
   } else if(type === "dungsai"){
     const conLai = 4 - soYDaTraLoi;
     wrongCount += conLai;
-    cau.statements.forEach((st, idx)=>{
+    cau.statements.forEach(function(st, idx){
       const el = document.querySelector('.ds-statement[data-idx="' + idx + '"]');
       if(el && !el.classList.contains("locked")){
         el.classList.add("locked", "wrong");
         const btns = el.querySelectorAll(".ds-btn");
-        btns.forEach(b=>b.disabled = true);
+        btns.forEach(function(b){ b.disabled = true; });
         if(st.answer) btns[0].classList.add("correct-ans");
         else btns[1].classList.add("correct-ans");
         wrongList.push({ type:"Đ/S", q:"Ý " + "abcd"[idx] + ") " + st.text, correct: st.answer ? "ĐÚNG" : "SAI" });
@@ -669,7 +669,7 @@ function endGame(){
     const h = document.createElement("h3");
     h.textContent = "❗ CÁC CÂU LÀM SAI (" + wrongList.length + ")";
     list.appendChild(h);
-    wrongList.forEach(w=>{
+    wrongList.forEach(function(w){
       const d = document.createElement("div");
       d.className = "wrong-item";
       const typeColor = w.type === "ABCD" ? "#38bdf8" : w.type === "Đ/S" ? "#22c55e" : "#fbbf24";
