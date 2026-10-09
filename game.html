@@ -439,6 +439,17 @@ if(subEl){
 
   window.CURRENT_MON = mon;
 })();
+  
+/* Hiện nút Mix chỉ khi vào Hóa */
+(function showMixBtn(){
+  const params = new URLSearchParams(window.location.search);
+  const mon = params.get("mon") || "lich-su";
+  const btnMix = document.getElementById("btnMix");
+  if(btnMix && mon === "hoa"){
+    btnMix.style.display = "block";
+    btnMix.href = "game-mix.html?mon=" + mon;
+  }
+})();
 </script>
 </body>
                                                               </html>
