@@ -6,7 +6,6 @@
 <title>Ôn tập hỗn hợp</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* ABCD options */
 .option{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 15px;border-radius:13px;border:1.5px solid #2b3a55;background:#101a2c;color:#dbe4f3;font-size:15px;line-height:1.5;cursor:pointer;transition:.16s;font-family:inherit;margin-bottom:10px}
 .option:hover{border-color:#38bdf8;background:#16233a;transform:translateX(4px)}
 .option .letter{flex:0 0 28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#26344d;font-weight:800;font-size:13px;color:#a8b8d0}
@@ -16,8 +15,6 @@
 .option.wrong{background:rgba(239,68,68,.16);border-color:#ef4444;color:#fecaca}
 .option.wrong .letter{background:#ef4444;color:#450a0a}
 .options.locked .option{pointer-events:none}
-
-/* Đ/S doc */
 .ds-doc{background:rgba(13,22,38,.9);border:1.5px solid #26344d;border-radius:14px;padding:16px;margin-bottom:14px}
 .ds-doc .doc-label{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;background:rgba(168,85,247,.15);color:#c084fc;padding:4px 10px;border-radius:99px;margin-bottom:10px}
 .ds-doc .doc-text{font-size:14px;line-height:1.7;color:#e8eefc;font-style:italic;margin-bottom:10px}
@@ -37,8 +34,6 @@
 .ds-btn.correct-ans{background:rgba(34,197,94,.3);color:#bbf7d0;border-color:#22c55e}
 .ds-btn.wrong-ans{background:rgba(239,68,68,.3);color:#fecaca;border-color:#ef4444}
 .ds-btn:disabled{cursor:not-allowed;opacity:.6}
-
-/* TLN */
 .tl-q{background:rgba(13,22,38,.9);border:1.5px solid #26344d;border-radius:14px;padding:16px;margin-bottom:16px;font-size:15px;line-height:1.7;color:#e8eefc;white-space:pre-line}
 .tl-input-wrap{display:flex;gap:8px;margin-bottom:12px}
 .tl-input{flex:1;padding:14px 16px;border-radius:12px;background:#0d1626;border:2px solid #2b3a55;color:#e2e8f0;font-size:16px;font-family:inherit;outline:none}
@@ -51,7 +46,6 @@
 .tl-explain{padding:12px 14px;border-radius:10px;background:rgba(34,197,94,.08);border:1.5px solid #22c55e;color:#bbf7d0;font-size:13.5px;margin-top:12px;display:none}
 .tl-explain.show{display:block}
 .tl-explain.wrong{background:rgba(239,68,68,.08);border-color:#ef4444;color:#fecaca}
-
 .ds-feedback{text-align:center;padding:12px;border-radius:10px;font-weight:800;font-size:14px;margin-top:12px;display:none}
 .ds-feedback.show{display:block}
 .ds-feedback.ok{background:rgba(34,197,94,.12);border:1.5px solid #22c55e;color:#4ade80}
@@ -71,30 +65,20 @@
       <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
     </label>
     <p class="label-diff">CHỌN MỨC ĐỘ</p>
-<div class="diff-grid" id="diffGrid">
-  <button class="diff on" type="button" data-key="easy">
-    <b>THOẢI MÁI</b><small>Không giới hạn thời gian</small>
-  </button>
-  <button class="diff" type="button" data-key="medium">
-    <b>TRUNG BÌNH</b><small>90s/câu</small>
-  </button>
-  <button class="diff" type="button" data-key="hard">
-    <b>KHÓ</b><small>45s/câu</small>
-  </button>
-  <button class="diff pvp" type="button" data-key="pvp">
-    <b>PVP 4 NGƯỜI</b><small>Bạn vs 3 bot • 60s/câu</small>
-  </button>
-</div>
-
-<div class="toggle-row" id="toggleHardcore">
-  <div class="lbl">
-    <b>⚡ Chế độ khắc nghiệt</b>
-    <small>Giảm 1/2 thời gian mỗi câu</small>
-  </div>
-  <div class="toggle-switch"></div>
-</div>
-
-<div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
+    <div class="diff-grid" id="diffGrid">
+      <button class="diff on" type="button" data-key="easy"><b>THOẢI MÁI</b><small>Không giới hạn thời gian</small></button>
+      <button class="diff" type="button" data-key="medium"><b>TRUNG BÌNH</b><small>90s/câu</small></button>
+      <button class="diff" type="button" data-key="hard"><b>KHÓ</b><small>45s/câu</small></button>
+      <button class="diff pvp" type="button" data-key="pvp"><b>PVP 4 NGƯỜI</b><small>Bạn vs 3 bot • 60s/câu</small></button>
+    </div>
+    <div class="toggle-row" id="toggleHardcore">
+      <div class="lbl">
+        <b>⚡ Chế độ khắc nghiệt</b>
+        <small>Giảm 1/2 thời gian mỗi câu</small>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
     <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
     <p class="foot" id="totalInfo">Đang tải câu hỏi...</p>
   </div>
@@ -144,7 +128,7 @@
 
 </div>
 <script>
-/* ===== BIẾN STATE ===== */
+/* ===== STATE ===== */
 const params = new URLSearchParams(window.location.search);
 const mon = params.get("mon") || "hoa";
 
@@ -162,21 +146,21 @@ let timerId = null;
 let timeLeft = 0;
 let totalTime = 0;
 let wrongList = [];
-
-/* State cho Đ/S */
 let soYDaTraLoi = 0;
 let soYDungTrongCau = 0;
+
+/* PvP */
+let isPvP = false;
+let bots = [];
+let hardcoreMode = false;
 
 const $ = id => document.getElementById(id);
 
 const DIFFICULTIES = {
-  let hardcoreMode = false;
-
-const DIFFICULTIES = {
-  easy:   { label:"THOẢI MÁI", time: 0,  pvp:false },
-  medium: { label:"TRUNG BÌNH", time: 90, pvp:false },
-  hard:   { label:"KHÓ",       time: 45, pvp:false },
-  pvp:    { label:"PVP 4 NGƯỜI", time: 60, pvp:true }
+  easy:   { label:"THOẢI MÁI",   time: 0,  pvp:false },
+  medium: { label:"TRUNG BÌNH",  time: 90, pvp:false },
+  hard:   { label:"KHÓ",         time: 45, pvp:false },
+  pvp:    { label:"PVP 4 NGƯỜI", time: 60, pvp:true  }
 };
 
 const BOT_POOL = [
@@ -187,13 +171,6 @@ const BOT_POOL = [
   { name:"Nguyễn Huệ",     ava:"⚔️" },
   { name:"Lý Thường Kiệt", ava:"🏹" }
 ];
-
-let isPvP = false;
-let bots = [];
-  easy:   { label:"THOẢI MÁI", time: 0,  timeDS: 0,  timeTL: 0  },
-  medium: { label:"TRUNG BÌNH", time: 90, timeDS: 90, timeTL: 90 },
-  hard:   { label:"KHÓ",       time: 45, timeDS: 45, timeTL: 45 }
-};
 
 /* ===== LOAD DATA ===== */
 const scriptData = document.createElement("script");
@@ -217,6 +194,16 @@ function initEvents(){
       [...$("diffGrid").children].forEach(b=>b.classList.toggle("on", b === btn));
     };
   });
+
+  /* Toggle khắc nghiệt */
+  const tog = $("toggleHardcore");
+  if(tog){
+    tog.onclick = function(){
+      hardcoreMode = !hardcoreMode;
+      this.classList.toggle("on", hardcoreMode);
+    };
+  }
+
   $("btnStart").onclick = startGame;
   $("playerName").addEventListener("keydown", e=>{ if(e.key === "Enter") startGame(); });
   $("btnQuit").onclick = ()=>{ if(confirm("Thoát?")) window.location.href = "game.html?mon=" + mon; };
@@ -240,8 +227,17 @@ function startGame(){
   cauHienTai = 0; wrongList = [];
   soYDaTraLoi = 0; soYDungTrongCau = 0;
 
-  /* Trộn toàn bộ 57 câu */
+  /* Trộn 57 câu */
   danhSachChoi = [...DANH_SACH_CAU].sort(()=>Math.random()-0.5);
+
+  /* PvP? */
+  isPvP = DIFFICULTIES[selectedDiff].pvp;
+  if(isPvP){
+    $("pvpBoard").style.display = "grid";
+    setupBots();
+  } else {
+    $("pvpBoard").style.display = "none";
+  }
 
   $("hudName").textContent = playerName;
   $("avatar").textContent = playerName.charAt(0).toUpperCase();
@@ -251,12 +247,50 @@ function startGame(){
   renderQuestion();
 }
 
+/* ===== BOTS ===== */
+function setupBots(){
+  const pool = [...BOT_POOL].sort(()=>Math.random()-0.5);
+  bots = pool.slice(0,3).map(b=>({ name:b.name, ava:b.ava, score:0, state:null }));
+  renderPvpBoard();
+}
+
+function renderPvpBoard(){
+  const board = $("pvpBoard");
+  if(!board) return;
+  board.innerHTML = "";
+  const me = document.createElement("div");
+  me.className = "pvp-player me";
+  me.innerHTML = '<span class="ava">' + playerName.charAt(0).toUpperCase() + '</span><span class="nm">' + playerName + '</span><span class="sc">' + score + '</span>';
+  board.appendChild(me);
+  bots.forEach(bot=>{
+    const el = document.createElement("div");
+    el.className = "pvp-player";
+    if(bot.state === "correct") el.classList.add("correct");
+    el.innerHTML = '<span class="ava">' + bot.ava + '</span><span class="nm">' + bot.name + '</span><span class="sc">' + bot.score + '</span>';
+    board.appendChild(el);
+  });
+}
+
+function scheduleBotsAnswer(){
+  if(!bots || bots.length === 0) return;
+  bots.forEach(bot=>{
+    bot.state = null;
+    const delay = 2 + Math.random() * 3;
+    setTimeout(()=>{
+      const correct = Math.random() < 0.6;
+      bot.state = correct ? "correct" : "wrong";
+      if(correct) bot.score += 100;
+      renderPvpBoard();
+    }, delay * 1000);
+  });
+}
+
 function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active", s.id === id));
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-/* ===== RENDER CÂU HỎI (router theo type) ===== */
+/* ===== RENDER CÂU HỎI ===== */
 function renderQuestion(){
   if(cauHienTai >= danhSachChoi.length){ endGame(); return; }
 
@@ -270,14 +304,13 @@ function renderQuestion(){
   fb.textContent = "";
   fb.className = "ds-feedback";
 
-  /* Router */
-  if(cau.type === "abcd")       renderABCD(cau, wrap);
+  if(cau.type === "abcd")         renderABCD(cau, wrap);
   else if(cau.type === "dungsai") renderDungSai(cau, wrap);
   else if(cau.type === "tlngan")  renderTLNgan(cau, wrap);
 
-  startTimer(cau.type);
+  startTimer();
+  if(isPvP) scheduleBotsAnswer();
 }
-
 /* ===== RENDER ABCD ===== */
 function renderABCD(cau, wrap){
   const qbox = document.createElement("div");
@@ -327,6 +360,7 @@ function submitABCD(userIdx, correctIdx, opts){
     setFeedback(false, "❌ Sai! Đáp án: " + "ABCD"[correctIdx]);
   }
   $("hudScore").textContent = score;
+  if(isPvP) renderPvpBoard();
   nextAfterDelay();
 }
 
@@ -346,7 +380,6 @@ function renderDungSai(cau, wrap){
   }
 
   const title = document.createElement("div");
-  title.className = "ds-question-title";
   title.style.cssText = "font-size:13px;font-weight:800;color:#fbbf24;margin:14px 0 10px;letter-spacing:.5px";
   title.textContent = "ĐÁNH GIÁ ĐÚNG / SAI CÁC Ý SAU:";
   wrap.appendChild(title);
@@ -422,6 +455,7 @@ function selectDungSai(idx, chonDung, cau, el){
   }
   soYDaTraLoi++;
   $("hudScore").textContent = score;
+  if(isPvP) renderPvpBoard();
 
   if(soYDaTraLoi >= 4){
     if(soYDungTrongCau === 4) score += 50;
@@ -511,17 +545,18 @@ function submitTLN(cau){
     setFeedback(false, "❌ Sai! Xem đáp án bên dưới");
   }
   $("hudScore").textContent = score;
+  if(isPvP) renderPvpBoard();
   nextAfterDelay();
 }
 
-/* ===== SET FEEDBACK ===== */
+/* ===== FEEDBACK ===== */
 function setFeedback(ok, text){
   const f = $("feedback");
   f.textContent = text;
   f.className = "ds-feedback show " + (ok ? "ok" : "no");
 }
 
-/* ===== CHUYỂN CÂU SAU DELAY ===== */
+/* ===== CHUYỂN CÂU ===== */
 function nextAfterDelay(){
   setTimeout(()=>{
     cauHienTai++;
@@ -532,11 +567,12 @@ function nextAfterDelay(){
 }
 
 /* ===== TIMER ===== */
-function startTimer(type){
+function startTimer(){
   clearInterval(timerId);
   const cfg = DIFFICULTIES[selectedDiff];
   let time = cfg.time;
-  if(cfg.time === 0){ $("timerWrap").style.display = "none"; return; }
+  if(hardcoreMode) time = Math.max(10, Math.round(time/2));
+  if(time === 0){ $("timerWrap").style.display = "none"; return; }
   $("timerWrap").style.display = "flex";
   totalTime = time;
   timeLeft = time;
@@ -546,7 +582,7 @@ function startTimer(type){
     if(timeLeft <= 0){
       timeLeft = 0; paintTimer();
       clearInterval(timerId);
-      handleTimeout(type);
+      handleTimeout();
     } else paintTimer();
   }, 100);
 }
@@ -562,21 +598,17 @@ function paintTimer(){
   $("timerText").style.color = p<=20 ? "#f87171" : "#94a3b8";
 }
 
-function handleTimeout(type){
+function handleTimeout(){
   const cau = danhSachChoi[cauHienTai];
   streak = 0;
+  const type = cau.type;
 
   if(type === "abcd"){
     wrongCount++;
-    wrongList.push({
-      type: "ABCD",
-      q: cau.q,
-      correct: "ABCD"[cau.a] + ". " + cau.o[cau.a]
-    });
+    wrongList.push({ type:"ABCD", q:cau.q, correct:"ABCD"[cau.a] + ". " + cau.o[cau.a] });
     const opts = $("options");
     if(opts){ opts.classList.add("locked"); [...opts.children].forEach((b,i)=>{ if(i === cau.a) b.classList.add("correct"); }); }
   } else if(type === "dungsai"){
-    /* Chưa trả lời các ý còn lại → tính sai hết */
     const conLai = 4 - soYDaTraLoi;
     wrongCount += conLai;
     cau.statements.forEach((st, idx)=>{
@@ -587,11 +619,7 @@ function handleTimeout(type){
         btns.forEach(b=>b.disabled = true);
         if(st.answer) btns[0].classList.add("correct-ans");
         else btns[1].classList.add("correct-ans");
-        wrongList.push({
-          type: "Đ/S",
-          q: "Ý " + "abcd"[idx] + ") " + st.text,
-          correct: st.answer ? "ĐÚNG" : "SAI"
-        });
+        wrongList.push({ type:"Đ/S", q:"Ý " + "abcd"[idx] + ") " + st.text, correct: st.answer ? "ĐÚNG" : "SAI" });
       }
     });
   } else if(type === "tlngan"){
@@ -605,18 +633,13 @@ function handleTimeout(type){
       explain.classList.add("show", "wrong");
       explain.innerHTML = '<b style="color:#f87171">⏰ Hết giờ! Đáp án: ' + cau.accept[0] + '</b><br>' + (cau.explain || "");
     }
-    wrongList.push({
-      type: "TLN",
-      q: cau.q,
-      correct: cau.accept[0],
-      userAns: "(hết giờ)"
-    });
+    wrongList.push({ type:"TLN", q:cau.q, correct:cau.accept[0], userAns:"(hết giờ)" });
   }
 
   setFeedback(false, "⏰ Hết giờ! Chuyển câu tiếp...");
   nextAfterDelay();
 }
-  
+
 /* ===== KẾT THÚC ===== */
 function endGame(){
   clearInterval(timerId);
