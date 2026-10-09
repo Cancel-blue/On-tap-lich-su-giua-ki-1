@@ -327,13 +327,13 @@ function renderABCD(cau, wrap){
     btn.type = "button";
     btn.className = "option";
     btn.innerHTML = '<span class="letter">' + "ABCD"[i] + '</span><span class="otext">' + text + '</span>';
-    btn.onclick = ()=>submitABCD(i, cau.a, opts);
+    btn.onclick = ()=>submitABCD(i, cau.a, opts, cau);
     opts.appendChild(btn);
   });
   wrap.appendChild(opts);
 }
 
-function submitABCD(userIdx, correctIdx, opts){
+function submitABCD(userIdx, correctIdx, opts, cau){
   if(opts.classList.contains("locked")) return;
   opts.classList.add("locked");
   clearInterval(timerId);
