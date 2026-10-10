@@ -25,6 +25,7 @@ let statusTimers = {};
 let peaceActive = false;
 let peaceUntil = 0;
 let doubleActive = false;
+let botInventories = {};  // Túi đồ riêng của từng bot
 const MAX_INV = 3;
 
 function initItemsSystem(){
@@ -60,6 +61,14 @@ function initItemsSystem(){
 
   peaceActive = false;
   peaceUntil = 0;
+     peaceActive = false;
+  peaceUntil = 0;
+
+  /* Khởi tạo túi đồ cho từng bot */
+  botInventories = {};
+  pvpPlayers.forEach(p => {
+    if (p.isBot) botInventories[p.uid] = [];
+  });
 }
 /* ===== RƠI ITEM 10% MỖI CÂU ĐÚNG ===== */
 function tryDropItem(){
@@ -769,7 +778,183 @@ function initItemSystem(){
   }
 
   initItemsSystem();
+/* =========================================================
+   HỆ THỐNG ITEM CHO BOT — Bot tự động dùng item ngẫu nhiên
+   ========================================================= */
 
+/* Hook được gọi từ game-mix.html khi bot trả lời đúng */
+function onBotCorrectAnswer(botUid){
+  if(!botInventories[botUid]) botInventories[botUid] = [];
+  if(botInventories[botUid].length >= MAX_INV) return;
+  if(Math.random() > 0.25) return;  /* 25% cơ hội nhận item */
+
+  const keys = Object.keys(ITEMS);
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  botInventories[botUid].push(key);
+
+  /* Hẹn giờ dùng item sau 2-6 giây */
+  const delay = 2000 + Math.random() * 4000;
+  setTimeout(() => botUseRandomItem(botUid), delay);
+}
+
+/* Bot chọn ngẫu nhiên 1 item trong túi và dùng */
+function botUseRandomItem(botUid){
+  const inv = botInventories[botUid];
+  if(!inv || inv.length === 0) return;
+  if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0) return;
+
+  const idx = Math.floor(Math.random() * inv.length);
+  const key = inv[idx];
+  const item = ITEMS[key];
+  inv.splice(idx, 1);
+
+  /* Chọn mục tiêu ngẫu nhiên */
+  const targets = [];
+  if(item.needTarget === 1){
+    const others = pvpPlayers.filter(p => p.uid !== botUid);
+    if(others.length > 0) targets.push(others[Math.floor(Math.random() * others.length)].uid);
+  } else if(item.needTarget === 2){
+    const others = [...pvpPlayers.filter(p => p.uid !== botUid)].sort(() => Math.random() - 0.5);
+    targets.push(...others.slice(0, 2).map(p => p.uid));
+  }
+
+  executeBotItem(botUid, key, targets);
+}
+
+/* Thực thi item từ phía Bot */
+function executeBotItem(botUid, key, targets){
+  const bot = pvpPlayers.find(p => p.uid === botUid);
+  if(!bot) return;
+  const botName = bot.name;
+  const botAva = bot.ava;
+
+  switch(key){
+    case "gold":
+      bot.score += 200;
+      syncScores();
+      showToast(botAva + " " + botName + " dùng 💰 Túi vàng! +200đ", "warn");
+      break;
+
+    case "double":
+      bot.score += 50;
+      syncScores();
+      showToast(botAva + " " + botName + " dùng ⚡ Nhân đôi điểm! +50đ", "warn");
+      break;
+
+    case "freezeTime":
+      bot.score += 20;
+      syncScores();
+      showToast(botAva + " " + botName + " dùng ⏱️ Đóng băng giờ!", "warn");
+      break;
+
+    case "fifty":
+      bot.score += 30;
+      syncScores();
+      showToast(botAva + " " + botName + " dùng 🎯 Gợi ý 50:50!", "warn");
+      break;
+
+    case "shield":
+      clearStatus(botUid, "mirror");
+      applyStatus(botUid, "shield", 30);
+      showToast(botAva + " " + botName + " bật 🛡️ Khiên 30s!", "warn");
+      break;
+
+    case "mirror":
+      clearStatus(botUid, "shield");
+      applyStatus(botUid, "mirror", 999);
+      showToast(botAva + " " + botName + " bật 🪞 Gương phản chiếu!", "warn");
+      break;
+
+    case "fireball":
+      if(targets[0]){
+        const t = pvpPlayers.find(p => p.uid === targets[0]);
+        if(t){
+          applyDamage(targets[0], 100, botUid, false);
+          const st = playerStatus[targets[0]];
+          if(st && st.shield === 0) applyStatus(targets[0], "fire", 10);
+          showToast(botAva + " " + botName + " ném 🔥 Cầu lửa vào " + t.name + "!", "danger");
+        }
+      }
+      break;
+
+    case "spear":
+      if(targets[0]){
+        const t = pvpPlayers.find(p => p.uid === targets[0]);
+        if(t){
+          applyDamage(targets[0], 75, botUid, false);
+          showToast(botAva + " " + botName + " đâm 🗡️ Giáo vào " + t.name + "!", "danger");
+        }
+      }
+      break;
+
+    case "freezeBot":
+      if(targets.length === 2){
+        targets.forEach(uid => {
+          applyStatus(uid, "frozen", 10);
+          if(uid === "me") showFreezeOverlay();
+        });
+        showToast(botAva + " " + botName + " đóng băng ❄️ 2 người!", "danger");
+      }
+      break;
+
+    case "lightning":
+      const others = pvpPlayers.filter(p => p.uid !== botUid);
+      if(others.length > 0){
+        const t = others[Math.floor(Math.random() * others.length)];
+        applyDamage(t.uid, 100, botUid, false);
+        showToast(botAva + " " + botName + " gọi ⚡ Thiên lôi vào " + t.name + "!", "danger");
+      }
+      break;
+
+    case "nuke":
+      pvpPlayers.forEach(p => {
+        clearStatus(p.uid, "shield");
+        clearStatus(p.uid, "mirror");
+        const dmg = p.uid === botUid ? 112.5 : 150;
+        p.score = Math.max(0, p.score - dmg);
+        applyStatus(p.uid, "radio", 25);
+      });
+      syncScores();
+      showToast("☢️ " + botName + " THẢ BOM HẠT NHÂN!", "danger");
+      break;
+
+    case "peace":
+      peaceActive = true;
+      peaceUntil = Date.now() + 60000;
+      pvpPlayers.forEach(p => {
+        clearStatus(p.uid, "shield");
+        clearStatus(p.uid, "mirror");
+      });
+      syncScores();
+      showToast("🕊️ " + botName + " dùng Lệnh bài hoà bình 60s!", "warn");
+      const peaceTimer = setInterval(() => {
+        const remain = Math.ceil((peaceUntil - Date.now())/1000);
+        if(remain <= 0){
+          peaceActive = false;
+          clearInterval(peaceTimer);
+          renderPvpBoardMerged();
+          showToast("🕊️ Hoà bình kết thúc!", "info");
+        }
+      }, 1000);
+      break;
+
+    case "magicHand":
+      if(targets[0] === "me" && myInventory.length > 0){
+        const stolenIdx = Math.floor(Math.random() * myInventory.length);
+        const stolenKey = myInventory[stolenIdx];
+        myInventory.splice(stolenIdx, 1);
+        renderInventory();
+        botInventories[botUid].push(stolenKey);
+        showToast("🪄 " + botName + " đã CƯỚP " + ITEMS[stolenKey].name + " của bạn!", "danger");
+      } else if(targets[0]){
+        const t = pvpPlayers.find(p => p.uid === targets[0]);
+        showToast("🪄 " + botName + " cố cướp item của " + (t ? t.name : "ai đó") + " nhưng thất bại!", "warn");
+      }
+      break;
+  }
+
+  renderPvpBoardMerged();
+}
   renderInventory();
 
   const invBar = document.getElementById("invBar");
