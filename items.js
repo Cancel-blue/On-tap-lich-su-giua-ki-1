@@ -1,5 +1,5 @@
 /* =========================================================
-   ITEMS.JS - Hệ thống 13 item (FIXED FULL v2)
+   ITEMS.JS - Hệ thống 13 item (CLEAN v3 - Live Binding)
    ========================================================= */
 
 const ITEMS = {
@@ -27,20 +27,19 @@ let peaceActive = false;
 let peaceUntil = 0;
 let doubleActive = false;
 let botInventories = {};
+let botNukeUsed = {};
 const MAX_INV = 3;
 
 /* =========================================================
-   ĐỒNG BỘ ĐIỂM TỪ GLOBAL `score` VÀO `pvpPlayers`
+   ĐỒNG BỘ ĐIỂM PLAYER (chỉ lo phần của bạn)
    ========================================================= */
 function syncGlobalToPvp() {
   if (typeof score === "undefined") return;
   const mePlayer = pvpPlayers.find(p => p.uid === "me");
   if (mePlayer) {
-    if (score > mePlayer.score) {
-      mePlayer.score = score;
-    } else {
-      score = mePlayer.score;
-    }
+    const maxScore = Math.max(score, mePlayer.score);
+    score = maxScore;
+    mePlayer.score = maxScore;
   }
 }
 
@@ -51,6 +50,7 @@ function initItemsSystem(){
   myInventory = [];
   pvpPlayers = [];
 
+  /* Thêm người chơi */
   pvpPlayers.push({
     uid: "me",
     name: playerName,
@@ -60,15 +60,24 @@ function initItemsSystem(){
     isBot: false
   });
 
+  /* Thêm bot với LIVE BINDING:
+     pvpPlayers[bot_x].score LUÔN bằng bots[x].score (cùng 1 biến) */
   bots.forEach((b, i)=>{
-    pvpPlayers.push({
+    const botPlayer = {
       uid: "bot_" + i,
       name: b.name,
       ava: b.ava,
-      score: b.score,
       isMe: false,
-      isBot: true
+      isBot: true,
+      botIdx: i
+    };
+    Object.defineProperty(botPlayer, 'score', {
+      get() { return (typeof bots[i] !== "undefined" && bots[i]) ? bots[i].score : 0; },
+      set(v) { if (typeof bots[i] !== "undefined" && bots[i]) bots[i].score = v; },
+      enumerable: true,
+      configurable: true
     });
+    pvpPlayers.push(botPlayer);
   });
 
   pvpPlayers.forEach(p=>{
@@ -362,6 +371,7 @@ function applyDamage(targetUid, amount, sourceUid, isNuke){
 
 /* =========================================================
    ÁP DỤNG STATUS EFFECT
+   Với LIVE BINDING, khi p.score thay đổi → bots[i].score cũng đổi theo
    ========================================================= */
 function applyStatus(targetUid, type, duration){
   const status = playerStatus[targetUid];
@@ -382,18 +392,18 @@ function applyStatus(targetUid, type, duration){
     }
     status[type] -= 1;
 
-    if(type === "fire"){
-      const p = pvpPlayers.find(pp => pp.uid === targetUid);
-      if(p) p.score = Math.max(0, p.score - 3);
-      if(targetUid === "me") showToast("🔥 Đang cháy! -3đ", "warn");
-      syncScores();
-    } else if(type === "radio"){
-      const p = pvpPlayers.find(pp => pp.uid === targetUid);
-      if(p) p.score = Math.max(0, p.score - 2);
-      if(targetUid === "me") showToast("☢️ Phóng xạ! -2đ", "warn");
-      syncScores();
+    const p = pvpPlayers.find(pp => pp.uid === targetUid);
+    if(p){
+      if(type === "fire"){
+        p.score = Math.max(0, p.score - 3);
+        if(targetUid === "me") showToast("🔥 Đang cháy! -3đ", "warn");
+      } else if(type === "radio"){
+        p.score = Math.max(0, p.score - 2);
+        if(targetUid === "me") showToast("☢️ Phóng xạ! -2đ", "warn");
+      }
     }
 
+    syncScores();
     updateStatusBadges();
   }, 1000);
 }
@@ -409,7 +419,8 @@ function clearStatus(targetUid, type){
 }
 
 /* =========================================================
-   SYNC ĐIỂM GIỮA PVPPPLAYERS + BOTS + SCORE GLOBAL
+   SYNC ĐIỂM — CHỈ CẦN CẬP NHẬT HUD VÀ RENDER LẠI BOARD
+   (Với LIVE BINDING, điểm bot tự động đồng bộ)
    ========================================================= */
 function syncScores(){
   const mePlayer = pvpPlayers.find(p => p.uid === "me");
@@ -418,13 +429,6 @@ function syncScores(){
     const hudScore = document.getElementById("hudScore");
     if(hudScore) hudScore.textContent = score.toLocaleString("vi-VN");
   }
-
-  pvpPlayers.forEach(p => {
-    if(p.isBot){
-      const botIdx = parseInt(p.uid.replace("bot_", ""));
-      if(bots[botIdx]) bots[botIdx].score = p.score;
-    }
-  });
 
   renderPvpBoardMerged();
 }
@@ -501,7 +505,7 @@ function executeItem(key, targets){
     case "spear":      executeSpear(targets[0]); break;
     case "magicHand":  executeMagicHand(targets[0]); break;
   }
-}
+  }
 /* ===== 1. TÚI VÀNG ===== */
 function executeGold(){
   const me = pvpPlayers.find(p => p.uid === "me");
@@ -797,24 +801,22 @@ function executeMagicHand(targetUid){
   }
 
   showToast("🪄 Đã cướp item thành công!", "success");
-     }
-    /* =========================================================
+}
+
+/* =========================================================
    HỆ THỐNG ITEM CHO BOT — Bot tự động dùng item ngẫu nhiên
    ========================================================= */
-
-let botNukeUsed = {};  /* Giới hạn mỗi bot chỉ dùng Bom 1 lần */
 
 /* Hook được gọi từ game-mix.html khi bot trả lời đúng */
 function onBotCorrectAnswer(botUid){
   if(!botInventories[botUid]) botInventories[botUid] = [];
   if(botInventories[botUid].length >= MAX_INV) return;
-  if(Math.random() > 0.15) return;  /* Giảm xuống 15% để bot bớt spam */
+  if(Math.random() > 0.15) return;
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
   botInventories[botUid].push(key);
 
-  /* Hẹn giờ dùng item sau 2-6 giây */
   const delay = 2000 + Math.random() * 4000;
   setTimeout(() => botUseRandomItem(botUid), delay);
 }
@@ -826,17 +828,13 @@ function botUseRandomItem(botUid){
   if(!inv || inv.length === 0) return;
   if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0) return;
 
-  /* NẾU ĐANG HOÀ BÌNH: chỉ cho dùng item hỗ trợ/phòng thủ, bỏ item tấn công */
   let availableKeys = [...inv];
   if(peaceActive){
     availableKeys = inv.filter(k => {
       const t = ITEMS[k].type;
       return t === "support" || t === "defense";
     });
-    if(availableKeys.length === 0){
-      /* Không có item nào dùng được, bỏ qua */
-      return;
-    }
+    if(availableKeys.length === 0) return;
   }
 
   const chosenKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
@@ -844,7 +842,6 @@ function botUseRandomItem(botUid){
   const item = ITEMS[chosenKey];
   inv.splice(idx, 1);
 
-  /* Chọn mục tiêu ngẫu nhiên */
   const targets = [];
   if(item.needTarget === 1){
     const others = pvpPlayers.filter(p => p.uid !== botUid);
@@ -865,7 +862,7 @@ function executeBotItem(botUid, key, targets){
   const botAva = bot.ava;
   const itemType = ITEMS[key].type;
 
-  /* CHẶN TUYỆT ĐỐI: Nếu Hoà bình đang bật và item là loại tấn công → không cho dùng */
+  /* Chặn item tấn công khi Hoà bình đang bật */
   if(peaceActive && itemType === "attack"){
     showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
     return;
@@ -950,7 +947,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "nuke":
-      /* GIỚI HẠN: Mỗi bot chỉ được dùng Bom 1 lần/trận */
       if(botNukeUsed[botUid]){
         showToast("🛑 " + botName + " đã dùng Bom rồi, không thể dùng lại!", "info");
         return;
@@ -966,7 +962,6 @@ function executeBotItem(botUid, key, targets){
       });
       syncScores();
 
-      /* Thêm hiệu ứng flash đỏ giống người chơi */
       const flash = document.createElement("div");
       flash.style.cssText = "position:fixed;inset:0;background:radial-gradient(circle,rgba(251,191,36,.6),transparent 70%);z-index:9998;pointer-events:none;animation:flashOut 1s";
       document.body.appendChild(flash);
@@ -1063,4 +1058,4 @@ function initItemSystem(){
   }
 
   renderPvpBoardMerged();
-}
+  }
