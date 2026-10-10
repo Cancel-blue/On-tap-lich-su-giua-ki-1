@@ -2,7 +2,6 @@
    ITEMS.JS - Hệ thống 13 item cho game-mix (Đã FIX lỗi)
    ========================================================= */
 
-/* ===== ĐỊNH NGHĨA 13 ITEM ===== */
 const ITEMS = {
   gold:       { name:"Túi vàng",       icon:"💰", slot:"gold",       desc:"+200 điểm ngay lập tức",                     type:"support" },
   freezeTime: { name:"Đóng băng giờ",  icon:"⏱️", slot:"freezeTime", desc:"+30 giây cho câu hiện tại",                  type:"support" },
@@ -19,23 +18,19 @@ const ITEMS = {
   magicHand:  { name:"Bàn tay ma thuật",icon:"🪄",slot:"magicHand",  desc:"Cướp 1 item random của người chỉ định",      type:"attack",  needTarget:1 }
 };
 
-/* ===== STATE ITEM ===== */
-let myInventory = [];        // Túi đồ player (max 3 ô)
-let pvpPlayers = [];         // Danh sách người chơi (player + bots)
-let playerStatus = {};       // { uid: { shield, mirror, fire, radio, peace, frozen } }
-let statusTimers = {};       // { uid: { fire: setInterval, ... } }
-let peaceActive = false;     // Lệnh bài hoà bình active?
-let peaceUntil = 0;          // Thời gian hết hoà bình
-let doubleActive = false;    // Trạng thái nhân đôi điểm (đã move lên đầu)
-
+let myInventory = [];
+let pvpPlayers = [];
+let playerStatus = {};
+let statusTimers = {};
+let peaceActive = false;
+let peaceUntil = 0;
+let doubleActive = false;
 const MAX_INV = 3;
 
-/* ===== KHỞI TẠO PLAYER DATA ===== */
 function initItemsSystem(){
   myInventory = [];
   pvpPlayers = [];
 
-  /* Thêm player (bạn) */
   pvpPlayers.push({
     uid: "me",
     name: playerName,
@@ -45,7 +40,6 @@ function initItemsSystem(){
     isBot: false
   });
 
-  /* Thêm bots */
   bots.forEach((b, i)=>{
     pvpPlayers.push({
       uid: "bot_" + i,
@@ -57,7 +51,6 @@ function initItemsSystem(){
     });
   });
 
-  /* Init status */
   pvpPlayers.forEach(p=>{
     playerStatus[p.uid] = {
       shield: 0, mirror: 0, fire: 0, radio: 0, peace: 0, frozen: 0
@@ -68,18 +61,14 @@ function initItemsSystem(){
   peaceActive = false;
   peaceUntil = 0;
 }
-
 /* ===== RƠI ITEM 10% MỖI CÂU ĐÚNG ===== */
 function tryDropItem(){
-  /* Túi đầy → không nhận */
   if(myInventory.length >= MAX_INV){
     console.log("Túi đầy, bỏ qua item");
     return;
   }
-  /* 10% cơ hội */
   if(Math.random() > 0.10) return;
 
-  /* Chọn random item */
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
   myInventory.push(key);
@@ -104,6 +93,7 @@ function showItemPopup(key){
   document.body.appendChild(pop);
   setTimeout(()=>{ if(pop.parentNode) pop.remove(); }, 4000);
 }
+
 /* =========================================================
    RENDER TÚI ĐỒ 3 Ô
    ========================================================= */
@@ -113,7 +103,6 @@ function renderInventory(){
 
   bar.innerHTML = "";
 
-  /* 3 ô */
   for(let i = 0; i < MAX_INV; i++){
     const slot = document.createElement("div");
     slot.className = "inv-slot";
@@ -126,7 +115,6 @@ function renderInventory(){
       slot.title = item.name + " - " + item.desc;
       slot.innerHTML = '<span class="icon">' + item.icon + '</span>';
 
-      /* Đếm số lượng nếu trùng */
       const sameCount = myInventory.filter(k => k === key).length;
       if(sameCount > 1){
         const cnt = document.createElement("span");
@@ -152,13 +140,11 @@ function useItemByIndex(idx){
   const key = myInventory[idx];
   const item = ITEMS[key];
 
-  /* Nếu game chưa bắt đầu hoặc đã kết thúc → không dùng */
   if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0){
     showToast("⏸️ Chưa vào ván chơi!", "warn");
     return;
   }
 
-  /* Item tấn công có mục tiêu */
   if(item.needTarget === 1){
     showTargetModal(key, 1, (targets)=>{
       if(targets.length === 0) return;
@@ -180,7 +166,6 @@ function useItemByIndex(idx){
     return;
   }
 
-  /* Item không cần target */
   executeItem(key, []);
   removeItemFromInv(idx);
 }
@@ -205,7 +190,6 @@ function showTargetModal(itemKey, needCount, callback){
   html += '<h3>' + item.icon + ' ' + item.name + '</h3>';
   html += '<p style="color:#94a3b8;font-size:12.5px;text-align:center;margin-bottom:14px">Chọn ' + needCount + ' người (đã chọn: <span id="selCount">0</span>/' + needCount + ')</p>';
 
-  /* Chỉ cho chọn người KHÁC mình (không chọn mình) */
   pvpPlayers.forEach(p=>{
     if(p.uid === "me") return;
     html += '<button type="button" class="target-btn" data-uid="' + p.uid + '">';
@@ -244,7 +228,6 @@ function showTargetModal(itemKey, needCount, callback){
 
       selCountEl.textContent = selected.length;
 
-      /* Đủ target → tự đóng và gọi callback */
       if(selected.length === needCount){
         setTimeout(()=>{
           modal.remove();
@@ -285,7 +268,6 @@ function showItemNote(){
   note.innerHTML = html;
   document.body.appendChild(note);
 
-  // Gán sự kiện đóng an toàn hơn thay vì dùng this.closest inline
   const closeBtn = note.querySelector("#noteCloseBtn");
   if(closeBtn){
     closeBtn.onclick = () => note.remove();
@@ -305,7 +287,7 @@ function showToast(msg, type){
     toast.style.transition = "opacity .3s";
     setTimeout(()=>{ if(toast.parentNode) toast.remove(); }, 300);
   }, 2800);
-     }
+                      }
 /* =========================================================
    HÀM XỬ LÝ SÁT THƯƠNG (CÓ KHIÊN/GƯƠNG)
    ========================================================= */
@@ -316,28 +298,23 @@ function applyDamage(targetUid, amount, sourceUid, isNuke){
   const status = playerStatus[targetUid];
   if(!status) return 0;
 
-  /* Nếu đang bị hoà bình → không tấn công */
   if(peaceActive && sourceUid !== "system"){
     return 0;
   }
 
-  /* Bom hạt nhân xuyên mọi thứ (trừ khiên? — không, nuke phá khiên) */
   if(isNuke){
-    /* Nuke xuyên khiên + gương */
     target.score = Math.max(0, target.score - amount);
     syncScores();
     return amount;
   }
 
-  /* Có KHIÊN → kháng 100% */
   if(status.shield > 0){
     showToast("🛡️ Khiên đã chặn sát thương!", "info");
     return 0;
   }
 
-  /* Có GƯƠNG → phản lại x2 về source */
   if(status.mirror > 0 && sourceUid && sourceUid !== targetUid){
-    status.mirror = 0;  /* Dùng 1 lần */
+    status.mirror = 0;
     const reflectDmg = amount * 2;
     const sourcePlayer = pvpPlayers.find(p => p.uid === sourceUid);
     if(sourcePlayer){
@@ -349,7 +326,6 @@ function applyDamage(targetUid, amount, sourceUid, isNuke){
     return -amount;
   }
 
-  /* Bình thường → trừ điểm */
   target.score = Math.max(0, target.score - amount);
   syncScores();
   return amount;
@@ -364,7 +340,6 @@ function applyStatus(targetUid, type, duration){
 
   status[type] = duration;
 
-  /* Auto tick mỗi giây */
   if(statusTimers[targetUid][type]){
     clearInterval(statusTimers[targetUid][type]);
   }
@@ -378,15 +353,12 @@ function applyStatus(targetUid, type, duration){
     }
     status[type] -= 1;
 
-    /* Hiệu ứng đặc biệt theo từng loại */
     if(type === "fire"){
-      /* Cháy: -3đ/s */
       const p = pvpPlayers.find(pp => pp.uid === targetUid);
       if(p) p.score = Math.max(0, p.score - 3);
       if(targetUid === "me") showToast("🔥 Đang cháy! -3đ", "warn");
       syncScores();
     } else if(type === "radio"){
-      /* Phóng xạ: -2đ/s */
       const p = pvpPlayers.find(pp => pp.uid === targetUid);
       if(p) p.score = Math.max(0, p.score - 2);
       if(targetUid === "me") showToast("☢️ Phóng xạ! -2đ", "warn");
@@ -397,9 +369,6 @@ function applyStatus(targetUid, type, duration){
   }, 1000);
 }
 
-/* =========================================================
-   XÓA STATUS
-   ========================================================= */
 function clearStatus(targetUid, type){
   const status = playerStatus[targetUid];
   if(!status) return;
@@ -421,7 +390,6 @@ function syncScores(){
     if(hudScore) hudScore.textContent = score.toLocaleString("vi-VN");
   }
 
-  /* Sync bots vào mảng bots[] gốc */
   pvpPlayers.forEach(p => {
     if(p.isBot){
       const botIdx = parseInt(p.uid.replace("bot_", ""));
@@ -429,7 +397,6 @@ function syncScores(){
     }
   });
 
-  /* Render lại PvP board */
   renderPvpBoardMerged();
 }
 
@@ -448,7 +415,6 @@ function renderPvpBoardMerged(){
 
     el.dataset.uid = p.uid;
 
-    /* Status badges */
     const status = playerStatus[p.uid] || {};
     let badgesHTML = "";
 
@@ -474,7 +440,6 @@ function renderPvpBoardMerged(){
     board.appendChild(el);
   });
 
-  /* Highlight peace badge trên toàn board */
   if(peaceActive){
     const peaceBadge = document.createElement("div");
     peaceBadge.style.cssText = "grid-column:1/-1;text-align:center;font-size:12px;font-weight:800;color:#4ade80;padding:4px";
@@ -484,9 +449,6 @@ function renderPvpBoardMerged(){
   }
 }
 
-/* =========================================================
-   CẬP NHẬT BADGE STATUS (gọi từ applyStatus)
-   ========================================================= */
 function updateStatusBadges(){
   renderPvpBoardMerged();
 }
@@ -510,7 +472,8 @@ function executeItem(key, targets){
     case "spear":      executeSpear(targets[0]); break;
     case "magicHand":  executeMagicHand(targets[0]); break;
   }
-  /* ===== 1. TÚI VÀNG ===== */
+}
+/* ===== 1. TÚI VÀNG ===== */
 function executeGold(){
   const me = pvpPlayers.find(p => p.uid === "me");
   if(me) me.score += 200;
@@ -566,7 +529,7 @@ function executeShield(){
 /* ===== 6. GƯƠNG PHẢN CHIẾU ===== */
 function executeMirror(){
   clearStatus("me", "shield");
-  applyStatus("me", "mirror", 999);  /* Không đếm ngược, dùng 1 lần */
+  applyStatus("me", "mirror", 999);
   showToast("🪞 Gương phản chiếu đã bật!", "success");
 }
 
@@ -585,7 +548,6 @@ function executeFreezeBot(targets){
   }
 }
 
-/* ===== OVERLAY ĐÓNG BĂNG CHO PLAYER ===== */
 function showFreezeOverlay(){
   if(document.getElementById("freezeOverlay")) return;
 
@@ -742,7 +704,8 @@ function executePeace(){
     renderPvpBoardMerged();
   }, 1000);
 }
-   /* ===== 12. GIÁO NGẮN ===== */
+
+/* ===== 12. GIÁO NGẮN ===== */
 function executeSpear(targetUid){
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return;
@@ -769,22 +732,18 @@ function executeMagicHand(targetUid){
 }
 
 /* =========================================================
-   TÍCH HỢP ITEM VÀO FLOW GAME (ĐÃ FIX LỖI CRASH)
+   TÍCH HỢP ITEM VÀO FLOW GAME
    ========================================================= */
-// Thay vì ghi đè paintTimer (gây lỗi nếu là const), ta dùng setInterval riêng
-// để cập nhật bảng PvP khi có hiệu ứng Hoà Bình
 setInterval(() => {
   if (typeof peaceActive !== "undefined" && peaceActive) {
     renderPvpBoardMerged();
   }
 }, 1000);
 
-/* HÀM ĐƯỢC GỌI KHI TRẢ LỜI ĐÚNG */
 function onCorrectAnswer(){
   tryDropItem();
 }
 
-/* HÀM ĐƯỢC GỌI KHI NEXT CÂU */
 function onNextQuestion(){
   const overlay = document.getElementById("freezeOverlay");
   if(overlay){
@@ -793,27 +752,30 @@ function onNextQuestion(){
 }
 
 /* =========================================================
-   INIT — GỌI KHI BẮT ĐẦU VÁN (ĐÃ THÊM CHỐT AN TOÀN)
+   INIT — GỌI KHI BẮT ĐẦU VÁN (ĐÃ FIX LỖI PVP KHÔNG CÓ BOT)
    ========================================================= */
 function initItemSystem(){
-  // KIỂM TRA AN TOÀN: Nếu các biến từ game-mix.js chưa có, không chạy tiếp
   if (typeof playerName === "undefined" || typeof bots === "undefined" || typeof score === "undefined") {
     console.warn("⏳ Item System chưa thể khởi tạo: Đang đợi game-mix.js...");
     return;
   }
 
-  /* Khởi tạo player data */
+  // ✅ FIX: Nếu là PvP nhưng bots rỗng, gọi setupBots() để tạo lại
+  if (typeof isPvP !== "undefined" && isPvP === true && (!bots || bots.length === 0)) {
+    console.warn("⚠️ PvP mode nhưng bots rỗng, đang khởi tạo lại bots...");
+    if (typeof setupBots === "function") {
+      setupBots();
+    }
+  }
+
   initItemsSystem();
 
-  /* Render túi đồ */
   renderInventory();
 
-  /* Hiện túi đồ nếu là PvP */
   const invBar = document.getElementById("invBar");
   if(invBar && typeof isPvP !== "undefined" && isPvP){
     invBar.style.display = "flex";
   }
 
-  /* Render lại board với pvpPlayers */
   renderPvpBoardMerged();
 }
