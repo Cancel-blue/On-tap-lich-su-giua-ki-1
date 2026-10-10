@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ôn tập hỗn hợp</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="items.css">
 <style>
 .option{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 15px;border-radius:13px;border:1.5px solid #2b3a55;background:#101a2c;color:#dbe4f3;font-size:15px;line-height:1.5;cursor:pointer;transition:.16s;font-family:inherit;margin-bottom:10px}
 .option:hover{border-color:#38bdf8;background:#16233a;transform:translateX(4px)}
@@ -69,7 +70,7 @@
       <button class="diff on" type="button" data-key="easy"><b>THOẢI MÁI</b><small>Không giới hạn thời gian</small></button>
       <button class="diff" type="button" data-key="medium"><b>TRUNG BÌNH</b><small>90s/câu</small></button>
       <button class="diff" type="button" data-key="hard"><b>KHÓ</b><small>45s/câu</small></button>
-      <button class="diff pvp" type="button" data-key="pvp"><b>PVP 4 NGƯỜI</b><small>Bạn vs 3 bot • 60s/câu</small></button>
+      <button class="diff pvp" type="button" data-key="pvp"><b>PVP 6 NGƯỜI</b><small>Bạn vs 5 bot • 75s/câu</small></button>
     </div>
     <div class="toggle-row" id="toggleHardcore">
       <div class="lbl">
@@ -79,6 +80,9 @@
       <div class="toggle-switch"></div>
     </div>
     <div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
+    <button class="btn-ghost" type="button" onclick="showItemNote()" style="width:100%;margin-bottom:14px;padding:12px;font-size:13.5px">
+  📖 CHỨC NĂNG ITEM
+    </button>
     <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
     <p class="foot" id="totalInfo">Đang tải câu hỏi...</p>
   </div>
@@ -100,6 +104,11 @@
     <div class="timer-wrap" id="timerWrap">
       <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       <div class="timer-txt" id="timerText">--s</div>
+    </div>
+    <div class="inv-bar" id="invBar" style="display:none">
+  <div class="inv-slot"><span style="color:#2b3a55;font-size:22px">+</span></div>
+  <div class="inv-slot"><span style="color:#2b3a55;font-size:22px">+</span></div>
+  <div class="inv-slot"><span style="color:#2b3a55;font-size:22px">+</span></div>
     </div>
     <div id="questionWrap"></div>
     <div class="ds-feedback" id="feedback"></div>
@@ -158,7 +167,7 @@ const DIFFICULTIES = {
   easy:   { label:"THOẢI MÁI",   time: 0,  pvp:false },
   medium: { label:"TRUNG BÌNH",  time: 90, pvp:false },
   hard:   { label:"KHÓ",         time: 45, pvp:false },
-  pvp:    { label:"PVP 4 NGƯỜI", time: 60, pvp:true  }
+  pvp:    { label:"PVP 6 NGƯỜI", time: 75, pvp:true  }
 };
 
 const BOT_POOL = [
@@ -239,13 +248,14 @@ function startGame(){
   $("hudScore").textContent = "0";
 
   showScreen("screenQuiz");
-  renderQuestion();
+initItemSystem();   /* Khởi tạo hệ thống item */
+renderQuestion();
 }
 
 /* ===== BOTS ===== */
 function setupBots(){
   const pool = [...BOT_POOL].sort(()=>Math.random()-0.5);
-  bots = pool.slice(0,3).map(b=>({ name:b.name, ava:b.ava, score:0, state:null }));
+  bots = pool.slice(0,5).map(b=>({ name:b.name, ava:b.ava, score:0, state:null }));
   renderPvpBoard();
 }
 
@@ -700,6 +710,8 @@ function endGame(){
 .pvp-player .nm{font-size:11px;font-weight:700;color:#cbd5e1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .pvp-player .sc{font-size:15px;font-weight:900;color:#38bdf8}
 .pvp-player.me .nm{color:#7dd3fc}
+<script src="items.js"></script>
 </script>
 </body>
 </html>
+
