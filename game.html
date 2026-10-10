@@ -314,16 +314,6 @@ function startHoaOnline(){
   /* Chuyển hướng sang game.html với flag online=1 */
   window.location.href = "game.html?mon=hoa&online=1";
 }
-  /* Hiện khối gốc rồi click nút Đấu Online */
-  document.getElementById("hoaCustomUI").style.display = "none";
-  document.getElementById("defaultUI").style.display = "block";
-  document.getElementById("playerName").value = name;
-  setTimeout(()=>{
-    const btn = document.getElementById("btnOnlineMode");
-    if(btn) btn.click();
-  }, 300);
-}
-
 /* ===== XỬ LÝ KHI TRANG LOAD XONG ===== */
 document.addEventListener("DOMContentLoaded", ()=>{
   const params = new URLSearchParams(window.location.search);
