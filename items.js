@@ -769,17 +769,15 @@ function executeMagicHand(targetUid){
 }
 
 /* =========================================================
-   TÍCH HỢP ITEM VÀO FLOW GAME
+   TÍCH HỢP ITEM VÀO FLOW GAME (ĐÃ FIX LỖI CRASH)
    ========================================================= */
-const _origPaintTimer = typeof paintTimer === "function" ? paintTimer : null;
-if(_origPaintTimer){
-  paintTimer = function(){
-    _origPaintTimer();
-    if(peaceActive && Date.now() % 1000 < 100){
-      renderPvpBoardMerged();
-    }
-  };
-}
+// Thay vì ghi đè paintTimer (gây lỗi nếu là const), ta dùng setInterval riêng
+// để cập nhật bảng PvP khi có hiệu ứng Hoà Bình
+setInterval(() => {
+  if (typeof peaceActive !== "undefined" && peaceActive) {
+    renderPvpBoardMerged();
+  }
+}, 1000);
 
 /* HÀM ĐƯỢC GỌI KHI TRẢ LỜI ĐÚNG */
 function onCorrectAnswer(){
