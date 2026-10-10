@@ -313,13 +313,20 @@ function renderPvpBoard(){
 
 function scheduleBotsAnswer(){
   if(!bots || bots.length === 0) return;
-  bots.forEach(bot=>{
+  bots.forEach((bot, idx)=>{
     bot.state = null;
     const delay = 2 + Math.random() * 3;
     setTimeout(()=>{
       const correct = Math.random() < 0.6;
       bot.state = correct ? "correct" : "wrong";
-      if(correct) bot.score += 100;
+      if(correct){
+        bot.score += 100;
+        /* Gọi hook để bot có cơ hội nhận và dùng item */
+        if(typeof onBotCorrectAnswer === "function"){
+          const botUid = "bot_" + idx;
+          onBotCorrectAnswer(botUid);
+        }
+      }
       renderPvpBoard();
     }, delay * 1000);
   });
