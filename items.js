@@ -798,15 +798,17 @@ function executeMagicHand(targetUid){
 
   showToast("🪄 Đã cướp item thành công!", "success");
      }
-/* =========================================================
+    /* =========================================================
    HỆ THỐNG ITEM CHO BOT — Bot tự động dùng item ngẫu nhiên
    ========================================================= */
+
+let botNukeUsed = {};  /* Giới hạn mỗi bot chỉ dùng Bom 1 lần */
 
 /* Hook được gọi từ game-mix.html khi bot trả lời đúng */
 function onBotCorrectAnswer(botUid){
   if(!botInventories[botUid]) botInventories[botUid] = [];
   if(botInventories[botUid].length >= MAX_INV) return;
-  if(Math.random() > 0.25) return;  /* 25% cơ hội nhận item */
+  if(Math.random() > 0.15) return;  /* Giảm xuống 15% để bot bớt spam */
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
@@ -824,9 +826,22 @@ function botUseRandomItem(botUid){
   if(!inv || inv.length === 0) return;
   if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0) return;
 
-  const idx = Math.floor(Math.random() * inv.length);
-  const key = inv[idx];
-  const item = ITEMS[key];
+  /* NẾU ĐANG HOÀ BÌNH: chỉ cho dùng item hỗ trợ/phòng thủ, bỏ item tấn công */
+  let availableKeys = [...inv];
+  if(peaceActive){
+    availableKeys = inv.filter(k => {
+      const t = ITEMS[k].type;
+      return t === "support" || t === "defense";
+    });
+    if(availableKeys.length === 0){
+      /* Không có item nào dùng được, bỏ qua */
+      return;
+    }
+  }
+
+  const chosenKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
+  const idx = inv.indexOf(chosenKey);
+  const item = ITEMS[chosenKey];
   inv.splice(idx, 1);
 
   /* Chọn mục tiêu ngẫu nhiên */
@@ -839,7 +854,7 @@ function botUseRandomItem(botUid){
     targets.push(...others.slice(0, 2).map(p => p.uid));
   }
 
-  executeBotItem(botUid, key, targets);
+  executeBotItem(botUid, chosenKey, targets);
 }
 
 /* Thực thi item từ phía Bot */
@@ -848,6 +863,13 @@ function executeBotItem(botUid, key, targets){
   if(!bot) return;
   const botName = bot.name;
   const botAva = bot.ava;
+  const itemType = ITEMS[key].type;
+
+  /* CHẶN TUYỆT ĐỐI: Nếu Hoà bình đang bật và item là loại tấn công → không cho dùng */
+  if(peaceActive && itemType === "attack"){
+    showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
+    return;
+  }
 
   switch(key){
     case "gold":
@@ -887,10 +909,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "fireball":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
-        break;
-      }
       if(targets[0]){
         const t = pvpPlayers.find(p => p.uid === targets[0]);
         if(t){
@@ -903,10 +921,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "spear":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
-        break;
-      }
       if(targets[0]){
         const t = pvpPlayers.find(p => p.uid === targets[0]);
         if(t){
@@ -917,10 +931,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "freezeBot":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể đóng băng ai!", "warn");
-        break;
-      }
       if(targets.length === 2){
         targets.forEach(uid => {
           applyStatus(uid, "frozen", 10);
@@ -931,10 +941,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "lightning":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
-        break;
-      }
       const others = pvpPlayers.filter(p => p.uid !== botUid);
       if(others.length > 0){
         const t = others[Math.floor(Math.random() * others.length)];
@@ -944,10 +950,13 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "nuke":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể thả bom!", "warn");
-        break;
+      /* GIỚI HẠN: Mỗi bot chỉ được dùng Bom 1 lần/trận */
+      if(botNukeUsed[botUid]){
+        showToast("🛑 " + botName + " đã dùng Bom rồi, không thể dùng lại!", "info");
+        return;
       }
+      botNukeUsed[botUid] = true;
+
       pvpPlayers.forEach(p => {
         clearStatus(p.uid, "shield");
         clearStatus(p.uid, "mirror");
@@ -956,6 +965,13 @@ function executeBotItem(botUid, key, targets){
         applyStatus(p.uid, "radio", 25);
       });
       syncScores();
+
+      /* Thêm hiệu ứng flash đỏ giống người chơi */
+      const flash = document.createElement("div");
+      flash.style.cssText = "position:fixed;inset:0;background:radial-gradient(circle,rgba(251,191,36,.6),transparent 70%);z-index:9998;pointer-events:none;animation:flashOut 1s";
+      document.body.appendChild(flash);
+      setTimeout(()=> flash.remove(), 1000);
+
       showToast("☢️ " + botName + " THẢ BOM HẠT NHÂN!", "danger");
       break;
 
@@ -980,10 +996,6 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "magicHand":
-      if(peaceActive){
-        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể cướp item!", "warn");
-        break;
-      }
       if(targets[0] === "me" && myInventory.length > 0){
         const stolenIdx = Math.floor(Math.random() * myInventory.length);
         const stolenKey = myInventory[stolenIdx];
@@ -1005,20 +1017,17 @@ function executeBotItem(botUid, key, targets){
    TÍCH HỢP ITEM VÀO FLOW GAME
    ========================================================= */
 
-/* Cập nhật bảng PvP khi có hiệu ứng Hoà Bình */
 setInterval(() => {
   if (typeof peaceActive !== "undefined" && peaceActive) {
     renderPvpBoardMerged();
   }
 }, 1000);
 
-/* Hook được gọi khi người chơi trả lời đúng */
 function onCorrectAnswer(){
   syncGlobalToPvp();
   tryDropItem();
 }
 
-/* Hook được gọi khi chuyển sang câu tiếp theo */
 function onNextQuestion(){
   const overlay = document.getElementById("freezeOverlay");
   if(overlay){
@@ -1035,7 +1044,6 @@ function initItemSystem(){
     return;
   }
 
-  /* Nếu là PvP nhưng bots rỗng, gọi setupBots() để tạo lại */
   if (typeof isPvP !== "undefined" && isPvP === true && (!bots || bots.length === 0)) {
     console.warn("⚠️ PvP mode nhưng bots rỗng, đang khởi tạo lại bots...");
     if (typeof setupBots === "function") {
@@ -1043,18 +1051,16 @@ function initItemSystem(){
     }
   }
 
-  /* Khởi tạo player data + túi đồ bot */
-  initItemsSystem();
+  /* Reset giới hạn Bom cho từng bot */
+  botNukeUsed = {};
 
-  /* Render túi đồ */
+  initItemsSystem();
   renderInventory();
 
-  /* Hiện túi đồ nếu là PvP */
   const invBar = document.getElementById("invBar");
   if(invBar && typeof isPvP !== "undefined" && isPvP){
     invBar.style.display = "flex";
   }
 
-  /* Render lại board với pvpPlayers */
   renderPvpBoardMerged();
 }
