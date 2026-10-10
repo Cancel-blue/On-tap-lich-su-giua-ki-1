@@ -1,5 +1,5 @@
 /* =========================================================
-   ITEMS.JS - Hệ thống 13 item (CLEAN v4 - Fix Freeze UI)
+   ITEMS.JS - Hệ thống 13 item (CLEAN v5 - FIXED)
    ========================================================= */
 
 const ITEMS = {
@@ -30,9 +30,6 @@ let botInventories = {};
 let botNukeUsed = {};
 const MAX_INV = 3;
 
-/* =========================================================
-   ĐỒNG BỘ ĐIỂM PLAYER
-   ========================================================= */
 function syncGlobalToPvp() {
   if (typeof score === "undefined") return;
   const mePlayer = pvpPlayers.find(p => p.uid === "me");
@@ -43,14 +40,10 @@ function syncGlobalToPvp() {
   }
 }
 
-/* =========================================================
-   KHỞI TẠO PLAYER DATA + TÚI ĐỒ BOT (Live Binding)
-   ========================================================= */
 function initItemsSystem(){
   myInventory = [];
   pvpPlayers = [];
 
-  /* Thêm người chơi */
   pvpPlayers.push({
     uid: "me",
     name: playerName,
@@ -60,7 +53,6 @@ function initItemsSystem(){
     isBot: false
   });
 
-  /* Thêm bot với LIVE BINDING */
   bots.forEach((b, i)=>{
     const botPlayer = {
       uid: "bot_" + i,
@@ -321,7 +313,7 @@ function showToast(msg, type){
     toast.style.transition = "opacity .3s";
     setTimeout(()=>{ if(toast.parentNode) toast.remove(); }, 300);
   }, 2800);
-     }
+}
 /* =========================================================
    HÀM XỬ LÝ SÁT THƯƠNG (CÓ KHIÊN/GƯƠNG)
    ========================================================= */
@@ -518,7 +510,7 @@ function executeItem(key, targets){
     case "spear":      executeSpear(targets[0]); break;
     case "magicHand":  executeMagicHand(targets[0]); break;
   }
-}
+       }
 /* ===== 1. TÚI VÀNG ===== */
 function executeGold(){
   const me = pvpPlayers.find(p => p.uid === "me");
@@ -598,7 +590,7 @@ function executeFreezeBot(targets){
   }
 }
 
-/* FIX: Overlay đóng băng tự động gọi unfreezeUI() khi hết 10s */
+/* Overlay đóng băng tự động gọi unfreezeUI() khi hết 10s */
 function showFreezeOverlay(){
   if(document.getElementById("freezeOverlay")) return;
 
@@ -621,7 +613,6 @@ function showFreezeOverlay(){
     if(cdEl) cdEl.textContent = cd;
     if(cd <= 0){
       clearInterval(timer);
-      /* FIX: Bật lại UI thay vì chỉ xóa overlay */
       unfreezeUI();
     }
   }, 1000);
@@ -1057,7 +1048,6 @@ function initItemSystem(){
     }
   }
 
-  /* Reset giới hạn Bom cho từng bot */
   botNukeUsed = {};
 
   initItemsSystem();
@@ -1069,4 +1059,4 @@ function initItemSystem(){
   }
 
   renderPvpBoardMerged();
-}
+     }
