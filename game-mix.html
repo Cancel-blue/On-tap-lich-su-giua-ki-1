@@ -201,7 +201,7 @@ const BOT_POOL = [
   { name:"Phúc",     ava:"🐼" },
   { name:"Thảo",     ava:"🦚" },
   { name:"Quân",     ava:"🐺" },
-  { name:"Yến",      ava:"🐦" }
+  { name:"Yến",      ava:"🐦" },
   { name:"Cún Con",   ava:"🐶" },
   { name:"Mèo Mun",   ava:"🐱" },
   { name:"Gấu Bông",  ava:"🐻" },
@@ -353,8 +353,12 @@ function scheduleBotsAnswer(){
           onBotCorrectAnswer(botUid);
         }
       }
-      renderPvpBoard();
-    }, delay * 1000);
+        if (typeof renderPvpBoardMerged === "function") {
+    renderPvpBoardMerged();
+  } else {
+    renderPvpBoard();
+  }
+}, delay * 1000);
   });
 }
 
