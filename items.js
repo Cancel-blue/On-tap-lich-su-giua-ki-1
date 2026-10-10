@@ -1,5 +1,5 @@
 /* =========================================================
-   ITEMS.JS - Hệ thống 13 item cho game-mix (FIXED FULL)
+   ITEMS.JS - Hệ thống 13 item (FIXED FULL v2)
    ========================================================= */
 
 const ITEMS = {
@@ -30,22 +30,20 @@ let botInventories = {};
 const MAX_INV = 3;
 
 /* =========================================================
-   FIX: ĐỒNG BỘ ĐIỂM TỪ GLOBAL `score` VÀO `pvpPlayers`
-   Gọi hàm này TRƯỚC khi tính sát thương để tránh reset điểm.
+   ĐỒNG BỘ ĐIỂM TỪ GLOBAL `score` VÀO `pvpPlayers`
    ========================================================= */
 function syncGlobalToPvp() {
   if (typeof score === "undefined") return;
   const mePlayer = pvpPlayers.find(p => p.uid === "me");
   if (mePlayer) {
-    // Chỉ cập nhật nếu `score` global lớn hơn (tránh ghi đè khi bị trừ điểm)
     if (score > mePlayer.score) {
       mePlayer.score = score;
     } else {
-      // Nếu pvpPlayers lớn hơn (đã có bonus), cập nhật ngược lại global
       score = mePlayer.score;
     }
   }
 }
+
 /* =========================================================
    KHỞI TẠO PLAYER DATA + TÚI ĐỒ BOT
    ========================================================= */
@@ -89,7 +87,6 @@ function initItemsSystem(){
     if (p.isBot) botInventories[p.uid] = [];
   });
 }
-
 /* ===== RƠI ITEM 25% MỖI CÂU ĐÚNG ===== */
 function tryDropItem(){
   if(myInventory.length >= MAX_INV){
@@ -165,7 +162,7 @@ function renderInventory(){
    DÙNG ITEM
    ========================================================= */
 function useItemByIndex(idx){
-  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi dùng item */
+  syncGlobalToPvp();
   if(idx < 0 || idx >= myInventory.length) return;
   const key = myInventory[idx];
   const item = ITEMS[key];
@@ -322,13 +319,14 @@ function showToast(msg, type){
    HÀM XỬ LÝ SÁT THƯƠNG (CÓ KHIÊN/GƯƠNG)
    ========================================================= */
 function applyDamage(targetUid, amount, sourceUid, isNuke){
-  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi tính sát thương */
+  syncGlobalToPvp();
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return 0;
 
   const status = playerStatus[targetUid];
   if(!status) return 0;
 
+  /* Chặn tấn công khi có Hoà bình (trừ system) */
   if(peaceActive && sourceUid !== "system"){
     return 0;
   }
@@ -566,6 +564,10 @@ function executeMirror(){
 
 /* ===== 7. ĐÓNG BĂNG KÉP (2 người, 10s) ===== */
 function executeFreezeBot(targets){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể đóng băng ai!", "warn");
+    return;
+  }
   targets.forEach(uid => {
     applyStatus(uid, "frozen", 10);
     const target = pvpPlayers.find(p => p.uid === uid);
@@ -613,6 +615,10 @@ function showFreezeOverlay(){
 
 /* ===== 8. QUẢ CẦU LỬA ===== */
 function executeFireball(targetUid){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể tấn công!", "warn");
+    return;
+  }
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return;
 
@@ -628,6 +634,10 @@ function executeFireball(targetUid){
 
 /* ===== 9. THIÊN LÔI ===== */
 function executeLightning(){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể tấn công!", "warn");
+    return;
+  }
   const roll = Math.random();
 
   if(roll < 0.01){
@@ -660,6 +670,10 @@ function executeLightning(){
 
 /* ===== 10. BOM HẠT NHÂN ===== */
 function executeNuke(){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể thả bom!", "warn");
+    return;
+  }
   const confirmPop = document.createElement("div");
   confirmPop.className = "item-popup";
   confirmPop.innerHTML = `
@@ -686,6 +700,10 @@ function executeNuke(){
 }
 
 function nukeExplode(){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể thả bom!", "warn");
+    return;
+  }
   pvpPlayers.forEach(p => {
     clearStatus(p.uid, "shield");
     clearStatus(p.uid, "mirror");
@@ -738,6 +756,10 @@ function executePeace(){
 
 /* ===== 12. GIÁO NGẮN ===== */
 function executeSpear(targetUid){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể tấn công!", "warn");
+    return;
+  }
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return;
 
@@ -751,6 +773,10 @@ function executeSpear(targetUid){
 
 /* ===== 13. BÀN TAY MA THUẬT ===== */
 function executeMagicHand(targetUid){
+  if(peaceActive){
+    showToast("🕊️ Hoà bình đang bật, không thể cướp item!", "warn");
+    return;
+  }
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return;
 
@@ -780,7 +806,7 @@ function executeMagicHand(targetUid){
 function onBotCorrectAnswer(botUid){
   if(!botInventories[botUid]) botInventories[botUid] = [];
   if(botInventories[botUid].length >= MAX_INV) return;
-  if(Math.random() > 0.30) return;  /* 25% cơ hội nhận item */
+  if(Math.random() > 0.25) return;  /* 25% cơ hội nhận item */
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
@@ -793,7 +819,7 @@ function onBotCorrectAnswer(botUid){
 
 /* Bot chọn ngẫu nhiên 1 item trong túi và dùng */
 function botUseRandomItem(botUid){
-  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi bot dùng item */
+  syncGlobalToPvp();
   const inv = botInventories[botUid];
   if(!inv || inv.length === 0) return;
   if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0) return;
@@ -861,6 +887,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "fireball":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
+        break;
+      }
       if(targets[0]){
         const t = pvpPlayers.find(p => p.uid === targets[0]);
         if(t){
@@ -873,6 +903,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "spear":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
+        break;
+      }
       if(targets[0]){
         const t = pvpPlayers.find(p => p.uid === targets[0]);
         if(t){
@@ -883,6 +917,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "freezeBot":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể đóng băng ai!", "warn");
+        break;
+      }
       if(targets.length === 2){
         targets.forEach(uid => {
           applyStatus(uid, "frozen", 10);
@@ -893,6 +931,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "lightning":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể tấn công!", "warn");
+        break;
+      }
       const others = pvpPlayers.filter(p => p.uid !== botUid);
       if(others.length > 0){
         const t = others[Math.floor(Math.random() * others.length)];
@@ -902,6 +944,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "nuke":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể thả bom!", "warn");
+        break;
+      }
       pvpPlayers.forEach(p => {
         clearStatus(p.uid, "shield");
         clearStatus(p.uid, "mirror");
@@ -934,6 +980,10 @@ function executeBotItem(botUid, key, targets){
       break;
 
     case "magicHand":
+      if(peaceActive){
+        showToast("🕊️ Hoà bình đang bật, " + botName + " không thể cướp item!", "warn");
+        break;
+      }
       if(targets[0] === "me" && myInventory.length > 0){
         const stolenIdx = Math.floor(Math.random() * myInventory.length);
         const stolenKey = myInventory[stolenIdx];
@@ -964,7 +1014,7 @@ setInterval(() => {
 
 /* Hook được gọi khi người chơi trả lời đúng */
 function onCorrectAnswer(){
-  syncGlobalToPvp();  /* FIX: Cập nhật điểm mới nhất vào pvpPlayers */
+  syncGlobalToPvp();
   tryDropItem();
 }
 
