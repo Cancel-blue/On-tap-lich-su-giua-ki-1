@@ -51,9 +51,9 @@
 .ds-feedback.show{display:block}
 .ds-feedback.ok{background:rgba(34,197,94,.12);border:1.5px solid #22c55e;color:#4ade80}
 .ds-feedback.no{background:rgba(239,68,68,.12);border:1.5px solid #ef4444;color:#f87171}
-/* PvP Board - Đã chuyển vào đúng vị trí */
+/* PvP Board */
 .pvp-board{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;padding:10px;background:rgba(13,22,38,.85);border:1px solid #26344d;border-radius:13px}
-@media(min-width:520px){.pvp-board{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:520px){.pvp-board{grid-template-columns:repeat(3,1fr)}}
 .pvp-player{padding:8px;border-radius:10px;background:#101a2c;border:1.5px solid #26344d;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
 .pvp-player.me{border-color:#38bdf8;background:rgba(56,189,248,.1)}
 .pvp-player.correct{border-color:#22c55e;background:rgba(34,197,94,.12)}
@@ -89,8 +89,7 @@
       </div>
       <div class="toggle-switch"></div>
     </div>
-    <div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
-    <button class="btn-ghost" type="button" onclick="showItemNote()" style="width:100%;margin-bottom:14px;padding:12px;font-size:13.5px">
+    <button class="btn-ghost" type="button" id="btnItemNote" style="width:100%;margin-bottom:14px;padding:12px;font-size:13.5px">
   📖 CHỨC NĂNG ITEM
     </button>
     <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
@@ -111,6 +110,8 @@
         <button class="btn-quit" id="btnQuit">Thoát</button>
       </div>
     </div>
+    <!-- PvP Board đã chuyển vào màn hình Quiz -->
+    <div id="pvpBoard" class="pvp-board" style="display:none;margin-bottom:14px"></div>
     <div class="timer-wrap" id="timerWrap">
       <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       <div class="timer-txt" id="timerText">--s</div>
@@ -203,7 +204,7 @@ scriptData.onload = function(){
 };
 document.body.appendChild(scriptData);
 
-/* ===== INIT ===== */
+/* ===== INIT EVENTS ===== */
 function initEvents(){
   [...$("diffGrid").querySelectorAll(".diff")].forEach(btn=>{
     btn.onclick = ()=>{
@@ -225,6 +226,18 @@ function initEvents(){
   $("btnQuit").onclick = ()=>{ if(confirm("Thoát?")) window.location.href = "game.html?mon=" + mon; };
   $("btnHome").onclick = ()=>{ window.location.href = "game.html?mon=" + mon; };
   $("btnReplay").onclick = ()=>{ window.location.reload(); };
+
+  // Gán sự kiện cho nút CHỨC NĂNG ITEM
+  const btnNote = $("btnItemNote");
+  if(btnNote){
+    btnNote.onclick = () => {
+      if (typeof showItemNote === "function") {
+        showItemNote();
+      } else {
+        alert("Hệ thống item chưa tải xong! Vui lòng tải lại trang.");
+      }
+    };
+  }
 }
 
 /* ===== START GAME ===== */
@@ -247,7 +260,6 @@ function startGame(){
 
   isPvP = DIFFICULTIES[selectedDiff].pvp;
   if(isPvP){
-    $("pvpBoard").style.display = "grid";
     setupBots();
   } else {
     $("pvpBoard").style.display = "none";
@@ -258,14 +270,23 @@ function startGame(){
   $("hudScore").textContent = "0";
 
   showScreen("screenQuiz");
-  if (typeof initItemSystem === "function") initItemSystem(); /* Khởi tạo hệ thống item */
+  if (typeof initItemSystem === "function") initItemSystem();
   renderQuestion();
 }
 
 /* ===== BOTS ===== */
 function setupBots(){
   const pool = [...BOT_POOL].sort(()=>Math.random()-0.5);
-  bots = pool.slice(0,5).map(b=>({ name:b.name, ava:b.ava, score:0, state:null }));
+  bots = pool.slice(0,5).map(b=>({
+    name: b.name,
+    ava: b.ava,
+    score: 0,
+    state: null
+  }));
+
+  const board = $("pvpBoard");
+  if(board) board.style.display = "grid";
+
   renderPvpBoard();
 }
 
@@ -273,10 +294,14 @@ function renderPvpBoard(){
   const board = $("pvpBoard");
   if(!board) return;
   board.innerHTML = "";
+
+  // Hiển thị bản thân
   const me = document.createElement("div");
   me.className = "pvp-player me";
   me.innerHTML = '<span class="ava">' + playerName.charAt(0).toUpperCase() + '</span><span class="nm">' + playerName + '</span><span class="sc">' + score + '</span>';
   board.appendChild(me);
+
+  // Hiển thị 5 bot
   bots.forEach(bot=>{
     const el = document.createElement("div");
     el.className = "pvp-player";
@@ -299,12 +324,12 @@ function scheduleBotsAnswer(){
     }, delay * 1000);
   });
 }
-  function showScreen(id){
+
+function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active", s.id === id));
   window.scrollTo({top:0, behavior:"smooth"});
 }
-
-/* ===== RENDER CÂU HỎI (router) ===== */
+  /* ===== RENDER CÂU HỎI (router) ===== */
 function renderQuestion(){
   if(cauHienTai >= danhSachChoi.length || !danhSachChoi[cauHienTai]){
     endGame(); return;
@@ -327,7 +352,7 @@ function renderQuestion(){
   startTimer();
   if(isPvP) scheduleBotsAnswer();
 }
-  
+
 /* ===== RENDER ABCD ===== */
 function renderABCD(cau, wrap){
   const qbox = document.createElement("div");
@@ -575,7 +600,7 @@ function setFeedback(ok, text){
   f.className = "ds-feedback show " + (ok ? "ok" : "no");
 }
 
-/* ===== CHUYỂN CÂU (KHÔNG KẸT) ===== */
+/* ===== CHUYỂN CÂU ===== */
 function nextAfterDelay(){
   clearInterval(timerId);
   cauHienTai++;
@@ -713,6 +738,7 @@ function endGame(){
   showScreen("screenEnd");
 }
 </script>
+
 <!-- Thẻ script gọi items.js đặt ĐÚNG VỊ TRÍ, bên ngoài script chính -->
 <script src="items.js"></script>
 </body>
