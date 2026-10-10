@@ -10,7 +10,6 @@
 <body>
 <div class="app">
 
-<!-- ===== MÀN CHỌN BỘ ĐỀ ===== -->
 <section id="screenChooseSet" class="screen">
   <div class="card">
     <a href="index.html" class="btn-back">← Trang chủ</a>
@@ -36,13 +35,11 @@
   </div>
 </section>
 
-<!-- ===== MÀN CHỌN NHÓM ĐỀ + MỨC ĐỘ FULL ===== -->
 <section id="screenChooseLevelFull" class="screen">
   <div class="card">
     <button class="btn-back" onclick="quayLaiChonSet()" type="button">← Quay lại</button>
     <h1>📚 GAME FULL</h1>
     <p class="sub">Chọn nhóm đề và mức độ</p>
-
     <div class="warning-note">
       <span class="wn-icon">⚠️</span>
       <div>
@@ -50,7 +47,6 @@
         <span class="wn-text">Đây là bản <b style="display:inline;color:#fcd34d">ôn tập tham khảo</b>, tổng hợp từ các <b style="display:inline;color:#fcd34d">đề thi thử TN THPT</b> của các Sở GD&amp;ĐT. <b style="display:inline;color:#fcd34d">KHÔNG PHẢI</b> đề thi THPT Quốc gia chính thức của Bộ GD&amp;ĐT.</span>
       </div>
     </div>
-
     <p class="label-diff">CHỌN NHÓM ĐỀ</p>
     <div class="diff-grid" id="deGridFull">
       <button class="diff on" type="button" data-key="01-02"><b>ĐỀ 1-2</b><small>Hải Phòng • Quảng Ninh</small></button>
@@ -64,7 +60,6 @@
       <button class="diff" type="button" data-key="17-18"><b>ĐỀ 17-18</b><small>Đề tham khảo</small></button>
       <button class="diff" type="button" data-key="19-20"><b>ĐỀ 19-20</b><small>Đề tham khảo</small></button>
     </div>
-
     <p class="label-diff">CHỌN MỨC ĐỘ</p>
     <div class="diff-grid" id="diffGridFull">
       <button class="diff on" type="button" data-key="mediumFull"><b>TRUNG BÌNH</b><small>1 phút/câu</small></button>
@@ -72,25 +67,20 @@
       <button class="diff" type="button" data-key="extremeFull"><b>SIÊU KHÓ</b><small>10 giây/câu</small></button>
       <button class="diff pvp" type="button" data-key="pvpFull"><b>PVP 4 NGƯỜI</b><small>30 giây/câu</small></button>
     </div>
-
     <button class="btn-primary" id="btnStartFull" type="button">BẮT ĐẦU ⚔️</button>
     <p class="foot">Chúc bạn chinh phục bộ đề full!</p>
   </div>
 </section>
 
-<!-- ===== MÀN START CHÍNH ===== -->
 <section id="screenStart" class="screen active">
   <div class="card">
     <a href="index.html" class="btn-back">← Trang chủ</a>
     <h1 id="monTitle">⚔️ ĐẤU TRƯỜNG</h1>
     <p class="sub" id="monSub">Ôn tập • Chọn mức độ để bắt đầu</p>
-
     <label class="field">
       <span>NHẬP TÊN CỦA BẠN</span>
       <input id="playerName" type="text" maxlength="20" placeholder="VD: Nguyễn Văn A" autocomplete="off">
     </label>
-
-    <!-- KHỐI HÓA - ẩn mặc định -->
     <div id="hoaCustomUI" style="display:none">
       <div class="hoa-warning">
         <span class="icon">⚠️</span>
@@ -118,12 +108,9 @@
         </a>
       </div>
     </div>
-
-    <!-- KHỐI GỐC - ẩn khi vào Hóa -->
     <div id="defaultUI">
       <p class="label-diff">CHỌN MỨC ĐỘ</p>
       <div class="diff-grid" id="diffGrid"></div>
-
       <div class="toggle-row" id="toggleHardcore">
         <div class="lbl">
           <b>⚡ Chế độ khắc nghiệt</b>
@@ -131,16 +118,12 @@
         </div>
         <div class="toggle-switch"></div>
       </div>
-
       <button class="btn-primary" id="btnStart">BẮT ĐẦU ⚔️</button>
       <button class="btn-online" id="btnOnlineMode" type="button">🌐 ĐẤU ONLINE 4 NGƯỜI</button>
     </div>
-
     <p class="foot">Chúc bạn chinh phục được toàn bộ câu hỏi!</p>
   </div>
 </section>
-
-<!-- ===== MÀN QUIZ ===== -->
 <section id="screenQuiz" class="screen">
   <div class="card">
     <div class="topbar">
@@ -177,7 +160,6 @@
   </div>
 </section>
 
-<!-- ===== MÀN END ===== -->
 <section id="screenEnd" class="screen">
   <div class="card">
     <div class="end-title" id="endTitle">HOÀN THÀNH!</div>
@@ -198,7 +180,6 @@
   </div>
 </section>
 
-<!-- ===== MÀN LOBBY (ONLINE) ===== -->
 <section id="screenLobby" class="screen">
   <div class="card">
     <h1>🌐 ĐẤU ONLINE</h1>
@@ -226,7 +207,6 @@
   </div>
 </section>
 
-<!-- ===== MÀN ROOM (ONLINE) ===== -->
 <section id="screenRoom" class="screen">
   <div class="card">
     <h1 id="roomTitle">PHÒNG CHỜ</h1>
@@ -246,6 +226,8 @@
     </p>
   </div>
 </section>
+
+</div>
 <script>
 /* ===== BIẾN TOÀN CỤC ===== */
 let selectedFullDiff = "mediumFull";
@@ -259,7 +241,7 @@ function hienThiManHinh(id){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-/* ===== CHỌN BỘ ĐỀ (truong / full) ===== */
+/* ===== CHỌN BỘ ĐỀ ===== */
 function chonBoDe(set){
   sessionStorage.setItem("chosenSet", set);
   if(set === "full"){
@@ -269,7 +251,7 @@ function chonBoDe(set){
   }
 }
 
-/* ===== QUAY LẠI MÀN CHỌN BỘ ĐỀ ===== */
+/* ===== QUAY LẠI ===== */
 function quayLaiChonSet(){
   hienThiManHinh("screenChooseSet");
 }
@@ -289,14 +271,10 @@ function startHoaBot(){
     setTimeout(()=>document.getElementById("playerName").classList.remove("err"), 450);
     return;
   }
-  /* Chuyển sang screenStart bình thường nhưng giữ tên */
   sessionStorage.setItem("tempName", name);
-  /* Hiện lại khối gốc để chọn mức độ */
   document.getElementById("hoaCustomUI").style.display = "none";
   document.getElementById("defaultUI").style.display = "block";
-  /* Điền lại tên */
   document.getElementById("playerName").value = name;
-  /* Chuyển sang màn chơi bot (giữ ở màn start, chỉ đổi UI) */
   alert("Đã chọn chế độ VS BOT!\nChọn mức độ bên dưới rồi bấm BẮT ĐẦU.");
 }
 
@@ -309,11 +287,10 @@ function startHoaOnline(){
     setTimeout(()=>document.getElementById("playerName").classList.remove("err"), 450);
     return;
   }
-  /* Lưu tên vào sessionStorage để dùng lại */
   sessionStorage.setItem("tempName", name);
-  /* Chuyển hướng sang game.html với flag online=1 */
   window.location.href = "game.html?mon=hoa&online=1";
 }
+  
 /* ===== XỬ LÝ KHI TRANG LOAD XONG ===== */
 document.addEventListener("DOMContentLoaded", ()=>{
   const params = new URLSearchParams(window.location.search);
@@ -334,35 +311,29 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   /* Điều hướng màn hình */
   if(setFromUrl){
-  hienThiManHinh("screenStart");
-  const savedDiff = sessionStorage.getItem("chosenDiff");
-  const savedDe = sessionStorage.getItem("chosenDe");
-  if(savedDiff) selectedFullDiff = savedDiff;
-  if(savedDe) selectedDeFull = savedDe;
-}
-else if(mon !== "lich-su"){
-  hienThiManHinh("screenStart");
-}
-else {
-  /* Lịch sử → hiện menu chọn bộ đề */
-  hienThiManHinh("screenChooseSet");
-}
+    hienThiManHinh("screenStart");
+    const savedDiff = sessionStorage.getItem("chosenDiff");
+    const savedDe = sessionStorage.getItem("chosenDe");
+    if(savedDiff) selectedFullDiff = savedDiff;
+    if(savedDe) selectedDeFull = savedDe;
+  } else if(mon !== "lich-su"){
+    hienThiManHinh("screenStart");
+  } else {
+    hienThiManHinh("screenChooseSet");
+  }
 
-  /* ===== HIỆN KHỐI HÓA / KHỐI GỐC THEO MÔN ===== */
+  /* Hiện/ẩn khối Hóa */
   const hoaUI = document.getElementById("hoaCustomUI");
   const defaultUI = document.getElementById("defaultUI");
-
   if(mon === "hoa"){
-    /* Vào Hóa → hiện khối Hóa, ẩn khối gốc */
     if(hoaUI) hoaUI.style.display = "block";
     if(defaultUI) defaultUI.style.display = "none";
   } else {
-    /* Các môn khác → ẩn khối Hóa, hiện khối gốc */
     if(hoaUI) hoaUI.style.display = "none";
     if(defaultUI) defaultUI.style.display = "block";
   }
 
-  /* ===== XỬ LÝ CHỌN NHÓM ĐỀ ===== */
+  /* Chọn nhóm đề full */
   const deGrid = document.getElementById("deGridFull");
   if(deGrid){
     [...deGrid.querySelectorAll(".diff")].forEach(btn=>{
@@ -373,7 +344,7 @@ else {
     });
   }
 
-  /* ===== XỬ LÝ CHỌN MỨC ĐỘ FULL ===== */
+  /* Chọn mức độ full */
   const gridFull = document.getElementById("diffGridFull");
   if(gridFull){
     [...gridFull.querySelectorAll(".diff")].forEach(btn=>{
@@ -384,7 +355,7 @@ else {
     });
   }
 
-  /* ===== NÚT BẮT ĐẦU FULL ===== */
+  /* Nút bắt đầu full */
   const btnStartFull = document.getElementById("btnStartFull");
   if(btnStartFull){
     btnStartFull.onclick = ()=>{
@@ -435,7 +406,6 @@ else {
     }
   }
 
-  /* Chọn file data */
   let dataPath;
   if(set === "full"){
     dataPath = "data/" + mon + "-full-" + de + ".js";
@@ -449,7 +419,7 @@ else {
   script.onerror = function(){
     const sub = document.getElementById("monSub");
     if(sub){
-      sub.innerHTML = '<span style="color:#f87171">⚠️ Chưa có đề nhóm này. Vui lòng chọn nhóm khác!</span>';
+      sub.innerHTML = '<span style="color:#f87171">⚠️ Chưa có đề nhóm này!</span>';
     }
     const b1 = document.getElementById("btnStart");
     const b2 = document.getElementById("btnOnlineMode");
@@ -458,26 +428,25 @@ else {
   };
 
   script.onload = function(){
-  window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
-  const main = document.createElement("script");
-  main.src = "script.js";
-  main.onload = function(){
-    /* Nếu URL có ?online=1 → tự click nút Đấu Online + điền tên */
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get("online") === "1"){
-      const savedName = sessionStorage.getItem("tempName");
-      const inputName = document.getElementById("playerName");
-      if(inputName && savedName) inputName.value = savedName;
-      const btn = document.getElementById("btnOnlineMode");
-      if(btn) btn.click();
-      sessionStorage.removeItem("tempName");
-    }
+    window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
+    const main = document.createElement("script");
+    main.src = "script.js";
+    main.onload = function(){
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.get("online") === "1"){
+        const savedName = sessionStorage.getItem("tempName");
+        const inputName = document.getElementById("playerName");
+        if(inputName && savedName) inputName.value = savedName;
+        const btn = document.getElementById("btnOnlineMode");
+        if(btn) btn.click();
+        sessionStorage.removeItem("tempName");
+      }
+    };
+    document.body.appendChild(main);
   };
-  document.body.appendChild(main);
-};
   document.body.appendChild(script);
   window.CURRENT_MON = mon;
 })();
 </script>
 </body>
-</html>                                                                                </div>
+</html>
