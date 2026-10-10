@@ -67,7 +67,7 @@ function tryDropItem(){
     console.log("Túi đầy, bỏ qua item");
     return;
   }
-  if(Math.random() > 0.10) return;
+  if(Math.random() > 0.30) return;
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
