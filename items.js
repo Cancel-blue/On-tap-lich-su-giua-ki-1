@@ -1,5 +1,5 @@
 /* =========================================================
-   ITEMS.JS - Hệ thống 13 item cho game-mix (Đã FIX lỗi)
+   ITEMS.JS - Hệ thống 13 item cho game-mix (FIXED FULL)
    ========================================================= */
 
 const ITEMS = {
@@ -18,6 +18,7 @@ const ITEMS = {
   magicHand:  { name:"Bàn tay ma thuật",icon:"🪄",slot:"magicHand",  desc:"Cướp 1 item random của người chỉ định",      type:"attack",  needTarget:1 }
 };
 
+/* ===== STATE ===== */
 let myInventory = [];
 let pvpPlayers = [];
 let playerStatus = {};
@@ -25,9 +26,29 @@ let statusTimers = {};
 let peaceActive = false;
 let peaceUntil = 0;
 let doubleActive = false;
-let botInventories = {};  // Túi đồ riêng của từng bot
+let botInventories = {};
 const MAX_INV = 3;
 
+/* =========================================================
+   FIX: ĐỒNG BỘ ĐIỂM TỪ GLOBAL `score` VÀO `pvpPlayers`
+   Gọi hàm này TRƯỚC khi tính sát thương để tránh reset điểm.
+   ========================================================= */
+function syncGlobalToPvp() {
+  if (typeof score === "undefined") return;
+  const mePlayer = pvpPlayers.find(p => p.uid === "me");
+  if (mePlayer) {
+    // Chỉ cập nhật nếu `score` global lớn hơn (tránh ghi đè khi bị trừ điểm)
+    if (score > mePlayer.score) {
+      mePlayer.score = score;
+    } else {
+      // Nếu pvpPlayers lớn hơn (đã có bonus), cập nhật ngược lại global
+      score = mePlayer.score;
+    }
+  }
+}
+/* =========================================================
+   KHỞI TẠO PLAYER DATA + TÚI ĐỒ BOT
+   ========================================================= */
 function initItemsSystem(){
   myInventory = [];
   pvpPlayers = [];
@@ -61,8 +82,6 @@ function initItemsSystem(){
 
   peaceActive = false;
   peaceUntil = 0;
-     peaceActive = false;
-  peaceUntil = 0;
 
   /* Khởi tạo túi đồ cho từng bot */
   botInventories = {};
@@ -70,13 +89,14 @@ function initItemsSystem(){
     if (p.isBot) botInventories[p.uid] = [];
   });
 }
-/* ===== RƠI ITEM 10% MỖI CÂU ĐÚNG ===== */
+
+/* ===== RƠI ITEM 25% MỖI CÂU ĐÚNG ===== */
 function tryDropItem(){
   if(myInventory.length >= MAX_INV){
     console.log("Túi đầy, bỏ qua item");
     return;
   }
-  if(Math.random() > 0.30) return;
+  if(Math.random() > 0.25) return;
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
@@ -145,6 +165,7 @@ function renderInventory(){
    DÙNG ITEM
    ========================================================= */
 function useItemByIndex(idx){
+  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi dùng item */
   if(idx < 0 || idx >= myInventory.length) return;
   const key = myInventory[idx];
   const item = ITEMS[key];
@@ -296,11 +317,12 @@ function showToast(msg, type){
     toast.style.transition = "opacity .3s";
     setTimeout(()=>{ if(toast.parentNode) toast.remove(); }, 300);
   }, 2800);
-                      }
+}
 /* =========================================================
    HÀM XỬ LÝ SÁT THƯƠNG (CÓ KHIÊN/GƯƠNG)
    ========================================================= */
 function applyDamage(targetUid, amount, sourceUid, isNuke){
+  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi tính sát thương */
   const target = pvpPlayers.find(p => p.uid === targetUid);
   if(!target) return 0;
 
@@ -733,51 +755,23 @@ function executeMagicHand(targetUid){
   if(!target) return;
 
   if(target.isBot){
-    showToast("🪄 " + target.name + " không có item để cướp!\nLượt cướp mất hiệu lực.", "warn");
+    if(botInventories[targetUid] && botInventories[targetUid].length > 0){
+      const stolenIdx = Math.floor(Math.random() * botInventories[targetUid].length);
+      const stolenKey = botInventories[targetUid][stolenIdx];
+      botInventories[targetUid].splice(stolenIdx, 1);
+      if(myInventory.length < MAX_INV){
+        myInventory.push(stolenKey);
+        renderInventory();
+      }
+      showToast("🪄 Đã cướp " + ITEMS[stolenKey].name + " từ " + target.name + "!", "success");
+    } else {
+      showToast("🪄 " + target.name + " không có item để cướp!", "warn");
+    }
     return;
   }
 
   showToast("🪄 Đã cướp item thành công!", "success");
-}
-
-/* =========================================================
-   TÍCH HỢP ITEM VÀO FLOW GAME
-   ========================================================= */
-setInterval(() => {
-  if (typeof peaceActive !== "undefined" && peaceActive) {
-    renderPvpBoardMerged();
-  }
-}, 1000);
-
-function onCorrectAnswer(){
-  tryDropItem();
-}
-
-function onNextQuestion(){
-  const overlay = document.getElementById("freezeOverlay");
-  if(overlay){
-    overlay.remove();
-  }
-}
-
-/* =========================================================
-   INIT — GỌI KHI BẮT ĐẦU VÁN (ĐÃ FIX LỖI PVP KHÔNG CÓ BOT)
-   ========================================================= */
-function initItemSystem(){
-  if (typeof playerName === "undefined" || typeof bots === "undefined" || typeof score === "undefined") {
-    console.warn("⏳ Item System chưa thể khởi tạo: Đang đợi game-mix.js...");
-    return;
-  }
-
-  // ✅ FIX: Nếu là PvP nhưng bots rỗng, gọi setupBots() để tạo lại
-  if (typeof isPvP !== "undefined" && isPvP === true && (!bots || bots.length === 0)) {
-    console.warn("⚠️ PvP mode nhưng bots rỗng, đang khởi tạo lại bots...");
-    if (typeof setupBots === "function") {
-      setupBots();
-    }
-  }
-
-  initItemsSystem();
+     }
 /* =========================================================
    HỆ THỐNG ITEM CHO BOT — Bot tự động dùng item ngẫu nhiên
    ========================================================= */
@@ -786,7 +780,7 @@ function initItemSystem(){
 function onBotCorrectAnswer(botUid){
   if(!botInventories[botUid]) botInventories[botUid] = [];
   if(botInventories[botUid].length >= MAX_INV) return;
-  if(Math.random() > 0.25) return;  /* 25% cơ hội nhận item */
+  if(Math.random() > 0.30) return;  /* 25% cơ hội nhận item */
 
   const keys = Object.keys(ITEMS);
   const key = keys[Math.floor(Math.random() * keys.length)];
@@ -799,6 +793,7 @@ function onBotCorrectAnswer(botUid){
 
 /* Bot chọn ngẫu nhiên 1 item trong túi và dùng */
 function botUseRandomItem(botUid){
+  syncGlobalToPvp();  /* FIX: Đồng bộ điểm trước khi bot dùng item */
   const inv = botInventories[botUid];
   if(!inv || inv.length === 0) return;
   if(typeof cauHienTai === "undefined" || !danhSachChoi || danhSachChoi.length === 0) return;
@@ -955,12 +950,61 @@ function executeBotItem(botUid, key, targets){
 
   renderPvpBoardMerged();
 }
+
+/* =========================================================
+   TÍCH HỢP ITEM VÀO FLOW GAME
+   ========================================================= */
+
+/* Cập nhật bảng PvP khi có hiệu ứng Hoà Bình */
+setInterval(() => {
+  if (typeof peaceActive !== "undefined" && peaceActive) {
+    renderPvpBoardMerged();
+  }
+}, 1000);
+
+/* Hook được gọi khi người chơi trả lời đúng */
+function onCorrectAnswer(){
+  syncGlobalToPvp();  /* FIX: Cập nhật điểm mới nhất vào pvpPlayers */
+  tryDropItem();
+}
+
+/* Hook được gọi khi chuyển sang câu tiếp theo */
+function onNextQuestion(){
+  const overlay = document.getElementById("freezeOverlay");
+  if(overlay){
+    overlay.remove();
+  }
+}
+
+/* =========================================================
+   INIT — GỌI KHI BẮT ĐẦU VÁN
+   ========================================================= */
+function initItemSystem(){
+  if (typeof playerName === "undefined" || typeof bots === "undefined" || typeof score === "undefined") {
+    console.warn("⏳ Item System chưa thể khởi tạo: Đang đợi game-mix.js...");
+    return;
+  }
+
+  /* Nếu là PvP nhưng bots rỗng, gọi setupBots() để tạo lại */
+  if (typeof isPvP !== "undefined" && isPvP === true && (!bots || bots.length === 0)) {
+    console.warn("⚠️ PvP mode nhưng bots rỗng, đang khởi tạo lại bots...");
+    if (typeof setupBots === "function") {
+      setupBots();
+    }
+  }
+
+  /* Khởi tạo player data + túi đồ bot */
+  initItemsSystem();
+
+  /* Render túi đồ */
   renderInventory();
 
+  /* Hiện túi đồ nếu là PvP */
   const invBar = document.getElementById("invBar");
   if(invBar && typeof isPvP !== "undefined" && isPvP){
     invBar.style.display = "flex";
   }
 
+  /* Render lại board với pvpPlayers */
   renderPvpBoardMerged();
 }
