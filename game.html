@@ -344,15 +344,19 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   /* Điều hướng màn hình */
   if(setFromUrl){
-    hienThiManHinh("screenStart");
-    const savedDiff = sessionStorage.getItem("chosenDiff");
-    const savedDe = sessionStorage.getItem("chosenDe");
-    if(savedDiff) selectedFullDiff = savedDiff;
-    if(savedDe) selectedDeFull = savedDe;
-  }
-  else if(mon !== "lich-su"){
-    hienThiManHinh("screenStart");
-  }
+  hienThiManHinh("screenStart");
+  const savedDiff = sessionStorage.getItem("chosenDiff");
+  const savedDe = sessionStorage.getItem("chosenDe");
+  if(savedDiff) selectedFullDiff = savedDiff;
+  if(savedDe) selectedDeFull = savedDe;
+}
+else if(mon !== "lich-su"){
+  hienThiManHinh("screenStart");
+}
+else {
+  /* Lịch sử → hiện menu chọn bộ đề */
+  hienThiManHinh("screenChooseSet");
+}
 
   /* ===== HIỆN KHỐI HÓA / KHỐI GỐC THEO MÔN ===== */
   const hoaUI = document.getElementById("hoaCustomUI");
