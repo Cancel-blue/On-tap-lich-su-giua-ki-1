@@ -309,6 +309,11 @@ function startHoaOnline(){
     setTimeout(()=>document.getElementById("playerName").classList.remove("err"), 450);
     return;
   }
+  /* Lưu tên vào sessionStorage để dùng lại */
+  sessionStorage.setItem("tempName", name);
+  /* Chuyển hướng sang game.html với flag online=1 */
+  window.location.href = "game.html?mon=hoa&online=1";
+}
   /* Hiện khối gốc rồi click nút Đấu Online */
   document.getElementById("hoaCustomUI").style.display = "none";
   document.getElementById("defaultUI").style.display = "block";
@@ -459,11 +464,23 @@ document.addEventListener("DOMContentLoaded", ()=>{
   };
 
   script.onload = function(){
-    window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
-    const main = document.createElement("script");
-    main.src = "script.js";
-    document.body.appendChild(main);
+  window.QUESTIONS = window.ON_TAP_DATA || window.QUESTIONS || [];
+  const main = document.createElement("script");
+  main.src = "script.js";
+  main.onload = function(){
+    /* Nếu URL có ?online=1 → tự click nút Đấu Online + điền tên */
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get("online") === "1"){
+      const savedName = sessionStorage.getItem("tempName");
+      const inputName = document.getElementById("playerName");
+      if(inputName && savedName) inputName.value = savedName;
+      const btn = document.getElementById("btnOnlineMode");
+      if(btn) btn.click();
+      sessionStorage.removeItem("tempName");
+    }
   };
+  document.body.appendChild(main);
+};
   document.body.appendChild(script);
   window.CURRENT_MON = mon;
 })();
